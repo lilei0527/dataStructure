@@ -1,13 +1,20 @@
-package tree.btree;
+package tree;
 
-public class KeyAndValue implements Comparable<KeyAndValue>{
+public class Entry implements Comparable<Entry>{
     /*存储索引关键字*/
     private int key;
     /*存储数据*/
     private Object value;
 
     @Override
-    public int compareTo(KeyAndValue o) {
+    public String toString() {
+        return "Entry{" +
+                "key=" + key +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Entry o) {
         //根据key的值升序排列
         return this.key - o.key;
     }
@@ -28,7 +35,7 @@ public class KeyAndValue implements Comparable<KeyAndValue>{
         this.value = value;
     }
 
-     KeyAndValue(int key, Object value) {
+     public Entry(int key, Object value) {
         this.key = key;
         this.value = value;
     }

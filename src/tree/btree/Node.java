@@ -1,5 +1,7 @@
 package tree.btree;
 
+import tree.Entry;
+
 import java.util.List;
 
 /*节点类*/
@@ -8,19 +10,19 @@ public class Node {
     //节点的子节点
     private List<Node> nodes;
     //节点的键值对
-    private List<KeyAndValue> keyAndValue;
+    private List<Entry> entry;
     //节点的后节点
     private Node nextNode;
     //节点的前节点
     private Node previousNode;
     //节点的父节点
-    private Node parantNode;
+    private Node parentNode;
 
-    public Node( List<Node> nodes, List<KeyAndValue> keyAndValue, Node nextNode,Node previousNode, Node parantNode) {
+    public Node(List<Node> nodes, List<Entry> entry, Node nextNode, Node previousNode, Node parentNode) {
         this.nodes = nodes;
-        this.keyAndValue = keyAndValue;
+        this.entry = entry;
         this.nextNode = nextNode;
-        this.parantNode = parantNode;
+        this.parentNode = parentNode;
         this.previousNode = previousNode;
     }
 
@@ -37,7 +39,7 @@ public class Node {
     }
 
      boolean isRoot() {
-        return parantNode == null;
+        return parentNode == null;
     }
 
 
@@ -50,8 +52,8 @@ public class Node {
     }
 
 
-    List<KeyAndValue> getKeyAndValue() {
-        return keyAndValue;
+    List<Entry> getEntry() {
+        return entry;
     }
 
 //    public void setKeyAndValue(List<KeyAndValue> KeyAndValue) {
@@ -66,12 +68,12 @@ public class Node {
         this.nextNode = nextNode;
     }
 
-     Node getParantNode() {
-        return parantNode;
+     Node getParentNode() {
+        return parentNode;
     }
 
-     void setParantNode(Node parantNode) {
-        this.parantNode = parantNode;
+     void setParentNode(Node parentNode) {
+        this.parentNode = parentNode;
     }
 
      Node getPreviousNode() {

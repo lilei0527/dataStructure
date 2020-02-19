@@ -1,50 +1,52 @@
 package tree.btree;
 
+import tree.Entry;
+
 public class Main {
 
     public static void main(String[] args) {
         Btree btree = new Btree(4 );
-        KeyAndValue keyAndValue = new KeyAndValue(1,"123");
-        KeyAndValue keyAndValue1 = new KeyAndValue(2,"123");
-        KeyAndValue keyAndValue2 = new KeyAndValue(3,"123");
-        KeyAndValue keyAndValue3 = new KeyAndValue(4,"123");
-        KeyAndValue keyAndValue4 = new KeyAndValue(5,"123");
-        KeyAndValue keyAndValue5 = new KeyAndValue(6,"123");
-        KeyAndValue keyAndValue6 = new KeyAndValue(7,"12300");
-        KeyAndValue keyAndValue7 = new KeyAndValue(8,"546");
-        KeyAndValue keyAndValue8 = new KeyAndValue(9,"123");
-        KeyAndValue keyAndValue9 = new KeyAndValue(10,"123");
-        KeyAndValue keyAndValue10 = new KeyAndValue(11,"123");
-        KeyAndValue keyAndValue11 = new KeyAndValue(12,"123");
-        KeyAndValue keyAndValue12 = new KeyAndValue(13,"123");
-        KeyAndValue keyAndValue14 = new KeyAndValue(15,"12345");
-        KeyAndValue keyAndValue15 = new KeyAndValue(16,"12345");
-        KeyAndValue keyAndValue16 = new KeyAndValue(17,"12345");
-        KeyAndValue keyAndValue17 = new KeyAndValue(18,"12345");
-        KeyAndValue keyAndValue18 = new KeyAndValue(19,"12345");
-        KeyAndValue keyAndValue19 = new KeyAndValue(20,"12345");
-        KeyAndValue keyAndValue20 = new KeyAndValue(21,"12345");
+        Entry entry = new Entry(1,"123");
+        Entry entry1 = new Entry(2,"123");
+        Entry entry2 = new Entry(3,"123");
+        Entry entry3 = new Entry(4,"123");
+        Entry entry4 = new Entry(5,"123");
+        Entry entry5 = new Entry(6,"123");
+        Entry entry6 = new Entry(7,"12300");
+        Entry entry7 = new Entry(8,"546");
+        Entry entry8 = new Entry(9,"123");
+        Entry entry9 = new Entry(10,"123");
+        Entry entry10 = new Entry(11,"123");
+        Entry entry11 = new Entry(12,"123");
+        Entry entry12 = new Entry(13,"123");
+        Entry entry14 = new Entry(15,"12345");
+        Entry entry15 = new Entry(16,"12345");
+        Entry entry16 = new Entry(17,"12345");
+        Entry entry17 = new Entry(18,"12345");
+        Entry entry18 = new Entry(19,"12345");
+        Entry entry19 = new Entry(20,"12345");
+        Entry entry20 = new Entry(21,"12345");
 
-        btree.insert(keyAndValue);
-        btree.insert(keyAndValue5);
-        btree.insert(keyAndValue9);
-        btree.insert(keyAndValue1);
-        btree.insert(keyAndValue7);
-        btree.insert(keyAndValue10);
-        btree.insert(keyAndValue17);
-        btree.insert(keyAndValue2);
-        btree.insert(keyAndValue14);
-        btree.insert(keyAndValue16);
-        btree.insert(keyAndValue11);
-        btree.insert(keyAndValue12);
-        btree.insert(keyAndValue3);
-        btree.insert(keyAndValue8);
-        btree.insert(keyAndValue18);
-        btree.insert(keyAndValue15);
-        btree.insert(keyAndValue4);
-        btree.insert(keyAndValue19);
-        btree.insert(keyAndValue6);
-        btree.insert(keyAndValue20);
+        btree.insert(entry);
+        btree.insert(entry5);
+        btree.insert(entry9);
+        btree.insert(entry1);
+        btree.insert(entry7);
+        btree.insert(entry10);
+        btree.insert(entry17);
+        btree.insert(entry2);
+        btree.insert(entry14);
+        btree.insert(entry16);
+        btree.insert(entry11);
+        btree.insert(entry12);
+        btree.insert(entry3);
+        btree.insert(entry8);
+        btree.insert(entry18);
+        btree.insert(entry15);
+        btree.insert(entry4);
+        btree.insert(entry19);
+        btree.insert(entry6);
+        btree.insert(entry20);
 
 
         btree.printBtree(btree.getRoot());
