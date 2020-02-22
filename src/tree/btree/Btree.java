@@ -63,14 +63,11 @@ public class Btree implements Tree {
     }
 
     @Override
-    public void search(Entry entry) {
-        search(entry.getKey(),root,INT);
+    public Entry search(int key) {
+       return (Entry) search(key,root,INT);
     }
 
-    @Override
-    public boolean delete(Entry entry) {
-        return delete(entry.getKey());
-    }
+
 
 
     //判断是否需要拆分节点

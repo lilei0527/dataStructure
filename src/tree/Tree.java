@@ -3,8 +3,8 @@ package tree;
 public interface Tree {
     void insert(Entry key);
 
-    void search(Entry key);
+    Entry search(int key);
 
-    boolean delete(Entry key);
+    boolean delete(int key);
 
 }
