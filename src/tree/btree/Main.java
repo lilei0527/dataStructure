@@ -109,7 +109,8 @@ public class Main {
         btree.printBtree(btree.getRoot());
 
 
-        System.out.println(btree.search(18,btree.getRoot(),Btree.INT));
+
+        System.out.println(btree.search(18,btree.getRoot(),Btree.ENTRY));
 
     }
 }

@@ -5,6 +5,6 @@ public interface Tree {
 
     Entry search(int key);
 
-    boolean delete(int key);
+    Entry delete(int key);
 
 }

@@ -8,7 +8,7 @@ import java.util.*;
 
 public class Btree implements Tree {
     private static final String NODE = "node";
-    static final String INT = "int";
+    static final String ENTRY = "entry";
     private static final String PREN_ODE = "preNode";
     private static final String NEXT_NODE = "nextNode";
     //B+树的阶数
@@ -64,10 +64,8 @@ public class Btree implements Tree {
 
     @Override
     public Entry search(int key) {
-       return (Entry) search(key,root,INT);
+        return (Entry) search(key, root, ENTRY);
     }
-
-
 
 
     //判断是否需要拆分节点
@@ -258,8 +256,8 @@ public class Btree implements Tree {
                     switch (mode) {
                         case NODE:
                             return node;
-                        case INT:
-                            return entry.getValue();
+                        case ENTRY:
+                            return entry;
                     }
                 }
             }
@@ -307,7 +305,7 @@ public class Btree implements Tree {
         return null;
     }
 
-    public boolean delete(int key) {
+    public Entry delete(int key) {
         System.out.println("delete:" + key);
         System.out.println();
 
@@ -315,18 +313,23 @@ public class Btree implements Tree {
         Node deleteNode = (Node) search(key, root, NODE);
         //如果没找到则删除失败
         if (deleteNode == null) {
-            return false;
+            return null;
         }
 
         if (deleteNode == root) {
-            delKeyAndValue(root.getEntry(), key);
-            return true;
+            return delKeyAndValue(root.getEntry(), key);
         }
 
         if (deleteNode == head && isNeedMerge(head)) {
             head = head.getNextNode();
         }
-        return merge(deleteNode, key);
+
+        if (merge(deleteNode, key)) {
+            return getKeyAndValue(deleteNode.getEntry(), key);
+        } else {
+            return null;
+        }
+
     }
 
 
@@ -616,13 +619,23 @@ public class Btree implements Tree {
     }
 
 
-    private void delKeyAndValue(List<Entry> entries, int key) {
+    private Entry delKeyAndValue(List<Entry> entries, int key) {
         for (Entry entry : entries) {
             if (entry.getKey() == key) {
                 entries.remove(entry);
-                break;
+                return entry;
             }
         }
+        return null;
+    }
+
+    private Entry getKeyAndValue(List<Entry> entries, int key) {
+        for (Entry entry : entries) {
+            if (entry.getKey() == key) {
+                return entry;
+            }
+        }
+        return null;
     }
 
     //找到node的键值对中在min和max中的键值对
