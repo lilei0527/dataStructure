@@ -1,4 +1,4 @@
-package tree.btree;
+package tree.bPlusTree;
 
 import tree.Entry;
 import tree.Tree;
@@ -6,7 +6,7 @@ import tree.Tree;
 import java.util.*;
 
 
-public class Btree implements Tree {
+public class BPlusTree implements Tree {
     private static final String NODE = "node";
     static final String ENTRY = "entry";
     private static final String PREN_ODE = "preNode";
@@ -18,7 +18,7 @@ public class Btree implements Tree {
     //头结点
     private Node head;
 
-    Btree(int rank) {
+    BPlusTree(int rank) {
         this.rank = rank;
     }
 

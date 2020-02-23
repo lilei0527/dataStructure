@@ -1,11 +1,11 @@
-package tree.btree;
+package tree.bPlusTree;
 
 import tree.Entry;
 
 public class Main {
 
     public static void main(String[] args) {
-        Btree btree = new Btree(4 );
+        BPlusTree btree = new BPlusTree(4 );
         Entry entry = new Entry(1,"123");
         Entry entry1 = new Entry(2,"123");
         Entry entry2 = new Entry(3,"123");
@@ -110,7 +110,7 @@ public class Main {
 
 
 
-        System.out.println(btree.search(18,btree.getRoot(),Btree.ENTRY));
+        System.out.println(btree.search(18,btree.getRoot(), BPlusTree.ENTRY));
 
     }
 }

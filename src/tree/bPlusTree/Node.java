@@ -1,4 +1,4 @@
-package tree.btree;
+package tree.bPlusTree;
 
 import tree.Entry;
 
