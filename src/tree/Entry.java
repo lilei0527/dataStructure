@@ -2,9 +2,9 @@ package tree;
 
 public class Entry implements Comparable<Entry>{
     /*存储索引关键字*/
-    private int key;
+    public int key;
     /*存储数据*/
-    private Object value;
+    public Object value;
 
     @Override
     public String toString() {
