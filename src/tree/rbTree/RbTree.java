@@ -4,7 +4,6 @@ import tree.Entry;
 import tree.Tree;
 
 
-
 /**
  * @author lilei
  * create at 2020/2/29 15:35
@@ -95,7 +94,7 @@ public class RbTree implements Tree {
         if (p.left != null && p.right != null) {
             Node s = getMin(p);
             //将待删除节点属性赋值到后继节点
-            s.entry = p.entry;
+            p.entry = s.entry;
             p = s;
         }
 
