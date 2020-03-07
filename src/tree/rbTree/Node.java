@@ -1,12 +1,10 @@
 package tree.rbTree;
 
 import tree.Entry;
+import tree.TreeNode;
+
 @SuppressWarnings("unused")
-public class Node {
-    public Node parent;
-    public Node left;
-    public Node right;
-    public Entry entry;
+public class Node<K,V> extends TreeNode<K,V> {
     public boolean color; //true-黑  false-红
 
     @Override
@@ -20,9 +18,9 @@ public class Node {
     }
 
 
-    public Node(Node parent, Entry entry) {
+    public Node(Node<K,V> parent, Entry<K,V> entry) {
+        super(entry);
         this.parent = parent;
-        this.entry = entry;
         color = true;
     }
 }

@@ -1,28 +1,29 @@
 package tree.akl;
 
 import tree.Entry;
-import tree.Tree;
+import tree.TreeNode;
+import tree.TwoForkTree;
 
 @SuppressWarnings("unused")
-public class AvlTree implements Tree {
-    private Node root;
+public class AvlTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
 
     @Override
-    public void insert(Entry entry) {
-        root = insert(entry, root);
+    public void insert(K k, V v) {
+        Entry<K, V> entry = new Entry<>(k, v);
+        root = insert(entry, (Node<K, V>) root);
     }
 
-    public Node insert(Entry entry, Node node) {
+    public Node<K, V> insert(Entry<K, V> entry, Node<K, V> node) {
         if (node == null) {
-            node = new Node(entry);
+            node = new Node<>(entry);
         } else {
             if (isLeft(entry, node)) {
-                node.left = insert(entry, node.left);
+                node.left = insert(entry, (Node<K, V>) node.left);
                 node = rotate(node, entry);
             }
 
             if (isRight(entry, node)) {
-                node.right = insert(entry, node.right);
+                node.right = insert(entry, (Node<K, V>) node.right);
                 node = rotate(node, entry);
             }
 
@@ -30,37 +31,26 @@ public class AvlTree implements Tree {
                 node.entry = entry;
             }
         }
+
         updateHeight(node);
         return node;
     }
 
     @Override
-    public Entry search(int key) {
-        return search(root, key);
-    }
-
-    public Entry search(Node node, int key) {
-        if (node == null) {
-            return null;
-        } else {
-            if (isLeft(key, node)) {
-                return search(node.left, key);
-            }
-            if (isRight(key, node)) {
-                return search(node.right, key);
-            }
-            return node.entry;
-        }
+    public V search(K key) {
+        TreeNode<K, V> search = search(root, key);
+        return search == null ? null : search.entry.value;
     }
 
 
     @Override
-    public Entry delete(int key) {
-        root = delete(root, key);
-        return search(root, key);
+    public V delete(K key) {
+        V value = search(key);
+        root = delete((Node<K, V>) root, key);
+        return value;
     }
 
-    public Node delete(Node node, int key) {
+    public Node<K, V> delete(Node<K, V> node, K key) {
         if (node == null) {
             return null;
         } else {
@@ -72,29 +62,27 @@ public class AvlTree implements Tree {
                 }
 
                 //左子树的高度大于等于右子树
-                if (height(node.left) >= height(node.right)) {
+                if (height((Node<K, V>) node.left) >= height((Node<K, V>) node.right)) {
                     //从左子树中选择一个最大值来代替被删除节点
-                    int max = findMax(node);
-                    Entry entry = node.entry;
-                    entry.setKey(max);
-                    node.entry = entry;
-                    delete(node.left, max);
+                    Node<K, V> max = (Node<K, V>) findMax(node);
+                    node.entry = max.entry;
+                    delete((Node<K, V>) node.left, max.entry.key);
                 } else {
-                    int min = findMin(node);
-                    Entry entry = node.entry;
-                    entry.setKey(min);
+                    TreeNode<K, V> min = findMin(node);
+                    Entry<K, V> entry = node.entry;
+                    entry.setKey(min.entry.key);
                     node.entry = entry;
-                    delete(node.right, min);
+                    delete((Node<K, V>) node.right, min.entry.key);
                 }
             }
 
 
             if (isLeft(key, node)) {
-                node.left = delete(node.left,key);
+                node.left = delete((Node<K, V>) node.left, key);
 
-                if (height(node.right) - height(node.left) == 2) {
-                    if (height(node.right == null ? null : node.right.right)
-                            >= height(node.right == null ? null : node.right.left)) {
+                if (height((Node<K, V>) node.right) - height((Node<K, V>) node.left) == 2) {
+                    if (height(node.right == null ? null : (Node<K, V>) node.right.right)
+                            >= height(node.right == null ? null : (Node<K, V>) node.right.left)) {
                         //RR
                         node = leftRotate(node);
                     } else {
@@ -106,10 +94,10 @@ public class AvlTree implements Tree {
 
 
             if (isRight(key, node)) {
-                node.right = delete(node.right,key);
-                if (height(node.left) - height(node.right) == 2) {
-                    if (height(node.right == null ? null : node.right.left)
-                            >= height(node.right == null ? null : node.right.right)) {
+                node.right = delete((Node<K, V>) node.right, key);
+                if (height((Node<K, V>) node.left) - height((Node<K, V>) node.right) == 2) {
+                    if (height(node.right == null ? null : (Node<K, V>) node.right.left)
+                            >= height(node.right == null ? null : (Node<K, V>) node.right.right)) {
                         //LL
                         node = rightRotate(node);
                     } else {
@@ -124,8 +112,8 @@ public class AvlTree implements Tree {
     }
 
 
-    private Node rotate(Node node, int key) {
-        if (height(node.left) - height(node.right) == 2) {
+    private Node<K, V> rotate(Node<K, V> node, K key) {
+        if (height((Node<K, V>) node.left) - height((Node<K, V>) node.right) == 2) {
             if (isLeft(key, node.left)) {
                 //LL
                 node = rightRotate(node);
@@ -133,7 +121,7 @@ public class AvlTree implements Tree {
                 //LR
                 node = leftRightRotate(node);
             }
-        } else if (height(node.right) - height(node.left) == 2) {
+        } else if (height((Node<K, V>) node.right) - height((Node<K, V>) node.left) == 2) {
             if (isRight(key, node.right)) {
                 //RR
                 node = leftRotate(node);
@@ -145,36 +133,14 @@ public class AvlTree implements Tree {
         return node;
     }
 
-    private Node rotate(Node node, Entry entry) {
+    private Node<K, V> rotate(Node<K, V> node, Entry<K, V> entry) {
         return rotate(node, entry.getKey());
     }
 
 
-    private int findMax(Node node) {
-        if (node == null) {
-            return 0;
-        }
-        if (node.right != null) {
-            return findMax(node);
-        } else {
-            return getKey(node);
-        }
-    }
-
-    private int findMin(Node node) {
-        if (node == null) {
-            return 0;
-        }
-        if (node.left != null) {
-            return findMin(node);
-        } else {
-            return getKey(node);
-        }
-    }
-
     //左旋
-    private Node leftRotate(Node node) {
-        Node right = node.right;
+    private Node<K, V> leftRotate(Node<K, V> node) {
+        Node<K, V> right = (Node<K, V>) node.right;
         node.right = right.left;
         right.left = node;
 
@@ -186,8 +152,8 @@ public class AvlTree implements Tree {
     }
 
     //右旋
-    private Node rightRotate(Node node) {
-        Node left = node.left;
+    private Node<K, V> rightRotate(Node<K, V> node) {
+        Node<K, V> left = (Node<K, V>) node.left;
         node.left = left.right;
         left.right = node;
 
@@ -199,29 +165,29 @@ public class AvlTree implements Tree {
     }
 
     //更新根节点的高度
-    private void updateHeight(Node node) {
-        node.height = Math.max(height(node.left),height(node.right)+1);
+    private void updateHeight(Node<K, V> node) {
+        node.height = Math.max(height((Node<K, V>) node.left), height((Node<K, V>) node.right)) + 1;
     }
 
     //判断是否平衡
-    private boolean isBalance(Node node) {
-        return Math.abs(height(node.left) - height(node.right)) < 2;
+    private boolean isBalance(Node<K, V> node) {
+        return Math.abs(height((Node<K, V>) node.left) - height((Node<K, V>) node.right)) < 2;
     }
 
     //先左旋后右旋
-    private Node leftRightRotate(Node node) {
-        node.left = leftRotate(node.left);
+    private Node<K, V> leftRightRotate(Node<K, V> node) {
+        node.left = leftRotate((Node<K, V>) node.left);
         return rightRotate(node);
     }
 
     //先右旋后左旋
-    private Node rightLeftRotate(Node node) {
-        node.right = rightRotate(node.right);
+    private Node<K, V> rightLeftRotate(Node<K, V> node) {
+        node.right = rightRotate((Node<K, V>) node.right);
         return leftRotate(node);
     }
 
 
-    public int height(Node node) {
+    public int height(Node<K, V> node) {
         if (node == null) {
             return 0;
         } else {
@@ -230,68 +196,6 @@ public class AvlTree implements Tree {
 
     }
 
-    private boolean hasLeft(Node node) {
-        return node.left != null;
-    }
 
 
-    private boolean hasRight(Node node) {
-        return node.left != null || node.right != null;
-    }
-
-    private boolean hasChild(Node node) {
-        return node.left != null || node.right != null;
-    }
-
-    private int getKey(Node node) {
-        return node.entry.key;
-    }
-
-    public boolean hasRoot() {
-        return root != null;
-    }
-
-    private boolean isLeft(Entry entry, Node node) {
-        return isLeft(entry.getKey(), node);
-    }
-
-    private boolean isLeft(int key, Node node) {
-        return key < getKey(node);
-    }
-
-    private boolean isRight(Entry entry, Node node) {
-        return isRight(entry.getKey(), node);
-    }
-
-    private boolean isRight(int key, Node node) {
-        return key > getKey(node);
-    }
-
-    private boolean isSame(Entry entry, Node node) {
-        return isSame(entry.getKey(), node);
-    }
-
-    private boolean isSame(int key, Node node) {
-        return key == getKey(node);
-    }
-
-
-    private boolean isRoot(Node node) {
-        return node == root;
-    }
-
-
-    public static void main(String[] args) {
-        AvlTree tree = new AvlTree();
-        tree.insert(new Entry(1, 1));
-        tree.insert(new Entry(4, 4));
-        tree.insert(new Entry(8, 8));
-        tree.insert(new Entry(3, 3));
-        tree.insert(new Entry(3, 3));
-        tree.insert(new Entry(2, 2));
-        System.out.println(tree.root);
-        System.out.println(tree.search(4).getKey());
-        tree.delete(8);
-        System.out.println(tree.root);
-    }
 }

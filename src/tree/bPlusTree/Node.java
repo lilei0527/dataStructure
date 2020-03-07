@@ -5,20 +5,20 @@ import tree.Entry;
 import java.util.List;
 
 /*节点类*/
-public class Node {
+public class Node<K , V> {
 
     //节点的子节点
-    private List<Node> nodes;
+    private List<Node<K, V>> nodes;
     //节点的键值对
-    private List<Entry> entry;
+    private List<Entry<K, V>> entry;
     //节点的后节点
-    private Node nextNode;
+    private Node<K, V> nextNode;
     //节点的前节点
-    private Node previousNode;
+    private Node<K, V> previousNode;
     //节点的父节点
-    private Node parentNode;
+    private Node<K, V> parentNode;
 
-    public Node(List<Node> nodes, List<Entry> entry, Node nextNode, Node previousNode, Node parentNode) {
+    public Node(List<Node<K, V>> nodes, List<Entry<K, V>> entry, Node<K, V> nextNode, Node<K, V> previousNode, Node<K, V> parentNode) {
         this.nodes = nodes;
         this.entry = entry;
         this.nextNode = nextNode;
@@ -43,16 +43,16 @@ public class Node {
     }
 
 
-     List<Node> getNodes() {
+     List<Node<K, V>> getNodes() {
         return nodes;
     }
 
-     void setNodes(List<Node> nodes) {
+     void setNodes(List<Node<K, V>> nodes) {
         this.nodes = nodes;
     }
 
 
-    List<Entry> getEntry() {
+    List<Entry<K, V>> getEntry() {
         return entry;
     }
 
@@ -60,27 +60,27 @@ public class Node {
 //        this.keyAndValue = KeyAndValue;
 //    }
 
-    Node getNextNode() {
+    Node<K, V> getNextNode() {
         return nextNode;
     }
 
-     void setNextNode(Node nextNode) {
+     void setNextNode(Node<K, V> nextNode) {
         this.nextNode = nextNode;
     }
 
-     Node getParentNode() {
+     Node<K, V> getParentNode() {
         return parentNode;
     }
 
-     void setParentNode(Node parentNode) {
+     void setParentNode(Node<K, V> parentNode) {
         this.parentNode = parentNode;
     }
 
-     Node getPreviousNode() {
+     Node<K, V> getPreviousNode() {
         return previousNode;
     }
 
-     void setPreviousNode(Node previousNode) {
+     void setPreviousNode(Node<K, V> previousNode) {
         this.previousNode = previousNode;
     }
 }

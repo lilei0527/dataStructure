@@ -1,10 +1,10 @@
 package tree;
 
-public class Entry implements Comparable<Entry>{
+public class Entry<K, V> implements Comparable<Entry<K,V>> {
     /*存储索引关键字*/
-    public int key;
+    public K key;
     /*存储数据*/
-    public Object value;
+    public V value;
 
     @Override
     public String toString() {
@@ -13,30 +13,31 @@ public class Entry implements Comparable<Entry>{
                 '}';
     }
 
-    @Override
-    public int compareTo(Entry o) {
-        //根据key的值升序排列
-        return this.key - o.key;
+    public Entry(K key, V value) {
+        this.key = key;
+        this.value = value;
     }
 
-    public int getKey() {
+    public K getKey() {
         return key;
     }
 
-    public void setKey(int key) {
+    public void setKey(K key) {
         this.key = key;
     }
 
-    public Object getValue() {
+    public V getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(V value) {
         this.value = value;
     }
 
-     public Entry(int key, Object value) {
-        this.key = key;
-        this.value = value;
+    @SuppressWarnings("unchecked")
+    @Override
+    public int compareTo(Entry<K,V> o) {
+        Comparable<? super K> k = (Comparable<? super K>) key;
+        return k.compareTo(o.getKey());
     }
 }

@@ -1,24 +1,21 @@
 package tree.akl;
 
 import tree.Entry;
+import tree.TreeNode;
 
 @SuppressWarnings("unused")
-public class Node {
-
+public class Node<K, V> extends TreeNode<K, V> {
     public int height;
-    public Entry entry;
-    public Node right;
-    public Node left;
 
-    public Node(Entry entry) {
-        this.entry = entry;
+    public Node(Entry<K, V> entry) {
+        super(entry);
     }
-
 
     @Override
     public String toString() {
         return "Node{" +
-                "entry=" + entry +
+                "height=" + height +
+                ", entry=" + entry +
                 ", right=" + right +
                 ", left=" + left +
                 '}';

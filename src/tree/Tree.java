@@ -1,10 +1,12 @@
 package tree;
+@SuppressWarnings("unused")
+public interface Tree<K, V> {
 
-public interface Tree {
-    void insert(Entry key);
 
-    Entry search(int key);
+    void insert(K k,V v);
 
-    Entry delete(int key);
+    V search(K key);
+
+    V delete(K key);
 
 }

@@ -1,7 +1,8 @@
 package tree.rbTree;
 
 import tree.Entry;
-import tree.Tree;
+import tree.TreeNode;
+import tree.TwoForkTree;
 
 
 /**
@@ -14,10 +15,10 @@ import tree.Tree;
  * 3.如果一个节点是红色的那么它的两个节点都是黑色
  * 4.从任何一个节点到其叶子节点的简单路径都包含相同数目的黑色节点
  */
-public class RbTree implements Tree {
+@SuppressWarnings("unused")
+public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
     private static final boolean RED = false;
     private static final boolean BLACK = true;
-    private Node root;
 
     @Override
     public String toString() {
@@ -27,28 +28,30 @@ public class RbTree implements Tree {
     }
 
     @Override
-    public void insert(Entry entry) {
+    public void insert(K k,V v) {
+        Entry<K, V> entry = new Entry<>(k, v);
         if (root == null) {
-            root = new Node(null, entry);
+            root = new Node<>(null, entry);
         } else {
-            Node p = root;
-            Node parent;
+            Node<K, V> p = (Node<K, V>) root;
+            Node<K, V> parent;
             //迭代
             do {
                 parent = p;
 
-                if (p.entry.key < entry.key) {
-                    p = p.right;
-                } else if (p.entry.key > entry.key) {
-                    p = p.left;
+                if (isRight(entry, p)) {
+                    p = (Node<K, V>) p.right;
+                } else if (isLeft(entry, p)) {
+                    p = (Node<K, V>) p.left;
                 } else {
                     p.entry = entry;
                 }
             } while (p != null);
 
 
-            Node node = new Node(parent, entry);
-            if (parent.entry.key < entry.key) {
+            Node<K,V> node = new Node<>(parent, entry);
+
+            if (isRight(entry,parent)) {
                 parent.right = node;
             } else {
                 parent.left = node;
@@ -56,49 +59,35 @@ public class RbTree implements Tree {
 
             fixAfterInsertion(node);
         }
-
-
     }
 
     @Override
-    public Entry search(int key) {
-        return search(root, key).entry;
+    public V search(K key) {
+        TreeNode<K, V> search = search(root, key);
+        return search==null?null:search.entry.value;
     }
 
-    public Node search(Node node, int key) {
-        if (node == null) {
-            return null;
-        } else {
-            if (node.entry.key > key) {
-                return search(node.left, key);
-            }
-            if (node.entry.key < key) {
-                return search(node.right, key);
-            }
-            return node;
-        }
-    }
 
     @Override
-    public Entry delete(int key) {
-        Node node = search(root, key);
+    public V delete(K key) {
+        Node<K,V> node = (Node<K,V>) search(root, key);
         if (node == null) {
             return null;
         }
         deleteNode(node);
-        return node.entry;
+        return node.entry.value;
     }
 
-    public void deleteNode(Node p) {
+    public void deleteNode(Node<K,V> p) {
         //待删除节点有两个孩子
         if (p.left != null && p.right != null) {
-            Node s = getMin(p);
+            Node<K,V> s = (Node<K,V>) successor(p);
             //将待删除节点属性赋值到后继节点
             p.entry = s.entry;
             p = s;
         }
 
-        Node replacement = p.left != null ? p.left : p.right;
+        Node<K,V> replacement = (Node<K,V>) (p.left != null ? p.left : p.right);
 
         if (replacement != null) {
             if (p.parent == null) {
@@ -131,14 +120,6 @@ public class RbTree implements Tree {
 
     }
 
-    private Node getMin(Node node) {
-        Node p = null;
-        while (node != null) {
-            p = node;
-            node = node.left;
-        }
-        return p;
-    }
 
     /**
      * @author lilei
@@ -177,13 +158,13 @@ public class RbTree implements Tree {
      *        node          node
      *
      */
-    private void fixAfterInsertion(Node node) {
+    private void fixAfterInsertion(Node<K,V> node) {
         node.color = RED;
 
         while (node != root && node.parent.color == RED) {
 
             if (parentOf(node) == leftOf(parentOf(parentOf(node)))) {
-                Node y = rightOf(parentOf(parentOf(node)));
+                Node<K,V> y = rightOf(parentOf(parentOf(node)));
                 if (colorOf(y) == RED) {
                     //对应第一种情况
                     setColor(parentOf(parentOf(node)), RED);
@@ -201,7 +182,7 @@ public class RbTree implements Tree {
                     rotateRight(parentOf(parentOf(node)));
                 }
             } else {
-                Node y = leftOf(parentOf(parentOf(node)));
+                Node<K,V> y = leftOf(parentOf(parentOf(node)));
                 if (colorOf(y) == RED) {
                     //对应第三种情况
                     setColor(parentOf(parentOf(node)), RED);
@@ -221,17 +202,17 @@ public class RbTree implements Tree {
             }
         }
 
-        root.color = BLACK;
+        ((Node<K,V>) root).color = BLACK;
     }
 
     /**
      * @author lilei
      *
      */
-    private void fixAfterDelete(Node x) {
+    private void fixAfterDelete(Node<K,V> x) {
         while (x != root && colorOf(x) == BLACK) {
             if (x == leftOf(parentOf(x))) {
-                Node sib = rightOf(parentOf(x));
+                Node<K,V> sib = rightOf(parentOf(x));
 
                 if (colorOf(sib) == RED) {
                     setColor(sib, BLACK);
@@ -255,10 +236,10 @@ public class RbTree implements Tree {
                     setColor(parentOf(x), BLACK);
                     setColor(rightOf(sib), BLACK);
                     rotateLeft(parentOf(x));
-                    x = root;
+                    x = (Node<K,V>) root;
                 }
             } else { // symmetric
-                Node sib = leftOf(parentOf(x));
+                Node<K,V> sib = leftOf(parentOf(x));
 
                 if (colorOf(sib) == RED) {
                     setColor(sib, BLACK);
@@ -282,7 +263,7 @@ public class RbTree implements Tree {
                     setColor(parentOf(x), BLACK);
                     setColor(leftOf(sib), BLACK);
                     rotateRight(parentOf(x));
-                    x = root;
+                    x = (Node<K,V>) root;
                 }
             }
         }
@@ -290,12 +271,12 @@ public class RbTree implements Tree {
         setColor(x, BLACK);
     }
 
-    private void rotateLeft(Node p) {
+    private void rotateLeft(Node<K,V> p) {
         if (p != null) {
-            Node r = p.right;
+            Node<K,V> r = (Node<K,V>) p.right;
             p.right = r.left;
             if (r.left != null)
-                r.left.parent = p;
+                ((Node<K,V>) r.left).parent = p;
             r.parent = p.parent;
             if (p.parent == null)
                 root = r;
@@ -308,11 +289,11 @@ public class RbTree implements Tree {
         }
     }
 
-    private void rotateRight(Node p) {
+    private void rotateRight(Node<K,V> p) {
         if (p != null) {
-            Node l = p.left;
+            Node<K,V> l = (Node<K,V>) p.left;
             p.left = l.right;
-            if (l.right != null) l.right.parent = p;
+            if (l.right != null) ((Node<K,V>) l.right).parent = p;
             l.parent = p.parent;
             if (p.parent == null)
                 root = l;
@@ -325,35 +306,24 @@ public class RbTree implements Tree {
     }
 
 
-    private static boolean colorOf(Node node) {
+    private  boolean colorOf(Node<K,V> node) {
         return (node == null ? BLACK : node.color);
     }
 
-    private static Node parentOf(Node node) {
+    private  Node<K,V> parentOf(Node<K,V> node) {
         return (node == null ? null : node.parent);
     }
 
-    private static void setColor(Node node, boolean c) {
+    private  void setColor(Node<K,V> node, boolean c) {
         if (node != null)
             node.color = c;
     }
 
-    private static Node leftOf(Node node) {
-        return (node == null) ? null : node.left;
+    private  Node<K,V> leftOf(Node<K,V> node) {
+        return (node == null) ? null : (Node<K,V>) node.left;
     }
 
-    private static Node rightOf(Node node) {
-        return (node == null) ? null : node.right;
-    }
-
-    public static void main(String[] args) {
-        RbTree rbTree = new RbTree();
-        rbTree.insert(new Entry(2, 2));
-        rbTree.insert(new Entry(21, 22));
-        rbTree.insert(new Entry(4, 4));
-        rbTree.insert(new Entry(1, 41));
-        rbTree.insert(new Entry(3, 3));
-        rbTree.insert(new Entry(23, 23));
-        System.out.println(rbTree.root);
+    private  Node<K,V> rightOf(Node<K,V> node) {
+        return (node == null) ? null : (Node<K,V>) node.right;
     }
 }
