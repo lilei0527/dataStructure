@@ -17,17 +17,17 @@ public class AvlTree implements Tree {
             node = new Node(entry);
         } else {
             if (isLeft(entry, node)) {
-                node.setLeft(insert(entry, node.getLeft()));
+                node.left = insert(entry, node.left);
                 node = rotate(node, entry);
             }
 
             if (isRight(entry, node)) {
-                node.setRight(insert(entry, node.getRight()));
+                node.right = insert(entry, node.right);
                 node = rotate(node, entry);
             }
 
             if (isSame(entry, node)) {
-                node.setEntry(entry);
+                node.entry = entry;
             }
         }
         updateHeight(node);
@@ -44,12 +44,12 @@ public class AvlTree implements Tree {
             return null;
         } else {
             if (isLeft(key, node)) {
-                return search(node.getLeft(), key);
+                return search(node.left, key);
             }
             if (isRight(key, node)) {
-                return search(node.getRight(), key);
+                return search(node.right, key);
             }
-            return node.getEntry();
+            return node.entry;
         }
     }
 
@@ -72,28 +72,29 @@ public class AvlTree implements Tree {
                 }
 
                 //左子树的高度大于等于右子树
-                if (height(node.getLeft()) >= height(node.getRight())) {
+                if (height(node.left) >= height(node.right)) {
                     //从左子树中选择一个最大值来代替被删除节点
                     int max = findMax(node);
-                    Entry entry = node.getEntry();
+                    Entry entry = node.entry;
                     entry.setKey(max);
-                    node.setEntry(entry);
-                    delete(node.getLeft(), max);
+                    node.entry = entry;
+                    delete(node.left, max);
                 } else {
                     int min = findMin(node);
-                    Entry entry = node.getEntry();
+                    Entry entry = node.entry;
                     entry.setKey(min);
-                    node.setEntry(entry);
-                    delete(node.getRight(), min);
+                    node.entry = entry;
+                    delete(node.right, min);
                 }
             }
 
 
             if (isLeft(key, node)) {
-                node.setLeft(delete(node.getLeft(), key));
-                if (height(node.getRight()) - height(node.getLeft()) == 2) {
-                    if (height(node.getRight() == null ? null : node.getRight().getRight())
-                            >= height(node.getRight() == null ? null : node.getRight().getLeft())) {
+                node.left = delete(node.left,key);
+
+                if (height(node.right) - height(node.left) == 2) {
+                    if (height(node.right == null ? null : node.right.right)
+                            >= height(node.right == null ? null : node.right.left)) {
                         //RR
                         node = leftRotate(node);
                     } else {
@@ -105,10 +106,10 @@ public class AvlTree implements Tree {
 
 
             if (isRight(key, node)) {
-                node.setRight(delete(node.getRight(), key));
-                if (height(node.getLeft()) - height(node.getRight()) == 2) {
-                    if (height(node.getRight() == null ? null : node.getRight().getLeft())
-                            >= height(node.getRight() == null ? null : node.getRight().getRight())) {
+                node.right = delete(node.right,key);
+                if (height(node.left) - height(node.right) == 2) {
+                    if (height(node.right == null ? null : node.right.left)
+                            >= height(node.right == null ? null : node.right.right)) {
                         //LL
                         node = rightRotate(node);
                     } else {
@@ -124,16 +125,16 @@ public class AvlTree implements Tree {
 
 
     private Node rotate(Node node, int key) {
-        if (height(node.getLeft()) - height(node.getRight()) == 2) {
-            if (isLeft(key, node.getLeft())) {
+        if (height(node.left) - height(node.right) == 2) {
+            if (isLeft(key, node.left)) {
                 //LL
                 node = rightRotate(node);
             } else {
                 //LR
                 node = leftRightRotate(node);
             }
-        } else if (height(node.getRight()) - height(node.getLeft()) == 2) {
-            if (isRight(key, node.getRight())) {
+        } else if (height(node.right) - height(node.left) == 2) {
+            if (isRight(key, node.right)) {
                 //RR
                 node = leftRotate(node);
             } else {
@@ -153,7 +154,7 @@ public class AvlTree implements Tree {
         if (node == null) {
             return 0;
         }
-        if (node.getRight() != null) {
+        if (node.right != null) {
             return findMax(node);
         } else {
             return getKey(node);
@@ -164,7 +165,7 @@ public class AvlTree implements Tree {
         if (node == null) {
             return 0;
         }
-        if (node.getLeft() != null) {
+        if (node.left != null) {
             return findMin(node);
         } else {
             return getKey(node);
@@ -173,9 +174,9 @@ public class AvlTree implements Tree {
 
     //左旋
     private Node leftRotate(Node node) {
-        Node right = node.getRight();
-        node.setRight(right.getLeft());
-        right.setLeft(node);
+        Node right = node.right;
+        node.right = right.left;
+        right.left = node;
 
         //更新node和node.right的高度
         updateHeight(node);
@@ -186,9 +187,10 @@ public class AvlTree implements Tree {
 
     //右旋
     private Node rightRotate(Node node) {
-        Node left = node.getLeft();
-        node.setLeft(left.getRight());
-        left.setRight(node);
+        Node left = node.left;
+        node.left = left.right;
+        left.right = node;
+
 
         //更新node和node.left的高度
         updateHeight(node);
@@ -198,23 +200,23 @@ public class AvlTree implements Tree {
 
     //更新根节点的高度
     private void updateHeight(Node node) {
-        node.setHeight(Math.max(height(node.getLeft()), height(node.getRight())) + 1);
+        node.height = Math.max(height(node.left),height(node.right)+1);
     }
 
     //判断是否平衡
     private boolean isBalance(Node node) {
-        return Math.abs(height(node.getLeft()) - height(node.getRight())) < 2;
+        return Math.abs(height(node.left) - height(node.right)) < 2;
     }
 
     //先左旋后右旋
     private Node leftRightRotate(Node node) {
-        node.setLeft(leftRotate(node.getLeft()));
+        node.left = leftRotate(node.left);
         return rightRotate(node);
     }
 
     //先右旋后左旋
     private Node rightLeftRotate(Node node) {
-        node.setRight(rightRotate(node.getRight()));
+        node.right = rightRotate(node.right);
         return leftRotate(node);
     }
 
@@ -223,26 +225,26 @@ public class AvlTree implements Tree {
         if (node == null) {
             return 0;
         } else {
-            return node.getHeight();
+            return node.height;
         }
 
     }
 
     private boolean hasLeft(Node node) {
-        return node.getLeft() != null;
+        return node.left != null;
     }
 
 
     private boolean hasRight(Node node) {
-        return node.getLeft() != null || node.getRight() != null;
+        return node.left != null || node.right != null;
     }
 
     private boolean hasChild(Node node) {
-        return node.getLeft() != null || node.getRight() != null;
+        return node.left != null || node.right != null;
     }
 
     private int getKey(Node node) {
-        return node.getEntry().getKey();
+        return node.entry.key;
     }
 
     public boolean hasRoot() {
