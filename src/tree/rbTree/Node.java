@@ -6,7 +6,7 @@ import tree.TreeNode;
 @SuppressWarnings("unused")
 public class Node<K,V> extends TreeNode<K,V> {
     public boolean color; //true-黑  false-红
-
+    public Node<K,V> parent;
     @Override
     public String toString() {
         return "Node{" +

@@ -16,7 +16,7 @@ public class BPlusTree<K extends Comparable<K>, V> implements Tree<K, V> {
     //头结点
     private Node<K, V> head;
 
-    BPlusTree(int rank) {
+    public BPlusTree(int rank) {
         this.rank = rank;
     }
 
@@ -24,7 +24,7 @@ public class BPlusTree<K extends Comparable<K>, V> implements Tree<K, V> {
         return root;
     }
 
-    public void insert(K k,V v) {
+    public void insert(K k, V v) {
         Entry<K, V> entry = new Entry<>(k, v);
         List<Entry<K, V>> keyAndValues1 = new ArrayList<>();
         //插入第一个节点
@@ -201,7 +201,12 @@ public class BPlusTree<K extends Comparable<K>, V> implements Tree<K, V> {
 
 
     //打印B+树
-    void printBtree(Node<K, V> root) {
+    public void print() {
+        print(root);
+    }
+
+    //打印B+树
+    void print(Node<K, V> root) {
         if (root == this.root) {
             //打印根节点内的元素
             printNode(root);
@@ -231,7 +236,7 @@ public class BPlusTree<K extends Comparable<K>, V> implements Tree<K, V> {
                 leftNode = leftNode.getNextNode();
             }
             System.out.println();
-            printBtree(tmpNode);
+            print(tmpNode);
         }
     }
 

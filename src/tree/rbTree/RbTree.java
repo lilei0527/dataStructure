@@ -28,7 +28,7 @@ public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
     }
 
     @Override
-    public void insert(K k,V v) {
+    public void insert(K k, V v) {
         Entry<K, V> entry = new Entry<>(k, v);
         if (root == null) {
             root = new Node<>(null, entry);
@@ -49,9 +49,9 @@ public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
             } while (p != null);
 
 
-            Node<K,V> node = new Node<>(parent, entry);
+            Node<K, V> node = new Node<>(parent, entry);
 
-            if (isRight(entry,parent)) {
+            if (isRight(entry, parent)) {
                 parent.right = node;
             } else {
                 parent.left = node;
@@ -61,16 +61,11 @@ public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
         }
     }
 
-    @Override
-    public V search(K key) {
-        TreeNode<K, V> search = search(root, key);
-        return search==null?null:search.entry.value;
-    }
 
 
     @Override
     public V delete(K key) {
-        Node<K,V> node = (Node<K,V>) search(root, key);
+        Node<K, V> node = (Node<K, V>) search(root, key);
         if (node == null) {
             return null;
         }
@@ -78,16 +73,16 @@ public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
         return node.entry.value;
     }
 
-    public void deleteNode(Node<K,V> p) {
+    public void deleteNode(Node<K, V> p) {
         //待删除节点有两个孩子
         if (p.left != null && p.right != null) {
-            Node<K,V> s = (Node<K,V>) successor(p);
+            Node<K, V> s =  successor(p);
             //将待删除节点属性赋值到后继节点
             p.entry = s.entry;
             p = s;
         }
 
-        Node<K,V> replacement = (Node<K,V>) (p.left != null ? p.left : p.right);
+        Node<K, V> replacement = (Node<K, V>) (p.left != null ? p.left : p.right);
 
         if (replacement != null) {
             if (p.parent == null) {
@@ -158,13 +153,13 @@ public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
      *        node          node
      *
      */
-    private void fixAfterInsertion(Node<K,V> node) {
+    private void fixAfterInsertion(Node<K, V> node) {
         node.color = RED;
 
         while (node != root && node.parent.color == RED) {
 
             if (parentOf(node) == leftOf(parentOf(parentOf(node)))) {
-                Node<K,V> y = rightOf(parentOf(parentOf(node)));
+                Node<K, V> y = rightOf(parentOf(parentOf(node)));
                 if (colorOf(y) == RED) {
                     //对应第一种情况
                     setColor(parentOf(parentOf(node)), RED);
@@ -182,7 +177,7 @@ public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
                     rotateRight(parentOf(parentOf(node)));
                 }
             } else {
-                Node<K,V> y = leftOf(parentOf(parentOf(node)));
+                Node<K, V> y = leftOf(parentOf(parentOf(node)));
                 if (colorOf(y) == RED) {
                     //对应第三种情况
                     setColor(parentOf(parentOf(node)), RED);
@@ -202,17 +197,17 @@ public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
             }
         }
 
-        ((Node<K,V>) root).color = BLACK;
+        ((Node<K, V>) root).color = BLACK;
     }
 
     /**
      * @author lilei
      *
      */
-    private void fixAfterDelete(Node<K,V> x) {
+    private void fixAfterDelete(Node<K, V> x) {
         while (x != root && colorOf(x) == BLACK) {
             if (x == leftOf(parentOf(x))) {
-                Node<K,V> sib = rightOf(parentOf(x));
+                Node<K, V> sib = rightOf(parentOf(x));
 
                 if (colorOf(sib) == RED) {
                     setColor(sib, BLACK);
@@ -236,10 +231,10 @@ public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
                     setColor(parentOf(x), BLACK);
                     setColor(rightOf(sib), BLACK);
                     rotateLeft(parentOf(x));
-                    x = (Node<K,V>) root;
+                    x = (Node<K, V>) root;
                 }
             } else { // symmetric
-                Node<K,V> sib = leftOf(parentOf(x));
+                Node<K, V> sib = leftOf(parentOf(x));
 
                 if (colorOf(sib) == RED) {
                     setColor(sib, BLACK);
@@ -263,7 +258,7 @@ public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
                     setColor(parentOf(x), BLACK);
                     setColor(leftOf(sib), BLACK);
                     rotateRight(parentOf(x));
-                    x = (Node<K,V>) root;
+                    x = (Node<K, V>) root;
                 }
             }
         }
@@ -271,12 +266,12 @@ public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
         setColor(x, BLACK);
     }
 
-    private void rotateLeft(Node<K,V> p) {
+    private void rotateLeft(Node<K, V> p) {
         if (p != null) {
-            Node<K,V> r = (Node<K,V>) p.right;
+            Node<K, V> r = (Node<K, V>) p.right;
             p.right = r.left;
             if (r.left != null)
-                ((Node<K,V>) r.left).parent = p;
+                ((Node<K, V>) r.left).parent = p;
             r.parent = p.parent;
             if (p.parent == null)
                 root = r;
@@ -289,11 +284,11 @@ public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
         }
     }
 
-    private void rotateRight(Node<K,V> p) {
+    private void rotateRight(Node<K, V> p) {
         if (p != null) {
-            Node<K,V> l = (Node<K,V>) p.left;
+            Node<K, V> l = (Node<K, V>) p.left;
             p.left = l.right;
-            if (l.right != null) ((Node<K,V>) l.right).parent = p;
+            if (l.right != null) ((Node<K, V>) l.right).parent = p;
             l.parent = p.parent;
             if (p.parent == null)
                 root = l;
@@ -306,24 +301,67 @@ public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
     }
 
 
-    private  boolean colorOf(Node<K,V> node) {
+    private boolean colorOf(Node<K, V> node) {
         return (node == null ? BLACK : node.color);
     }
 
-    private  Node<K,V> parentOf(Node<K,V> node) {
+    private Node<K, V> parentOf(Node<K, V> node) {
         return (node == null ? null : node.parent);
     }
 
-    private  void setColor(Node<K,V> node, boolean c) {
+    private void setColor(Node<K, V> node, boolean c) {
         if (node != null)
             node.color = c;
     }
 
-    private  Node<K,V> leftOf(Node<K,V> node) {
-        return (node == null) ? null : (Node<K,V>) node.left;
+    private Node<K, V> leftOf(Node<K, V> node) {
+        return (node == null) ? null : (Node<K, V>) node.left;
     }
 
-    private  Node<K,V> rightOf(Node<K,V> node) {
-        return (node == null) ? null : (Node<K,V>) node.right;
+    private Node<K, V> rightOf(Node<K, V> node) {
+        return (node == null) ? null : (Node<K, V>) node.right;
     }
+
+    protected Node<K, V> successor(Node<K, V> t) {
+        if (t == null)
+            return null;
+        else if (t.right != null) {
+            Node<K, V> p = (Node<K, V>) t.right;
+            while (p.left != null)
+                p = (Node<K, V>) p.left;
+            return p;
+        } else {
+            Node<K, V> p = t.parent;
+            Node<K, V> ch = t;
+            while (p != null && ch == p.right) {
+                ch = p;
+                p = p.parent;
+            }
+            return p;
+        }
+    }
+
+    /**
+     * Returns the predecessor of the specified Entry, or null if no such.
+     */
+    protected Node<K, V> predecessor(Node<K, V> t) {
+        if (t == null)
+            return null;
+        else if (t.left != null) {
+            TreeNode<K, V> p = t.left;
+            while (p.right != null)
+                p = p.right;
+            return (Node<K, V>) p;
+        } else {
+            Node<K, V> p = t.parent;
+            Node<K, V> ch = t;
+            while (p != null && ch == p.left) {
+                ch = p;
+                p = p.parent;
+            }
+            return p;
+        }
+    }
+
+
 }

@@ -36,11 +36,7 @@ public class AvlTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
         return node;
     }
 
-    @Override
-    public V search(K key) {
-        TreeNode<K, V> search = search(root, key);
-        return search == null ? null : search.entry.value;
-    }
+
 
 
     @Override
