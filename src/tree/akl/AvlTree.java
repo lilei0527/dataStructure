@@ -16,6 +16,8 @@ public class AvlTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
     public Node<K, V> insert(Entry<K, V> entry, Node<K, V> node) {
         if (node == null) {
             node = new Node<>(entry);
+
+
         } else {
             if (isLeft(entry, node)) {
                 node.left = insert(entry, (Node<K, V>) node.left);

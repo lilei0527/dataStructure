@@ -12,7 +12,7 @@ import java.util.*;
 public class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
     public Node<K> root;
     public Queue<Node<K>> queue = new PriorityQueue<>();
-    public Map<K, String> codeMap = new HashMap<>();
+    public Map<K, byte[]> codeMap = new HashMap<>();
 
     @Override
     public void create() {
@@ -47,58 +47,62 @@ public class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
 
     @Override
     public void listCode() {
-        String code = "1";
-        saveCode(root, code);
+        byte[] bytes = new byte[1];
+        bytes[0] = 0x01;
+        saveCode(root, bytes);
     }
 
     @Override
     public byte[] code(K[] key) {
-        List<Byte>bytes = new ArrayList<>();
-        for(int i=0;i<key.length;i++){
-            
-        }
+        return null;
     }
 
     public int getZero(byte b) {
         int i = 0;
-        while ((b = (byte) (b >> i)) != 0) {
+        while (b != 0) {
             i++;
+            b = (byte) (b >> 1);
         }
         return 8 - i;
     }
 
     @Override
     public byte[] getCode(K k) {
-        String s = codeMap.get(k);
-        return coverToBytes(s);
+        return null;
     }
 
 
-    public byte[] coverToBytes(String code) {
-        int length = code.length();
-        int size = length % 8 == 0 ? length / 8 : length / 8 + 1;
-        byte[] bytes = new byte[size];
-        for (int i = 0; i < length; i++) {
-            int index = 1 << (i % 8);
-            char c = code.charAt(length - i - 1);
-            if (c == '1') {
-                bytes[i / 8] |= index;
-            }
-        }
-        return bytes;
-    }
-
-
-    public void saveCode(Node<K> node, String code) {
+    public void saveCode(Node<K> node, byte[] code) {
         if (node.left == null && node.right == null) {
             codeMap.put(node.k, code);
-            System.out.println(node.k.toString() + "编码:" + code);
+//            System.out.println(node.k.toString() + "编码:" + code.);
         }
         if (node.left != null) {
-            saveCode(node.left, code + "0");
+            code(code, (byte) 0x00);
+            saveCode(node.left, code);
         }
         if (node.right != null) {
-            saveCode(node.right, code + "1");
+            code(code, (byte) 0x01);
+            saveCode(node.right, code);
+        }
+    }
+
+    private void code(byte[] code, byte bit) {
+        System.arraycopy(code, 0, code, 1, code.length);
+        code[0] |= bit;
+    }
+
+    private void moveLeftOneBit(byte[] code) {
+        if (getZero(code[code.length - 1]) == 0) {
+            byte[] newBytes = new byte[code.length + 1];
+            System.arraycopy(code, 0, newBytes, 0, code.length);
+            code = newBytes;
+        }
+
+        for (int i = code.length - 1; i >= 0; i--) {
+            code[i] = (byte) (code[i] << 1);
+            if (i > 0)
+                code[i] |= (code[i - 1] >> 7);
         }
     }
 
@@ -132,5 +136,11 @@ public class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
                 '}';
     }
 
+    public static void main(String[] args) {
+        HuffmanTree<Character> huffmanTree = new HuffmanTree<>();
+        byte[] bytes = new byte[1];
+        bytes[0] = 0b01010101;
+        huffmanTree.moveLeftOneBit(bytes);
+    }
 
 }

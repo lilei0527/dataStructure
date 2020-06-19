@@ -17,8 +17,5 @@ public class HuffmanTreeTest {
         huffmanTree.add('f', 11);
 
         huffmanTree.create();
-        huffmanTree.listCode();
-        String s = "11110011110";
-        System.out.println(huffmanTree.getCodeString('a'));
     }
 }
