@@ -1,6 +1,7 @@
 package tree;
 
 
+import tree.huffman.CharHuffmanTree;
 import tree.huffman.HuffmanTree;
 
 /**
@@ -8,23 +9,9 @@ import tree.huffman.HuffmanTree;
  **/
 public class HuffmanTreeTest {
     public static void main(String[] args) {
-        HuffmanTree<Character> huffmanTree = new HuffmanTree<>('@');
-        huffmanTree.add('a', 2);
-        huffmanTree.add('b', 5);
-        huffmanTree.add('c', 6);
-        huffmanTree.add('d', 9);
-        huffmanTree.add('e', 10);
-        huffmanTree.add('f', 11);
-        huffmanTree.add('@', 1);
-
-        huffmanTree.create();
-
-        Character[] characters = {'a','b','c','@'};
-
-        byte[] encode = huffmanTree.encode(characters);
-        Object[] decode = huffmanTree.decode(encode);
-        for(Object o:decode){
-            System.out.println(o.toString());
-        }
+        HuffmanTree<Character> tree = new CharHuffmanTree('@',"abc  adfd f @");
+        byte[]bytes = tree.encode();
+        Object[] decode = tree.decode(bytes);
+        System.out.println(tree.getCode('a'));
     }
 }

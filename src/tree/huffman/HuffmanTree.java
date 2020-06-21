@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * @author lilei
  **/
-public class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
+public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
     public Node<K> root;
     public Queue<Node<K>> queue = new PriorityQueue<>();
     public Map<K, String> codeMap = new HashMap<>();
@@ -65,6 +65,9 @@ public class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
         }
         return bytes;
     }
+
+    public abstract byte[] encode();
+
 
     @Override
     public Object[] decode(byte[] bytes) {
@@ -134,6 +137,10 @@ public class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
 
     public void add(K k, int weight) {
         queue.add(new Node<>(weight, k));
+    }
+
+    public String getCode(K k){
+        return codeMap.get(k);
     }
 
 

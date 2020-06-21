@@ -4,4 +4,5 @@ package tree;
 public interface Coded<K> {
     byte[] encode(K[]k);
     Object[]decode(byte[]bytes);
+    String getCode(K k);
 }
