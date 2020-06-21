@@ -43,11 +43,10 @@ public class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
             }
         }
 
-        listCode();
+        saveCode();
     }
 
-    @Override
-    public void listCode() {
+    public void saveCode() {
         String code = "0";
         saveCode(root, code);
     }
