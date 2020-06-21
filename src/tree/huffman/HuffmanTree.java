@@ -13,6 +13,12 @@ public class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
     public Node<K> root;
     public Queue<Node<K>> queue = new PriorityQueue<>();
     public Map<K, String> codeMap = new HashMap<>();
+    public Map<String, K> keyMap = new HashMap<>();
+    public K end;
+
+    public HuffmanTree(K end) {
+        this.end = end;
+    }
 
     @Override
     public void create() {
@@ -28,17 +34,12 @@ public class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
             while (true) {
                 Node<K> node = create(l, r);
                 Node<K> poll = queue.poll();
-                if (node.weight == l.weight + r.weight || poll == null) {
+                if (poll == null) {
                     root = node;
                     break;
                 }
-                if (node.weight > poll.weight) {
-                    l = poll;
-                    r = node;
-                } else {
-                    l = node;
-                    r = poll;
-                }
+                l = poll;
+                r = node;
             }
         }
 
@@ -51,9 +52,58 @@ public class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
         saveCode(root, code);
     }
 
+    @Override
+    public byte[] encode(K[] ks) {
+        byte[] bytes = new byte[getCodeLength(ks) / 8 + 1];
+        int index = 0;
+        for (K k : ks) {
+            String code = codeMap.get(k);
+            for (int j = 0; j < code.length(); j++) {
+                if (code.charAt(j) == '1')
+                    bytes[index / 8] |= (1 << (index % 8));
+                index++;
+            }
+        }
+        return bytes;
+    }
+
+    @Override
+    public Object[] decode(byte[] bytes) {
+        int index = 0;
+        List<K> list = new ArrayList<>();
+        StringBuilder stringBuilder = new StringBuilder();
+        while (true) {
+            if ((bytes[index / 8] & (1 << (index % 8))) == 1 << (index % 8)) {
+                stringBuilder.append("1");
+            } else {
+                stringBuilder.append("0");
+            }
+            index++;
+            String s = stringBuilder.toString();
+            K k = keyMap.get(s);
+            if (end.equals(k)) {
+                break;
+            }
+            if (k != null) {
+                list.add(k);
+                stringBuilder.delete(0, stringBuilder.length());
+            }
+        }
+        return list.toArray();
+    }
+
+    private int getCodeLength(K[] ks) {
+        int length = 0;
+        for (K k : ks) {
+            length += codeMap.get(k).length();
+        }
+        return length;
+    }
+
     public void saveCode(Node<K> node, String code) {
         if (node.left == null && node.right == null) {
             codeMap.put(node.k, code);
+            keyMap.put(code, node.k);
         }
         if (node.left != null) {
             saveCode(node.left, code + "0");
@@ -66,19 +116,21 @@ public class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
 
     public Node<K> create(Node<K> left, Node<K> right) {
         Node<K> node = queue.poll();
-
         Node<K> newNode = new Node<>(left.weight + right.weight, left, right);
-
         if (node == null) {
             return newNode;
         }
-        Node<K> parent;
-        if ((left.weight + right.weight) > node.weight) {
-            parent = new Node<>(node.weight + newNode.weight, node, newNode);
+        Node<K> parent = new Node<>(node.weight + newNode.weight, node, newNode);
+        Node<K> l = queue.poll();
+        Node<K> r = queue.poll();
+        if (l == null) {
+            return parent;
+        } else if (r == null) {
+            return new Node<>(l.weight + parent.weight, l, parent);
         } else {
-            parent = new Node<>(node.weight + newNode.weight, newNode, node);
+            Node<K> mid = new Node<>(l.weight + r.weight, l, r);
+            return new Node<>(mid.weight + parent.weight, mid, parent);
         }
-        return parent;
     }
 
     public void add(K k, int weight) {
@@ -90,6 +142,8 @@ public class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
     public String toString() {
         return "HuffmanTree{" +
                 "root=" + root +
+                ", queue=" + queue +
+                ", codeMap=" + codeMap +
                 '}';
     }
 }

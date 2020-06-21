@@ -8,19 +8,6 @@ public class Node<K> implements Comparable<Node<K>>{
     public K k;//存储实体
     public Node<K> left;
     public Node<K> right;
-
-    public Node(int weight, K k, Node<K> left, Node<K> right) {
-        this.weight = weight;
-        this.k = k;
-        this.left = left;
-        this.right = right;
-    }
-
-    public Node(Node<K> left, Node<K> right) {
-        this.left = left;
-        this.right = right;
-    }
-
     public Node(int weight, Node<K> left, Node<K> right) {
         this.weight = weight;
         this.left = left;
