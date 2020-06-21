@@ -93,6 +93,14 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
         }
         return list.toArray();
     }
+    public abstract Map<K, Integer> count() ;
+
+    public void addNode(){
+        Map<K, Integer> count = count();
+        for(Map.Entry<K, Integer> entry:count.entrySet()){
+            add(entry.getKey(),entry.getValue());
+        }
+    }
 
     private int getCodeLength(K[] ks) {
         int length = 0;

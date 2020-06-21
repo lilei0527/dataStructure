@@ -35,14 +35,6 @@ public class CharHuffmanTree extends HuffmanTree<Character> {
         return frequencyMap;
     }
 
-
-    public void addNode(){
-        Map<Character, Integer> count = count();
-        for(Map.Entry<Character, Integer> entry:count.entrySet()){
-            add(entry.getKey(),entry.getValue());
-        }
-    }
-
     public byte[] encode(){
         return encode(toChar());
     }
