@@ -1,7 +1,5 @@
 package tree.huffman;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author lilei
@@ -9,14 +7,14 @@ import java.util.Map;
 public class CharHuffmanTree extends HuffmanTree<Character> {
     private String content;
 
-    public CharHuffmanTree(Character end, String content) {
-        super(end);
+    public CharHuffmanTree( String content) {
+        super(content.length());
         this.content = content;
         addNode();
         create();
     }
 
-    public Character[] toChar() {
+    public Character[] toArray() {
         char[] chars = content.toCharArray();
         Character[] characters = new Character[chars.length];
         int index = 0;
@@ -26,17 +24,8 @@ public class CharHuffmanTree extends HuffmanTree<Character> {
         return characters;
     }
 
-    public Map<Character, Integer> count() {
-        Map<Character, Integer> frequencyMap = new HashMap<>();
-        Character[] characters = toChar();
-        for (Character character : characters) {
-            frequencyMap.merge(character, 1, Integer::sum);
-        }
-        return frequencyMap;
+    @Override
+    public byte getBinCode(Character character) {
+        return (byte) character.charValue();
     }
-
-    public byte[] encode(){
-        return encode(toChar());
-    }
-
 }
