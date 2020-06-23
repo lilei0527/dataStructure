@@ -19,15 +19,15 @@ public class HuffmanTreeTest {
 //            System.out.println((char) o);
 //        }
 
-        HuffmanTree<Byte> tree = new ByteHuffmanTree(new File("C:\\Users\\lilei\\Desktop\\1.txt"));
+        HuffmanTree<Byte> tree = new ByteHuffmanTree(new File("C:\\Users\\lilei\\Desktop\\1.jpg"));
         byte[] bytes = tree.encode();
 
-        File file1 = new File("C:\\Users\\lilei\\Desktop\\2-zip.txt");
+        File file1 = new File("C:\\Users\\lilei\\Desktop\\1.zip");
         OutputStream outputStream1 = new FileOutputStream(file1);
         outputStream1.write(bytes);
 
         byte[] decode = tree.decode(bytes);
-        File file = new File("C:\\Users\\lilei\\Desktop\\2.txt");
+        File file = new File("C:\\Users\\lilei\\Desktop\\2.jpg");
         OutputStream outputStream = new FileOutputStream(file);
         outputStream.write(decode);
     }

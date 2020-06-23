@@ -14,7 +14,6 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
     public Queue<Node<K>> queue = new PriorityQueue<>();
     public Map<K, String> codeMap = new HashMap<>();
     public Map<String, K> keyMap = new HashMap<>();
-    public String end="1";
     public long fileSize;//文件字节数
 
     public HuffmanTree(long fileSize) {
@@ -48,29 +47,30 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
     }
 
     public void saveCode() {
-        String code = "0";
+        String code = "";
         saveCode(root, code);
     }
 
     @Override
     public byte[] encode(K[] ks) {
-        byte[] bytes = new byte[getCodeLength(ks) / 8 + 1 + end.length()];
+        int codeLength = getCodeLength(ks);
+        int size = codeLength % 8 == 0 ? codeLength / 8 : codeLength / 8 + 1;
+        byte[] bytes = new byte[size];
         int index = 0;
+
+        out:
         for (K k : ks) {
             String code = codeMap.get(k);
             for (int j = 0; j < code.length(); j++) {
                 if (code.charAt(j) == '1')
                     bytes[index / 8] |= (1 << (index % 8));
                 index++;
+                if (index >= codeLength) {
+                    break out;
+                }
             }
         }
 
-        //add end
-        for (int j = 0; j < end.length(); j++) {
-            if (end.charAt(j) == '1')
-                bytes[index / 8] |= (1 << (index % 8));
-            index++;
-        }
         return bytes;
     }
 
@@ -82,8 +82,8 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
     @Override
     public byte[] decode(byte[] bytes) {
         int index = 0;
-        int i =0;
-        byte[] rb = new byte[(int)fileSize];
+        int i = 0;
+        byte[] rb = new byte[(int) fileSize];
         StringBuilder stringBuilder = new StringBuilder();
         while (true) {
             if ((bytes[index / 8] & (1 << (index % 8))) == 1 << (index % 8)) {
@@ -93,7 +93,7 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
             }
             String s = stringBuilder.toString();
             K k = keyMap.get(s);
-            if (end.equals(s)) {
+            if (i >= fileSize) {
                 break;
             }
             if (k != null) {
@@ -150,17 +150,15 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
         if (node == null) {
             return newNode;
         }
-        Node<K> parent = new Node<>(node.weight + newNode.weight, node, newNode);
-        Node<K> l = queue.poll();
-        Node<K> r = queue.poll();
-        if (l == null) {
-            return parent;
-        } else if (r == null) {
-            return new Node<>(l.weight + parent.weight, l, parent);
-        } else {
-            Node<K> mid = new Node<>(l.weight + r.weight, l, r);
-            return new Node<>(mid.weight + parent.weight, mid, parent);
+        if (node.weight <= newNode.weight) {
+            Node<K> peek = queue.peek();
+            if (peek != null && peek.weight <= newNode.weight) {
+                Node<K> poll = queue.poll();
+                Node<K> p = new Node<>(node.weight + poll.weight, node, poll);
+                return new Node<>(p.weight + newNode.weight, p, newNode);
+            }
         }
+        return newNode;
     }
 
     public void add(K k, int weight) {
