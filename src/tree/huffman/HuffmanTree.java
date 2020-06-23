@@ -85,24 +85,22 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
         int i = 0;
         byte[] rb = new byte[(int) fileSize];
         StringBuilder stringBuilder = new StringBuilder();
-        while (true) {
+        do {
             if ((bytes[index / 8] & (1 << (index % 8))) == 1 << (index % 8)) {
                 stringBuilder.append("1");
             } else {
                 stringBuilder.append("0");
             }
+            index++;
             String s = stringBuilder.toString();
             K k = keyMap.get(s);
-            if (i >= fileSize) {
-                break;
-            }
+
             if (k != null) {
                 byte binCode = getBinCode(k);
                 rb[i++] = binCode;
                 stringBuilder.delete(0, stringBuilder.length());
             }
-            index++;
-        }
+        } while (i < fileSize);
         return rb;
     }
 
