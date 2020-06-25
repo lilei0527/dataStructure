@@ -10,10 +10,10 @@ import java.util.*;
  * @author lilei
  **/
 public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
-    public Node<K> root;
-    public Queue<Node<K>> queue = new PriorityQueue<>();
-    public Map<K, String> codeMap = new HashMap<>();
-    public Map<String, K> keyMap = new HashMap<>();
+    public Node<Byte> root;
+    public Queue<Node<Byte>> queue = new PriorityQueue<>();
+    public Map<Byte, String> codeMap = new HashMap<>();
+    public Map<String, Byte> keyMap = new HashMap<>();
     public long fileSize;//文件字节数
 
     public HuffmanTree(long fileSize) {
@@ -22,16 +22,16 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
 
     @Override
     public void create() {
-            while (queue.peek() != null) {
-                Node<K> left = queue.poll();
-                Node<K> right = queue.poll();
-                if (right == null) {
-                    root = left;
-                    break;
-                }
-                Node<K> parent = new Node<>(left.weight + right.weight, left, right);
-                queue.add(parent);
+        while (queue.peek() != null) {
+            Node<Byte> left = queue.poll();
+            Node<Byte> right = queue.poll();
+            if (right == null) {
+                root = left;
+                break;
             }
+            Node<Byte> parent = new Node<>(left.weight + right.weight, left, right);
+            queue.add(parent);
+        }
         saveCode();
     }
 
@@ -41,22 +41,28 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
     }
 
     @Override
-    public byte[] encode(K[] ks) {
-        int codeLength = getCodeLength(ks);
-        int size = codeLength % 8 == 0 ? codeLength / 8 : codeLength / 8 + 1;
+    public byte[] encode(byte[] ks) {
+//        int codeLength = getCodeLength(ks);
+//        int size = codeLength % 8 == 0 ? codeLength / 8 : codeLength / 8 + 1;
+
+        int decreaseByte = getDecreaseByte(ks);
+        int size = ks.length-decreaseByte;
         byte[] bytes = new byte[size];
         int index = 0;
-
-        out:
-        for (K k : ks) {
+        int i = 0;
+//        out:
+        for (Byte k : ks) {
             String code = codeMap.get(k);
             for (int j = 0; j < code.length(); j++) {
-                if (code.charAt(j) == '1')
+                if (code.charAt(j) == '1'){
                     bytes[index / 8] |= (1 << (index % 8));
-                index++;
-                if (index >= codeLength) {
-                    break out;
+                    i++;
                 }
+                if(i>=size) break;
+                index++;
+//                if (s++<=size) {
+//                    break out;
+//                }
             }
         }
 
@@ -82,42 +88,49 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
             }
             index++;
             String s = stringBuilder.toString();
-            K k = keyMap.get(s);
+            Byte k = keyMap.get(s);
 
             if (k != null) {
-                byte binCode = getBinCode(k);
-                rb[i++] = binCode;
+                rb[i++] = k;
                 stringBuilder.delete(0, stringBuilder.length());
             }
         } while (i < fileSize);
         return rb;
     }
 
-    public Map<K, Integer> count() {
-        Map<K, Integer> frequencyMap = new HashMap<>();
-        K[] ks = toArray();
-        for (K k : ks) {
+    public Map<Byte, Integer> count() {
+        Map<Byte, Integer> frequencyMap = new HashMap<>();
+        byte[] ks = toArray();
+        for (byte k : ks) {
             frequencyMap.merge(k, 1, Integer::sum);
         }
         return frequencyMap;
     }
 
     public void addNode() {
-        Map<K, Integer> count = count();
-        for (Map.Entry<K, Integer> entry : count.entrySet()) {
+        Map<Byte, Integer> count = count();
+        for (Map.Entry<Byte, Integer> entry : count.entrySet()) {
             add(entry.getKey(), entry.getValue());
         }
     }
 
-    private int getCodeLength(K[] ks) {
+    private int getCodeLength(byte[] ks) {
         int length = 0;
-        for (K k : ks) {
+        for (byte k : ks) {
             length += codeMap.get(k).length();
         }
         return length;
     }
 
-    public void saveCode(Node<K> node, String code) {
+    private int getDecreaseByte(byte[] ks) {
+        int length = 0;
+        for (byte k : ks) {
+            length += (8 - codeMap.get(k).length());
+        }
+        return length % 8 == 0 ? length / 8 : length / 8 + 1;
+    }
+
+    public void saveCode(Node<Byte> node, String code) {
         if (node.left == null && node.right == null) {
             codeMap.put(node.k, code);
             keyMap.put(code, node.k);
@@ -131,17 +144,12 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
     }
 
 
-    public void add(K k, int weight) {
+    public void add(Byte k, int weight) {
         queue.add(new Node<>(weight, k));
     }
 
-    public String getCode(K k) {
-        return codeMap.get(k);
-    }
 
-    public abstract K[] toArray();
-
-    public abstract byte getBinCode(K k);
+    public abstract byte[] toArray();
 
     @Override
     public String toString() {

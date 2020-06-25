@@ -14,18 +14,7 @@ public class CharHuffmanTree extends HuffmanTree<Character> {
         create();
     }
 
-    public Character[] toArray() {
-        char[] chars = content.toCharArray();
-        Character[] characters = new Character[chars.length];
-        int index = 0;
-        for (char c : chars) {
-            characters[index++] = c;
-        }
-        return characters;
-    }
-
-    @Override
-    public byte getBinCode(Character character) {
-        return (byte) character.charValue();
+    public byte[] toArray() {
+        return content.getBytes();
     }
 }

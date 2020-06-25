@@ -18,18 +18,13 @@ public class ByteHuffmanTree extends HuffmanTree<Byte> {
     }
 
     @Override
-    public Byte[] toArray() {
+    public byte[] toArray() {
         InputStream inputStream = null;
         try {
             inputStream = new FileInputStream(file);
             byte[] bytes = new byte[(int) file.length()];
             inputStream.read(bytes);
-            Byte[] rb = new Byte[bytes.length];
-            int index = 0;
-            for (byte b : bytes) {
-                rb[index++] = b;
-            }
-            return rb;
+            return bytes;
         } catch (IOException e) {
             return null;
         } finally {
@@ -42,10 +37,4 @@ public class ByteHuffmanTree extends HuffmanTree<Byte> {
             }
         }
     }
-
-    @Override
-    public byte getBinCode(Byte aByte) {
-        return aByte;
-    }
-
 }
