@@ -19,7 +19,7 @@ public class HuffmanTreeTest {
 //            System.out.println((char) o);
 //        }
 
-        HuffmanTree<Byte> tree = new ByteHuffmanTree(new File("C:\\Users\\lilei\\Downloads\\基于改进Canny算子的图像边缘检测算法.pdf"));
+        HuffmanTree<Byte> tree = new ByteHuffmanTree(new File("C:\\Users\\lilei\\Downloads\\Xftp-6.0.0178p.exe"));
         byte[] bytes = tree.encode();
 
         File file1 = new File("C:\\Users\\lilei\\Desktop\\1.zip");
@@ -27,7 +27,7 @@ public class HuffmanTreeTest {
         outputStream1.write(bytes);
 
         byte[] decode = tree.decode(bytes);
-        File file = new File("C:\\Users\\lilei\\Desktop\\2.pdf");
+        File file = new File("C:\\Users\\lilei\\Desktop\\2.exe");
         OutputStream outputStream = new FileOutputStream(file);
         outputStream.write(decode);
     }

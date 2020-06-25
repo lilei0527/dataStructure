@@ -22,27 +22,16 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
 
     @Override
     public void create() {
-        Node<K> l = queue.poll();
-        Node<K> r = queue.poll();
-
-        if (l == null) {
-            root = null;
-        } else if (r == null) {
-            root = l;
-        } else {
-
-            while (true) {
-                Node<K> node = create(l, r);
-                Node<K> poll = queue.poll();
-                if (poll == null) {
-                    root = node;
+            while (queue.peek() != null) {
+                Node<K> left = queue.poll();
+                Node<K> right = queue.poll();
+                if (right == null) {
+                    root = left;
                     break;
                 }
-                l = poll;
-                r = node;
+                Node<K> parent = new Node<>(left.weight + right.weight, left, right);
+                queue.add(parent);
             }
-        }
-
         saveCode();
     }
 
@@ -141,23 +130,6 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
         }
     }
 
-
-    public Node<K> create(Node<K> left, Node<K> right) {
-        Node<K> node = queue.poll();
-        Node<K> newNode = new Node<>(left.weight + right.weight, left, right);
-        if (node == null) {
-            return newNode;
-        }
-        if (node.weight <= newNode.weight) {
-            Node<K> peek = queue.peek();
-            if (peek != null && peek.weight <= newNode.weight) {
-                Node<K> poll = queue.poll();
-                Node<K> p = new Node<>(node.weight + poll.weight, node, poll);
-                return new Node<>(p.weight + newNode.weight, p, newNode);
-            }
-        }
-        return newNode;
-    }
 
     public void add(K k, int weight) {
         queue.add(new Node<>(weight, k));
