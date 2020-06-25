@@ -3,22 +3,68 @@ package tree.huffman;
 import tree.Coded;
 import tree.WeightedTree;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 
 /**
  * @author lilei
  **/
-public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
-    public Node<Byte> root;
-    public Queue<Node<Byte>> queue = new PriorityQueue<>();
-    public Map<Byte, String> codeMap = new HashMap<>();
-    public Map<String, Byte> keyMap = new HashMap<>();
-    public long fileSize;//文件字节数
+public  class HuffmanTree implements WeightedTree, Coded {
+    private Node<Byte> root;
+    private Queue<Node<Byte>> queue = new PriorityQueue<>();
+    private Map<Byte, String> codeMap = new HashMap<>();
+    private Map<String, Byte> keyMap = new HashMap<>();
+    private byte[] bytes;
+    private long fileSize;//文件字节数
 
-    public HuffmanTree(long fileSize) {
+
+    public HuffmanTree(byte[] bytes, long fileSize) {
+        this.bytes = bytes;
         this.fileSize = fileSize;
+        addNode();
+        create();
     }
+
+    public HuffmanTree(File file, long fileSize) {
+        this.bytes = toArray(file);
+        this.fileSize = fileSize;
+        addNode();
+        create();
+    }
+
+
+    public HuffmanTree(String content) {
+        this(content.getBytes(), content.length());
+    }
+
+    public HuffmanTree(File file) {
+        this(file, file.length());
+    }
+
+    public byte[] toArray(File file) {
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(file);
+            byte[] bytes = new byte[(int) file.length()];
+            inputStream.read(bytes);
+            return bytes;
+        } catch (IOException e) {
+            return null;
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
     @Override
     public void create() {
@@ -42,27 +88,20 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
 
     @Override
     public byte[] encode(byte[] ks) {
-//        int codeLength = getCodeLength(ks);
-//        int size = codeLength % 8 == 0 ? codeLength / 8 : codeLength / 8 + 1;
-
         int decreaseByte = getDecreaseByte(ks);
-        int size = ks.length-decreaseByte;
+        int size = ks.length - decreaseByte;
         byte[] bytes = new byte[size];
         int index = 0;
         int i = 0;
-//        out:
         for (Byte k : ks) {
             String code = codeMap.get(k);
             for (int j = 0; j < code.length(); j++) {
-                if (code.charAt(j) == '1'){
+                if (code.charAt(j) == '1') {
                     bytes[index / 8] |= (1 << (index % 8));
                     i++;
                 }
-                if(i>=size) break;
+                if (i >= size) break;
                 index++;
-//                if (s++<=size) {
-//                    break out;
-//                }
             }
         }
 
@@ -70,7 +109,7 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
     }
 
     public byte[] encode() {
-        return encode(toArray());
+        return encode(bytes);
     }
 
 
@@ -100,8 +139,7 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
 
     public Map<Byte, Integer> count() {
         Map<Byte, Integer> frequencyMap = new HashMap<>();
-        byte[] ks = toArray();
-        for (byte k : ks) {
+        for (byte k : bytes) {
             frequencyMap.merge(k, 1, Integer::sum);
         }
         return frequencyMap;
@@ -114,13 +152,13 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
         }
     }
 
-    private int getCodeLength(byte[] ks) {
-        int length = 0;
-        for (byte k : ks) {
-            length += codeMap.get(k).length();
-        }
-        return length;
-    }
+//    private int getCodeLength(byte[] ks) {
+//        int length = 0;
+//        for (byte k : ks) {
+//            length += codeMap.get(k).length();
+//        }
+//        return length;
+//    }
 
     private int getDecreaseByte(byte[] ks) {
         int length = 0;
@@ -148,8 +186,6 @@ public abstract class HuffmanTree<K> implements WeightedTree<K>, Coded<K> {
         queue.add(new Node<>(weight, k));
     }
 
-
-    public abstract byte[] toArray();
 
     @Override
     public String toString() {

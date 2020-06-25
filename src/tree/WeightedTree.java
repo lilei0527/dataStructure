@@ -1,6 +1,6 @@
 package tree;
 
 
-public interface WeightedTree<K> {
+public interface WeightedTree {
     void create();
 }

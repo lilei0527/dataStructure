@@ -1,8 +1,6 @@
 package tree;
 
 
-import tree.huffman.ByteHuffmanTree;
-import tree.huffman.CharHuffmanTree;
 import tree.huffman.HuffmanTree;
 
 import java.io.*;
@@ -12,14 +10,14 @@ import java.io.*;
  **/
 public class HuffmanTreeTest {
     public static void main(String[] args) throws IOException {
-//        HuffmanTree<Character> tree = new CharHuffmanTree("abc  adfd f @");
+//        HuffmanTree<Character> tree = new HuffmanTree("abc  adfd f @");
 //        byte[] bytes = tree.encode();
 //        byte[] decode = tree.decode(bytes);
 //        for(byte o:decode){
 //            System.out.println((char) o);
 //        }
 
-        HuffmanTree<Byte> tree = new ByteHuffmanTree(new File("C:\\Users\\lilei\\Downloads\\Xftp-6.0.0178p.exe"));
+        HuffmanTree tree = new HuffmanTree(new File("C:\\Users\\lilei\\Downloads\\Xftp-6.0.0178p.exe"));
         byte[] bytes = tree.encode();
 
         File file1 = new File("C:\\Users\\lilei\\Desktop\\1.zip");
