@@ -108,7 +108,7 @@ public  class HuffmanTree implements WeightedTree, Coded {
         return bytes;
     }
 
-    private byte[] encode() {
+    public byte[] encode() {
         return encode(bytes);
     }
 
