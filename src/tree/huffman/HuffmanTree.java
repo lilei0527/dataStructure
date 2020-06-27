@@ -13,37 +13,12 @@ import java.util.*;
 /**
  * @author lilei
  **/
-public  class HuffmanTree implements WeightedTree, Coded {
+public class HuffmanTree implements WeightedTree, Coded {
     private Node<Byte> root;
     private Queue<Node<Byte>> queue = new PriorityQueue<>();
     private Map<Byte, String> codeMap = new HashMap<>();
     private Map<String, Byte> keyMap = new HashMap<>();
-    private byte[] bytes;
     private long fileSize;//文件字节数
-
-
-    private HuffmanTree(byte[] bytes, long fileSize) {
-        this.bytes = bytes;
-        this.fileSize = fileSize;
-        addNode();
-        create();
-    }
-
-    private HuffmanTree(File file, long fileSize) {
-        this.bytes = toArray(file);
-        this.fileSize = fileSize;
-        addNode();
-        create();
-    }
-
-
-    public HuffmanTree(String content) {
-        this(content.getBytes(), content.length());
-    }
-
-    public HuffmanTree(File file) {
-        this(file, file.length());
-    }
 
     private byte[] toArray(File file) {
         InputStream inputStream = null;
@@ -87,28 +62,39 @@ public  class HuffmanTree implements WeightedTree, Coded {
     }
 
     @Override
-    public byte[] encode(byte[] ks) {
-        int decreaseByte = getDecreaseByte(ks);
-        int size = ks.length - decreaseByte;
+    public byte[] encode(byte[] encodeBytes) {
+        fileSize = encodeBytes.length;
+        addNode(encodeBytes);
+        create();
+
+        int length = getCodeLength(encodeBytes);
+        int size = length % 8 == 0 ? length / 8 : length / 8 + 1;
         byte[] bytes = new byte[size];
         int index = 0;
         int i = 0;
-        for (Byte k : ks) {
+        for (Byte k : encodeBytes) {
             String code = codeMap.get(k);
             for (int j = 0; j < code.length(); j++) {
                 if (code.charAt(j) == '1') {
                     bytes[index / 8] |= (1 << (index % 8));
-                    i++;
                 }
-                if (i >= size) break;
                 index++;
+                if (index >= fileSize) break;
             }
         }
 
         return bytes;
     }
 
-    public byte[] encode() {
+    public byte[] encode(File file) {
+        byte[] bytes = toArray(file);
+        if (bytes == null)
+            return null;
+        return encode(bytes);
+    }
+
+    public byte[] encode(String content) {
+        byte[] bytes = content.getBytes();
         return encode(bytes);
     }
 
@@ -137,7 +123,7 @@ public  class HuffmanTree implements WeightedTree, Coded {
         return rb;
     }
 
-    private Map<Byte, Integer> count() {
+    private Map<Byte, Integer> count(byte[] bytes) {
         Map<Byte, Integer> frequencyMap = new HashMap<>();
         for (byte k : bytes) {
             frequencyMap.merge(k, 1, Integer::sum);
@@ -145,20 +131,20 @@ public  class HuffmanTree implements WeightedTree, Coded {
         return frequencyMap;
     }
 
-    private void addNode() {
-        Map<Byte, Integer> count = count();
+    private void addNode(byte[] bytes) {
+        Map<Byte, Integer> count = count(bytes);
         for (Map.Entry<Byte, Integer> entry : count.entrySet()) {
             add(entry.getKey(), entry.getValue());
         }
     }
 
-//    private int getCodeLength(byte[] ks) {
-//        int length = 0;
-//        for (byte k : ks) {
-//            length += codeMap.get(k).length();
-//        }
-//        return length;
-//    }
+    private int getCodeLength(byte[] ks) {
+        int length = 0;
+        for (byte k : ks) {
+            length += codeMap.get(k).length();
+        }
+        return length;
+    }
 
     private int getDecreaseByte(byte[] ks) {
         int length = 0;

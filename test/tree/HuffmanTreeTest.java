@@ -10,23 +10,22 @@ import java.io.*;
  **/
 public class HuffmanTreeTest {
     public static void main(String[] args) throws IOException {
-//        HuffmanTree<Character> tree = new HuffmanTree("abc  adfd f @");
-//        byte[] bytes = tree.encode();
-//        byte[] decode = tree.decode(bytes);
-//        for(byte o:decode){
-//            System.out.println((char) o);
-//        }
+        HuffmanTree tree = new HuffmanTree();
+        byte[] bytes = tree.encode("a adfsd afdf ");
+        byte[] decode = tree.decode(bytes);
+        for(byte o:decode){
+            System.out.println((char) o);
+        }
 
-        HuffmanTree tree = new HuffmanTree(new File("C:\\Users\\lilei\\Downloads\\Xftp-6.0.0178p.exe"));
-        byte[] bytes = tree.encode();
+        byte[] bytes1 = tree.encode(new File("C:\\Users\\lilei\\Downloads\\基于改进Canny算子的图像边缘检测算法.pdf"));
 
         File file1 = new File("C:\\Users\\lilei\\Desktop\\1.zip");
         OutputStream outputStream1 = new FileOutputStream(file1);
-        outputStream1.write(bytes);
+        outputStream1.write(bytes1);
 
-        byte[] decode = tree.decode(bytes);
-        File file = new File("C:\\Users\\lilei\\Desktop\\2.exe");
+        byte[] decode1 = tree.decode(bytes1);
+        File file = new File("C:\\Users\\lilei\\Desktop\\2.pdf");
         OutputStream outputStream = new FileOutputStream(file);
-        outputStream.write(decode);
+        outputStream.write(decode1);
     }
 }
