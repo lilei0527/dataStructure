@@ -3,25 +3,30 @@ package tree.huffman;
 /**
  * @author lilei
  **/
-public class Node<K> implements Comparable<Node<K>>{
+public class Node implements Comparable<Node> {
     public int weight;//权重
-    public K k;//存储实体
-    public Node<K> left;
-    public Node<K> right;
-    public Node(int weight, Node<K> left, Node<K> right) {
+    public byte k;//存储实体
+    public Node left;
+    public Node right;
+
+    public Node(int weight, Node left, Node right) {
         this.weight = weight;
         this.left = left;
         this.right = right;
     }
 
-    public Node(int weight, K k) {
+    public Node(int weight, byte k) {
         this.weight = weight;
         this.k = k;
     }
 
+    public Node(int weight) {
+        this.weight = weight;
+    }
+
     @Override
-    public int compareTo(Node<K> o) {
-        return this.weight-o.weight;
+    public int compareTo(Node o) {
+        return this.weight - o.weight;
     }
 
     @Override

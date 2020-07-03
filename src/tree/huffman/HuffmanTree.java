@@ -1,7 +1,6 @@
 package tree.huffman;
 
 import tree.Coded;
-import tree.WeightedTree;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,9 +12,9 @@ import java.util.*;
 /**
  * @author lilei
  **/
-public class HuffmanTree implements WeightedTree, Coded {
-    private Node<Byte> root;
-    private Queue<Node<Byte>> queue = new PriorityQueue<>();
+public class HuffmanTree  implements Coded {
+    private Node root;
+    private Queue<Node> queue = new PriorityQueue<>();
     private Map<Byte, String> codeMap = new HashMap<>();
     private Map<String, Byte> keyMap = new HashMap<>();
     private long fileSize;//文件字节数
@@ -41,16 +40,15 @@ public class HuffmanTree implements WeightedTree, Coded {
     }
 
 
-    @Override
     public void create() {
         while (queue.peek() != null) {
-            Node<Byte> left = queue.poll();
-            Node<Byte> right = queue.poll();
+            Node left = queue.poll();
+            Node right = queue.poll();
             if (right == null) {
                 root = left;
                 break;
             }
-            Node<Byte> parent = new Node<>(left.weight + right.weight, left, right);
+            Node parent = new Node(left.weight + right.weight, left, right);
             queue.add(parent);
         }
         saveCode();
@@ -71,7 +69,6 @@ public class HuffmanTree implements WeightedTree, Coded {
         int size = length % 8 == 0 ? length / 8 : length / 8 + 1;
         byte[] bytes = new byte[size];
         int index = 0;
-        int i = 0;
         for (Byte k : encodeBytes) {
             String code = codeMap.get(k);
             for (int j = 0; j < code.length(); j++) {
@@ -146,15 +143,8 @@ public class HuffmanTree implements WeightedTree, Coded {
         return length;
     }
 
-    private int getDecreaseByte(byte[] ks) {
-        int length = 0;
-        for (byte k : ks) {
-            length += (8 - codeMap.get(k).length());
-        }
-        return length % 8 == 0 ? length / 8 : length / 8 + 1;
-    }
 
-    private void saveCode(Node<Byte> node, String code) {
+    private void saveCode(Node node, String code) {
         if (node.left == null && node.right == null) {
             codeMap.put(node.k, code);
             keyMap.put(code, node.k);
@@ -169,7 +159,7 @@ public class HuffmanTree implements WeightedTree, Coded {
 
 
     private void add(Byte k, int weight) {
-        queue.add(new Node<>(weight, k));
+        queue.add(new Node(weight, k));
     }
 
 
