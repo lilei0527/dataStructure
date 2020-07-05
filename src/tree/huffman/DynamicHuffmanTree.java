@@ -181,7 +181,7 @@ public class DynamicHuffmanTree implements Coded {
 
     @Override
     public byte[] encode(byte[] bytes) {
-        byte[] newBytes = new byte[bytes.length];
+        byte[] newBytes = new byte[2 * bytes.length];
         int index = 0;
         for (byte b : bytes) {
             StringBuilder stringBuilder = addNode(b);
@@ -192,7 +192,18 @@ public class DynamicHuffmanTree implements Coded {
                 index++;
             }
         }
+
+        int remain = 8 - (index - 1) % 8;//剩余补0的位数
+        String code = getCode(NYT);
+
+        for (int i = 0; i < remain; i++) {
+            if (code.charAt(i % code.length()) == '1') {
+                newBytes[index / 8] |= (1 << (index % 8));
+            }
+            index++;
+        }
         index--;
+
         int size = getSize(index);
         byte[] returnBytes = new byte[size];
         System.arraycopy(newBytes, 0, returnBytes, 0, size);
@@ -224,6 +235,7 @@ public class DynamicHuffmanTree implements Coded {
                 if (node.weight == 0) {
                     //如果不够一个字节
                     if (index > (bytes.length - 1) * 8) {
+                        newIndex += bytes.length * 8 - index;
                         break;
                     }
                     //读入一个字节
@@ -259,7 +271,7 @@ public class DynamicHuffmanTree implements Coded {
             }
             index++;
         }
-        int size = getSize(newIndex);
+        int size = getSize(newIndex - 1);
         byte[] reBytes = new byte[size];
         System.arraycopy(newBytes, 0, reBytes, 0, size);
         return reBytes;
@@ -293,7 +305,7 @@ public class DynamicHuffmanTree implements Coded {
 
     public static void main(String[] args) throws IOException {
 //        DynamicHuffmanTree tree = new DynamicHuffmanTree();
-//        String s = "sdfsdsdffffffffffffffff" ;
+//        String s = "abc1qweryuyoiuoi[po,./,xxcvnmv,cmnxbv";
 //        byte[] encode = tree.encode(s);
 //        System.out.println(Arrays.toString(s.getBytes()));
 //        System.out.println(Arrays.toString(encode));
