@@ -181,12 +181,15 @@ public class DynamicHuffmanTree implements Coded {
 
     @Override
     public byte[] encode(byte[] bytes) {
-        byte[] newBytes = new byte[2 * bytes.length];
+        byte[] newBytes = new byte[bytes.length];
         int index = 0;
         for (byte b : bytes) {
             StringBuilder stringBuilder = addNode(b);
             for (int i = 0; i < stringBuilder.length(); i++) {
                 if (stringBuilder.charAt(i) == '1') {
+                    if (index >= newBytes.length * 8) {
+                        newBytes = resize(newBytes, 2);
+                    }
                     newBytes[index / 8] |= (1 << (index % 8));
                 }
                 index++;
@@ -198,16 +201,24 @@ public class DynamicHuffmanTree implements Coded {
 
         for (int i = 0; i < remain; i++) {
             if (code.charAt(i % code.length()) == '1') {
+                if (index >= newBytes.length * 8) {
+                    newBytes = resize(newBytes, 2);
+                }
                 newBytes[index / 8] |= (1 << (index % 8));
             }
             index++;
         }
-        index--;
 
-        int size = getSize(index);
+        int size = getSize(index - 1);
         byte[] returnBytes = new byte[size];
         System.arraycopy(newBytes, 0, returnBytes, 0, size);
         return returnBytes;
+    }
+
+    private byte[] resize(byte[] bytes, int times) {
+        byte[] resizeBytes = new byte[bytes.length * times];
+        System.arraycopy(bytes, 0, resizeBytes, 0, bytes.length);
+        return resizeBytes;
     }
 
     public byte[] encode(String s) {
@@ -224,7 +235,7 @@ public class DynamicHuffmanTree implements Coded {
 
     @Override
     public byte[] decode(byte[] bytes) {
-        byte[] newBytes = new byte[bytes.length * 4];
+        byte[] newBytes = new byte[bytes.length];
         StringBuilder stringBuilder = new StringBuilder();
         int index = 0;
         int newIndex = 0;
@@ -244,6 +255,9 @@ public class DynamicHuffmanTree implements Coded {
                         //bytes的最新位为1
                         if ((bytes[index / 8] & (1 << (index % 8))) == 1 << (index % 8)) {
                             b |= 1 << i;
+                            if (index >= newBytes.length * 8) {
+                                newBytes = resize(newBytes, 2);
+                            }
                             newBytes[newIndex / 8] |= 1 << (newIndex % 8);
                         }
 //                        newBytes[newIndex / 8] |= (bytes[index / 8] & (1 << (index % 8)));
@@ -255,6 +269,9 @@ public class DynamicHuffmanTree implements Coded {
                     //leaf
                     for (int i = 0; i < 8; i++) {
                         if (1 << i == (node.k & (1 << i))) {
+                            if (index >= newBytes.length * 8) {
+                                newBytes = resize(newBytes, 2);
+                            }
                             newBytes[newIndex / 8] |= 1 << (newIndex % 8);
                         }
                         newIndex++;
@@ -304,24 +321,24 @@ public class DynamicHuffmanTree implements Coded {
     }
 
     public static void main(String[] args) throws IOException {
-//        DynamicHuffmanTree tree = new DynamicHuffmanTree();
-//        String s = "abc1qweryuyoiuoi[po,./,xxcvnmv,cmnxbv";
-//        byte[] encode = tree.encode(s);
-//        System.out.println(Arrays.toString(s.getBytes()));
-//        System.out.println(Arrays.toString(encode));
+        DynamicHuffmanTree tree = new DynamicHuffmanTree();
+        String s = "abcdefghijklmnopqrstuvwxyz";
+        byte[] encode = tree.encode(s);
+        System.out.println(Arrays.toString(s.getBytes()));
+        System.out.println(Arrays.toString(encode));
+
+        DynamicHuffmanTree tree1 = new DynamicHuffmanTree();
+        byte[] decode = tree1.decode(encode);
+        System.out.println(Arrays.toString(decode));
+
+//        DynamicHuffmanTree tree2 = new DynamicHuffmanTree();
+//        byte[] encode1 = tree2.encode(new File("C:\\Users\\lilei\\Desktop\\1.jpg"));
+//        OutputStream outputStream = new FileOutputStream(new File("C:\\Users\\lilei\\Desktop\\1.zip"));
+//        outputStream.write(encode1);
 //
-//        DynamicHuffmanTree tree1 = new DynamicHuffmanTree();
-//        byte[] decode = tree1.decode(encode);
-//        System.out.println(Arrays.toString(decode));
-
-        DynamicHuffmanTree tree2 = new DynamicHuffmanTree();
-        byte[] encode1 = tree2.encode(new File("C:\\Users\\lilei\\Desktop\\1.jpg"));
-        OutputStream outputStream = new FileOutputStream(new File("C:\\Users\\lilei\\Desktop\\1.zip"));
-        outputStream.write(encode1);
-
-        DynamicHuffmanTree tree3 = new DynamicHuffmanTree();
-        byte[] decode = tree3.decode(encode1);
-        OutputStream outputStream1 = new FileOutputStream(new File("C:\\Users\\lilei\\Desktop\\2.jpg"));
-        outputStream1.write(decode);
+//        DynamicHuffmanTree tree3 = new DynamicHuffmanTree();
+//        byte[] decode = tree3.decode(encode1);
+//        OutputStream outputStream1 = new FileOutputStream(new File("C:\\Users\\lilei\\Desktop\\2.jpg"));
+//        outputStream1.write(decode);
     }
 }
