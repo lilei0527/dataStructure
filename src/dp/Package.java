@@ -15,36 +15,33 @@ public class Package {
 
     //cap:容量
     public int getMaxValue(int cap) {
-        int[] preResults = new int[cap + 1];
-        int[] results = new int[cap + 1];
-
-        //填充
-        for (int i = 0; i < cap; i++) {
-            if (i < weight[0]) {
-                preResults[i] = 0;
-            } else {
-                preResults[i] = value[0];
-            }
-        }
-
-        for (int i = 1; i < weight.length; i++) { //第几个物品
-            for (int j = 0; j <= cap; j++) { //背包总重量
-                if (j < weight[i]) {
-                    results[j] = preResults[j];
-                } else {
-                    results[j] = Math.max(preResults[j], preResults[j - weight[i]] + value[i]);
-                }
-            }
-            System.arraycopy(results, 0, preResults, 0, cap + 1);
-        }
-        return preResults[cap];
+        Strategy strategy = 1 << weight.length > cap * weight.length ? new DynamicStrategy() : new RecursionStrategy();
+        return strategy.getMaxValue(cap, weight, value);
     }
 
     public static void main(String[] args) {
         int[] v = {400, 500, 200, 300, 350};
         int[] w = {5, 5, 3, 4, 3};
+
+
         Package p = new Package(w, v);
         int maxValue = p.getMaxValue(9);
         System.out.println(maxValue);
+
+
+        long t1 = System.currentTimeMillis();
+        DynamicStrategy dynamicStrategy = new DynamicStrategy();
+        System.out.println(dynamicStrategy.getMaxValue(10, w, v));
+        long t2 = System.currentTimeMillis();
+
+
+        long t3 = System.currentTimeMillis();
+        RecursionStrategy recursionStrategy = new RecursionStrategy();
+        System.out.println(recursionStrategy.getMaxValue(10, w, v));
+        long t4 = System.currentTimeMillis();
+
+
+        System.out.println((t2 - t1));
+        System.out.println((t4 - t3));
     }
 }
