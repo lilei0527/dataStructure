@@ -11,6 +11,9 @@ public class Package {
     public Package(int[] weight, int[] value) {
         this.weight = weight;
         this.value = value;
+        if (weight.length != value.length) {
+            throw new RuntimeException("weight length must equal value length");
+        }
     }
 
     //cap:容量
@@ -20,24 +23,24 @@ public class Package {
     }
 
     public static void main(String[] args) {
-        int[] v = {400, 500, 200, 300, 350};
-        int[] w = {5, 5, 3, 4, 3};
+        int[] v = {400, 500, 200, 300, 350,100,200,900};
+        int[] w = {5, 5, 3, 4, 3,1,2,7};
 
 
         Package p = new Package(w, v);
-        int maxValue = p.getMaxValue(9);
+        int maxValue = p.getMaxValue(30);
         System.out.println(maxValue);
 
 
         long t1 = System.currentTimeMillis();
         DynamicStrategy dynamicStrategy = new DynamicStrategy();
-        System.out.println(dynamicStrategy.getMaxValue(10, w, v));
+        System.out.println(dynamicStrategy.getMaxValue(30, w, v));
         long t2 = System.currentTimeMillis();
 
 
         long t3 = System.currentTimeMillis();
         RecursionStrategy recursionStrategy = new RecursionStrategy();
-        System.out.println(recursionStrategy.getMaxValue(10, w, v));
+        System.out.println(recursionStrategy.getMaxValue(30, w, v));
         long t4 = System.currentTimeMillis();
 
 
