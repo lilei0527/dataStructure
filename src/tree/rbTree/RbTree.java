@@ -111,8 +111,6 @@ public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
                 p.parent = null;
             }
         }
-
-
     }
 
 
@@ -362,6 +360,4 @@ public class RbTree<K extends Comparable<K>, V> extends TwoForkTree<K, V> {
             return p;
         }
     }
-
-
 }
