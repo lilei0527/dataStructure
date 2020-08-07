@@ -10,6 +10,8 @@ public class StringUtil {
         return comparator.contains(lcs, scs);
     }
 
+
+
     public static void main(String[] args) {
         char[] lcs = {'h', 'e', 'r', 'e', ' ', 'i', 's', ' ', 'a', ' ', 's', 'i', 'm', 'p', 'l', 'e', ' ', 'e', 'x', 'a', 'm', 'p', 'l', 'e'};
         char[] scs = {'e', 'x', 'a', 'm', 'p', 'l', 'e'};
