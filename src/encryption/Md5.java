@@ -54,7 +54,7 @@ public class Md5 {
     /*
      * 移动一定位数
      */
-    private int shift(int a, int s) {
+    private int  shift(int a, int s) {
         return (a << s) | (a >>> (32 - s));// 右移的时候，高位一定要补零，而不是补充符号位
     }
 
