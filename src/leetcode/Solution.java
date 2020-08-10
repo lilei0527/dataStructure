@@ -12,7 +12,7 @@ public class Solution {
     static class Ip {
         private List<String> ips = new ArrayList<>();
         private String ip;
-        private StringBuilder sb = new StringBuilder();
+        private int[] segment = new int[3];
 
         /**
          * @author lilei
@@ -22,7 +22,7 @@ public class Solution {
          **/
         public List<String> getIps(String ip) {
             this.ip = ip;
-            addIp(0, 0);
+            addIp(0, 0, 0);
             return ips;
         }
 
@@ -31,7 +31,7 @@ public class Solution {
          * @param count:第几个点
          * @param index:点的下标
          **/
-        private void addIp(int count, int index) {
+        private void addIp(int count, int index, int height) {
 
             int last = ip.length() - index;
 
@@ -45,9 +45,7 @@ public class Solution {
             if (count == 3
                     && getLastSegment(ip, index) <= 255
                     && !(nextChar == '0' && last > 1)) {
-
-                sb.append(ip.substring(index));
-                ips.add(sb.toString());
+                ips.add(split());
                 return;
             }
 
@@ -56,14 +54,15 @@ public class Solution {
             for (int i = 0; i < max && index + i + 1 < ip.length(); i++) {
 
                 String substring = ip.substring(index, index + i + 1);
+
                 if (getLastSegment(substring, 0) > 255) {
                     continue;
                 }
 
-                sb.append(substring);
-                sb.append(".");
-                addIp(count + 1, index + i + 1);
-                sb.delete(index + count, sb.length());
+                if (height < 3)
+                    segment[height] = index + i + 1;
+
+                addIp(count + 1, index + i + 1, height + 1);
             }
         }
 
@@ -74,12 +73,20 @@ public class Solution {
             }
             return re;
         }
+
+        private String split() {
+            StringBuilder stringBuilder = new StringBuilder(ip);
+            stringBuilder.insert(segment[0], ".");
+            stringBuilder.insert(segment[1] + 1, ".");
+            stringBuilder.insert(segment[2] + 2, ".");
+            return stringBuilder.toString();
+        }
     }
 
 
     public static void main(String[] args) {
         Ip ip = new Ip();
-        List<String> ips = ip.getIps("21226991");
+        List<String> ips = ip.getIps("002561");
         System.out.println(ips);
     }
 }
