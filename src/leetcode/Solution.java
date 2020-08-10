@@ -1,6 +1,5 @@
 package leetcode;
 
-import math.MathUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +72,7 @@ public class Solution {
         private boolean isNumber(String s) {
             char[] chars = s.toCharArray();
             for (char c : chars) {
+                if (c == '.') continue;
                 if (c <= '0' || c >= '9') {
                     return false;
                 }
@@ -112,8 +112,8 @@ public class Solution {
 
     public static void main(String[] args) {
         Ip ip = new Ip();
-        List<String> ips = ip.getIps("abcd");
-        boolean b = ip.validIp4("a.b.c.d");
+        List<String> ips = ip.getIps("1231232123");
+        boolean b = ip.validIp4("12.23.34.12");
         System.out.println(b);
         System.out.println(ips);
     }
