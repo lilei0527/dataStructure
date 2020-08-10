@@ -1,5 +1,7 @@
 package leetcode;
 
+import math.MathUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class Solution {
          * 比如给定25525512122，可能的ip为255.255.12.122或者255.255.121.22
          **/
         public List<String> getIps(String ip) {
+            if (!isNumber(ip)) return ips;
             this.ip = ip;
             addIp(0, 0, 0);
             return ips;
@@ -59,11 +62,22 @@ public class Solution {
                     continue;
                 }
 
+
                 if (height < 3)
                     segment[height] = index + i + 1;
 
                 addIp(count + 1, index + i + 1, height + 1);
             }
+        }
+
+        private boolean isNumber(String s) {
+            char[] chars = s.toCharArray();
+            for (char c : chars) {
+                if (c <= '0' || c >= '9') {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private int getLastSegment(String ip, int index) {
@@ -81,12 +95,26 @@ public class Solution {
             stringBuilder.insert(segment[2] + 2, ".");
             return stringBuilder.toString();
         }
+
+        public boolean validIp4(String ip) {
+            String[] split = ip.split("\\.");
+            for (String s : split) {
+                if (s == null || s.length() == 0) return false;
+                if (s.length() > 3) return false;
+                if (s.length() != 1 && s.charAt(0) == '0') return false;
+                if (getLastSegment(s, 0) > 255) return false;
+                if (!isNumber(s)) return false;
+            }
+            return true;
+        }
     }
 
 
     public static void main(String[] args) {
         Ip ip = new Ip();
-        List<String> ips = ip.getIps("002561");
+        List<String> ips = ip.getIps("abcd");
+        boolean b = ip.validIp4("a.b.c.d");
+        System.out.println(b);
         System.out.println(ips);
     }
 }
