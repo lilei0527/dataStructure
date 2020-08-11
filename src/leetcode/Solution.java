@@ -1,6 +1,7 @@
 package leetcode;
 
 
+
 import java.util.*;
 
 /**
@@ -179,7 +180,11 @@ public class Solution {
 
             List<E> es = new ArrayList<>();
             for (int i = 0; i < k; i++) {
-                es.add(maxheap.poll());
+                E poll = maxheap.poll();
+                if (poll == null) {
+                    break;
+                }
+                es.add(poll);
             }
 
             return es;
@@ -207,7 +212,7 @@ public class Solution {
          * create at 14:25 2020/8/11
          * 最大连续e的个数,e如果为null，返回此数组最大连续元素的个数
          **/
-        public <E> int maxContinue(E[] es, E e) {
+        public <E> int maxRepeat(E[] es, E e) {
             int max = 0;
             int p = 0;
             while (p < es.length) {
@@ -231,7 +236,7 @@ public class Solution {
          * create at 14:25 2020/8/11
          * 返回数组es最大连续相同元素
          **/
-        public <E> List<E> maxContinue(E[] es) {
+        public <E> List<E> maxRepeat(E[] es) {
             int max = 0;
             int p = 0;
             List<E> maxEs = new ArrayList<>();
@@ -260,7 +265,7 @@ public class Solution {
          * create at 14:25 2020/8/11
          * 返回数组es最大连续相同元素与元素的个数
          **/
-        public <E> Map.Entry<List<E>, Integer> maxContinueAndCount(E[] es) {
+        public <E> Map.Entry<List<E>, Integer> maxRepeatAndCount(E[] es) {
             int max = 0;
             int p = 0;
             List<E> maxEs = new ArrayList<>();
@@ -286,8 +291,62 @@ public class Solution {
             maxEsIn.setValue(max);
             return maxEsIn;
         }
-        
 
+        /**
+         * @author lilei
+         * create at 14:25 2020/8/11
+         * 返回数组es连续相同元素与元素的个数(同元素取最大个数)
+         **/
+        public <E> Map<Integer, List<E>> repeatAndCount(E[] es) {
+            int p = 0;
+            Map<E, Integer> countMap = new HashMap<>();
+
+            while (p < es.length) {
+                int pn = p + 1;
+                while (pn < es.length && es[p].equals(es[pn])) {
+                    pn++;
+                }
+                int step = pn - p;
+                Integer count = countMap.get(es[p]);
+                if (count == null) {
+                    countMap.put(es[p], step);
+                } else {
+                    if (step > count) {
+                        countMap.put(es[p], step);
+                    }
+                }
+                p = pn;
+            }
+            return mergeSameValue(countMap);
+        }
+
+        private <E> List<E> removeRepeat(E[] es) {
+            List<E> list = new ArrayList<>();
+            int p = 0;
+            while (p < es.length) {
+                int pn = p + 1;
+                while (pn < es.length && es[p].equals(es[pn])) {
+                    pn++;
+                }
+                list.add(es[p]);
+                p = pn;
+            }
+            return list;
+        }
+
+        private <E> Map<Integer, List<E>> mergeSameValue(Map<E, Integer> map) {
+            Map<Integer, List<E>> reMap = new HashMap<>();
+            for (Map.Entry<E, Integer> e : map.entrySet()) {
+                Integer value = e.getValue();
+                List<E> es = reMap.get(value);
+                if (es == null) {
+                    es = new ArrayList<>();
+                }
+                es.add(e.getKey());
+                reMap.put(e.getValue(), es);
+            }
+            return reMap;
+        }
     }
 
 
@@ -310,13 +369,15 @@ public class Solution {
 
         Counter counter = new Counter();
         Integer[] element = {1, 22, 22, 22, 22, 1, 1, 22, 14, 12, 12, 12, 12};
-        List<Integer> integers = counter.topK(element, 2);
+        List<Integer> integers = counter.topK(element, 10);
         System.out.println("字符前K个频率最高" + integers);
 
         int[] nums = {-1, 2, 1, -1, 2, -1, 2};
         System.out.println("最大连续子数组" + counter.maxSubArray(nums));
-        System.out.println("查找最大连续元素个数" + counter.maxContinue(element, 123));
-        System.out.println("最大连续元素" + counter.maxContinue(element));
-        System.out.println("最大连续元素和个数" + counter.maxContinueAndCount(element));
+        System.out.println("查找最大连续元素个数" + counter.maxRepeat(element, 123));
+        System.out.println("最大连续元素" + counter.maxRepeat(element));
+        System.out.println("最大连续元素和个数" + counter.maxRepeatAndCount(element));
+        System.out.println("所有连续元素信息" + counter.repeatAndCount(element));
+        System.out.println("移除连续元素后" + counter.removeRepeat(element));
     }
 }
