@@ -109,8 +109,8 @@ public class Solution {
     }
 
     static class MedianFinder {
-        private PriorityQueue<Integer> maxheap = new PriorityQueue<>((x, y) -> y - x);
-        private PriorityQueue<Integer> minheap = new PriorityQueue<>();
+        private PriorityQueue<Double> maxheap = new PriorityQueue<>((x, y) -> (int) (y - x));
+        private PriorityQueue<Double> minheap = new PriorityQueue<>();
 
         /**
          * initialize your data structure here.
@@ -118,7 +118,7 @@ public class Solution {
         public MedianFinder() {
         }
 
-        public void addNum(int num) {
+        public void addNum(double num) {
             if (minheap.isEmpty() || minheap.peek() <= num) {
                 minheap.offer(num);
             } else {
@@ -132,20 +132,162 @@ public class Solution {
             }
         }
 
+        public double findMedian(List<Double> list) {
+            for (Double d : list) {
+                addNum(d);
+            }
+            return findMedian();
+        }
+
 
         public double findMedian() {
-            Integer max = maxheap.peek();
-            Integer min = minheap.peek();
+            Double max = maxheap.peek();
+            Double min = minheap.peek();
             max = max == null ? 0 : max;
             min = min == null ? 0 : min;
             if (maxheap.size() == minheap.size()) {
-                return (double) (max + min) / 2;
+                return (max + min) / 2;
             }
             if (maxheap.size() > minheap.size()) {
                 return max;
             }
             return min;
         }
+
+    }
+
+    static class Counter {
+        /**
+         * @author lilei
+         * create at 11:54 2020/8/11
+         * 前K个出现频率最高的元素
+         **/
+        public <E> List<E> topK(E[] element, int k) {
+
+            Map<E, Integer> count = new HashMap<>();
+
+            for (E e : element) {
+                count.merge(e, 1, Integer::sum);
+            }
+
+            PriorityQueue<E> maxheap =
+                    new PriorityQueue<>(((o1, o2) -> count.get(o2) - count.get(o1)));
+
+            for (E e : count.keySet()) {
+                maxheap.offer(e);
+            }
+
+            List<E> es = new ArrayList<>();
+            for (int i = 0; i < k; i++) {
+                es.add(maxheap.poll());
+            }
+
+            return es;
+        }
+
+
+        /**
+         * @author lilei
+         * create at 10:48 2020/7/28
+         * 求给定数组连续子数组的最大值（dp求解）
+         * 时间复杂度O(n) 空间复杂度O(1)
+         **/
+        public int maxSubArray(int[] nums) {
+            int res = nums[0];
+            int max = 0;
+            for (int i = 1; i < nums.length; i++) {
+                max = Math.max(max + nums[i], 0);
+                res = Math.max(max, res);
+            }
+            return res;
+        }
+
+        /**
+         * @author lilei
+         * create at 14:25 2020/8/11
+         * 最大连续e的个数,e如果为null，返回此数组最大连续元素的个数
+         **/
+        public <E> int maxContinue(E[] es, E e) {
+            int max = 0;
+            int p = 0;
+            while (p < es.length) {
+                if (es[p] != e && e != null) {
+                    p++;
+                    continue;
+                }
+                int pn = p + 1;
+                while (pn < es.length && es[p].equals(es[pn])) {
+                    pn++;
+                }
+                int step = pn - p;
+                max = Math.max(step, max);
+                p = pn;
+            }
+            return max;
+        }
+
+        /**
+         * @author lilei
+         * create at 14:25 2020/8/11
+         * 返回数组es最大连续相同元素
+         **/
+        public <E> List<E> maxContinue(E[] es) {
+            int max = 0;
+            int p = 0;
+            List<E> maxEs = new ArrayList<>();
+            while (p < es.length) {
+                int pn = p + 1;
+                while (pn < es.length && es[p].equals(es[pn])) {
+                    pn++;
+                }
+                int step = pn - p;
+                if (max == step) {
+                    maxEs.add(es[p]);
+                } else {
+                    max = Math.max(step, max);
+                    if (max == step) {
+                        maxEs.clear();
+                        maxEs.add(es[p]);
+                    }
+                }
+                p = pn;
+            }
+            return maxEs;
+        }
+
+        /**
+         * @author lilei
+         * create at 14:25 2020/8/11
+         * 返回数组es最大连续相同元素与元素的个数
+         **/
+        public <E> Map.Entry<List<E>, Integer> maxContinueAndCount(E[] es) {
+            int max = 0;
+            int p = 0;
+            List<E> maxEs = new ArrayList<>();
+            Map.Entry<List<E>, Integer> maxEsIn = new HashMap.SimpleEntry<>(maxEs, 0);
+
+            while (p < es.length) {
+                int pn = p + 1;
+                while (pn < es.length && es[p].equals(es[pn])) {
+                    pn++;
+                }
+                int step = pn - p;
+                if (max == step) {
+                    maxEs.add(es[p]);
+                } else {
+                    max = Math.max(step, max);
+                    if (max == step) {
+                        maxEs.clear();
+                        maxEs.add(es[p]);
+                    }
+                }
+                p = pn;
+            }
+            maxEsIn.setValue(max);
+            return maxEsIn;
+        }
+        
+
     }
 
 
@@ -156,12 +298,25 @@ public class Solution {
         System.out.println(b);
         System.out.println(ips);
 
+
         MedianFinder medianFinder = new MedianFinder();
         medianFinder.addNum(1);
         medianFinder.addNum(9);
         medianFinder.addNum(3);
         medianFinder.addNum(2);
         medianFinder.addNum(2);
-        System.out.println(medianFinder.findMedian());
+        System.out.println("中位数" + medianFinder.findMedian());
+
+
+        Counter counter = new Counter();
+        Integer[] element = {1, 22, 22, 22, 22, 1, 1, 22, 14, 12, 12, 12, 12};
+        List<Integer> integers = counter.topK(element, 2);
+        System.out.println("字符前K个频率最高" + integers);
+
+        int[] nums = {-1, 2, 1, -1, 2, -1, 2};
+        System.out.println("最大连续子数组" + counter.maxSubArray(nums));
+        System.out.println("查找最大连续元素个数" + counter.maxContinue(element, 123));
+        System.out.println("最大连续元素" + counter.maxContinue(element));
+        System.out.println("最大连续元素和个数" + counter.maxContinueAndCount(element));
     }
 }
