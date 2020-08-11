@@ -1,8 +1,7 @@
 package leetcode;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author lilei
@@ -109,6 +108,46 @@ public class Solution {
         }
     }
 
+    static class MedianFinder {
+        private PriorityQueue<Integer> maxheap = new PriorityQueue<>((x, y) -> y - x);
+        private PriorityQueue<Integer> minheap = new PriorityQueue<>();
+
+        /**
+         * initialize your data structure here.
+         */
+        public MedianFinder() {
+        }
+
+        public void addNum(int num) {
+            if (minheap.isEmpty() || minheap.peek() <= num) {
+                minheap.offer(num);
+            } else {
+                maxheap.offer(num);
+            }
+            if (minheap.size() - maxheap.size() == 2) {
+                maxheap.offer(minheap.poll());
+            }
+            if (maxheap.size() - minheap.size() == 2) {
+                minheap.offer(maxheap.poll());
+            }
+        }
+
+
+        public double findMedian() {
+            Integer max = maxheap.peek();
+            Integer min = minheap.peek();
+            max = max == null ? 0 : max;
+            min = min == null ? 0 : min;
+            if (maxheap.size() == minheap.size()) {
+                return (double) (max + min) / 2;
+            }
+            if (maxheap.size() > minheap.size()) {
+                return max;
+            }
+            return min;
+        }
+    }
+
 
     public static void main(String[] args) {
         Ip ip = new Ip();
@@ -116,5 +155,13 @@ public class Solution {
         boolean b = ip.validIp4("12.23.34.12");
         System.out.println(b);
         System.out.println(ips);
+
+        MedianFinder medianFinder = new MedianFinder();
+        medianFinder.addNum(1);
+        medianFinder.addNum(9);
+        medianFinder.addNum(3);
+        medianFinder.addNum(2);
+        medianFinder.addNum(2);
+        System.out.println(medianFinder.findMedian());
     }
 }
