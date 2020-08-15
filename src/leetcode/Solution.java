@@ -1,14 +1,48 @@
 package leetcode;
 
 
-
 import java.util.*;
 
 /**
  * @author lilei
  **/
 public class Solution {
+    static class Permutation {
+        /**
+         * @author lilei
+         * create at 2020/8/15 17:20
+         * 给定一个字符序列，返回所有不同序列的情况
+         */
+        public <E> Set<List<E>> rank(E[] es) {
+            Set<List<E>> all = new HashSet<>();
+            boolean[] used = new boolean[es.length];
+            int[] signal = new int[es.length];
+            dfs(0, all, signal, es, used);
+            return all;
+        }
 
+        private <E> void dfs(int deep, Set<List<E>> all,
+                             int[] signal, E[] es, boolean[] used) {
+            if (deep == es.length) {
+                List<E> list = new ArrayList<>();
+                for (int i = 0; i < es.length; i++) {
+                    list.add(es[signal[i]]);
+                }
+                all.add(list);
+                return;
+            }
+
+            for (int i = 0; i < es.length; i++) {
+                if (used[i]) {
+                    continue;
+                }
+                signal[deep] = i;
+                used[i] = true;
+                dfs(deep + 1, all, signal, es, used);
+                used[i] = false;
+            }
+        }
+    }
 
     static class Ip {
         private List<String> ips = new ArrayList<>();
@@ -379,5 +413,11 @@ public class Solution {
         System.out.println("最大连续元素和个数" + counter.maxRepeatAndCount(element));
         System.out.println("所有连续元素信息" + counter.repeatAndCount(element));
         System.out.println("移除连续元素后" + counter.removeRepeat(element));
+
+        Permutation permutation = new Permutation();
+        Integer[] integers1 = {1, 5, 4, 4};
+        Set<List<Integer>> rank = permutation.rank(integers1);
+        System.out.println(rank);
+        System.out.println(rank.size());
     }
 }
