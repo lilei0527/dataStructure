@@ -1,6 +1,9 @@
 package file;
 
 
+import java.io.File;
+import java.util.List;
+
 /**
  * @author lilei
  * 用于文件搜索的条件设置
@@ -10,22 +13,17 @@ package file;
  * 文件修改时间支持按照时间范围查找
  * 文件大小支持按照文件大小范围查找
  **/
-public abstract class Criteria {
+public interface Criteria {
 
-
-    private FileAttribute attribute;
-    private String value;
-
-    public Criteria(FileAttribute attribute, String value) {
-        this.attribute = attribute;
-        this.value = value;
+    enum BooleanOperator {
+        AND, OR,NONE
     }
 
-    public String getValue() {
-        return value;
-    }
+    BooleanOperator getOperator();
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+    List<Criteria> getExpressions();
+
+    boolean isCompound();
+
+    boolean isMatch(File file);
 }

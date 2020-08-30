@@ -368,6 +368,26 @@ public class Solution {
             return list;
         }
 
+        private String removeDuplicate(String s) {
+            Stack<Character> stack = new Stack<>();
+            HashSet<Character> seen = new HashSet<>();
+            HashMap<Character, Integer> last_occurrence = new HashMap<>();
+            for (int i = 0; i < s.length(); i++) last_occurrence.put(s.charAt(i), i);
+            for (int i = 0; i < s.length(); i++) {
+                char c = s.charAt(i);
+                if (!seen.contains(c)) {
+                    while (!stack.isEmpty() && c < stack.peek() && last_occurrence.get(stack.peek()) > i) {
+                        seen.remove(stack.pop());
+                    }
+                    seen.add(c);
+                    stack.push(c);
+                }
+            }
+            StringBuilder sb = new StringBuilder(stack.size());
+            for (Character c : stack) sb.append(c.charValue());
+            return sb.toString();
+        }
+
         private <E> Map<Integer, List<E>> mergeSameValue(Map<E, Integer> map) {
             Map<Integer, List<E>> reMap = new HashMap<>();
             for (Map.Entry<E, Integer> e : map.entrySet()) {
@@ -415,9 +435,14 @@ public class Solution {
         System.out.println("移除连续元素后" + counter.removeRepeat(element));
 
         Permutation permutation = new Permutation();
-        Integer[] integers1 = {1, 5, 4, 4};
+        Integer[] integers1 = {1, 2, 3};
         Set<List<Integer>> rank = permutation.rank(integers1);
         System.out.println(rank);
         System.out.println(rank.size());
+
+
+        String s = "bcabvxcjpwrtup123213sfs";
+        String s1 = counter.removeDuplicate(s);
+        System.out.println(s1);
     }
 }
