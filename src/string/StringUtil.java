@@ -4,7 +4,7 @@ package string;
  * @author lilei
  **/
 public class StringUtil {
-    Comparable comparator = new Sunday();
+    Comparable comparator = new Bm();
 
     public boolean contains(char[] lcs, char[] scs) {
         return comparator.contains(lcs, scs);
