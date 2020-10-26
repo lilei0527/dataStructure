@@ -5,6 +5,9 @@ import java.util.Map;
 
 /**
  * @author lilei
+ * 从后往前比较的字符串比较算法
+ * 时间复杂度O(n)
+ * 空间复杂度O(m)
  **/
 public class Sunday implements Comparable {
     @Override
@@ -35,8 +38,8 @@ public class Sunday implements Comparable {
 
         Map<Character, Integer> map = new HashMap<>();
 
-        for(int i=0;i<scs.length;i++){
-            map.put(scs[i],scs.length-i);
+        for (int i = 0; i < scs.length; i++) {
+            map.put(scs[i], scs.length - i);
         }
 
         return map;
