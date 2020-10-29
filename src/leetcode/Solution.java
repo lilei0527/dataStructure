@@ -6,7 +6,44 @@ import java.util.*;
 /**
  * @author lilei
  **/
+@SuppressWarnings("unused")
 public class Solution {
+    static class ListUtil {
+        static class ListNode {
+            int val;
+            ListNode next = null;
+
+            ListNode(int val) {
+                this.val = val;
+            }
+        }
+
+        public ListNode ReverseList(ListNode head) {
+            if (head == null) return null;
+            ListNode pre = null, next;
+            while (head.next != null) {
+                next = head.next;
+                head.next = pre;
+                pre = head;
+                head = next;
+            }
+            head.next = pre;
+            return head;
+        }
+
+        public boolean hasCycle(ListNode head) {
+            ListNode fast = head;
+            while (fast != null && fast.next != null) {
+                fast = fast.next.next;
+                head = head.next;
+                if (fast == head) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     static class Permutation {
         /**
          * @author lilei
