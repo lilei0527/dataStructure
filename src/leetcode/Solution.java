@@ -8,6 +8,35 @@ import java.util.*;
  **/
 @SuppressWarnings("unused")
 public class Solution {
+    static class Shape {
+        public void diamond(int sideLength, boolean isCross) {
+            for (int row = 0; row < 2 * sideLength - 1; row++) {
+                for (int col = 0; col < 2 * sideLength - 1; col++) {
+                    if (row < sideLength) {
+                        if (col == sideLength - row - 1 ||
+                                col == sideLength + row - 1 ||
+                                (isCross && row > sideLength / 2 &&
+                                        (col == row || col == 2 * sideLength - row - 2))) {
+                            System.out.print("*");
+                        } else {
+                            System.out.print(" ");
+                        }
+                    } else {
+                        if (col == row - sideLength + 1 ||
+                                col == 3 * sideLength - row - 3 ||
+                                (isCross && row < (3 * sideLength - 4) / 2 + 1 &&
+                                        (col == 2 * sideLength - row - 2 || col == row))) {
+                            System.out.print("*");
+                        } else {
+                            System.out.print(" ");
+                        }
+                    }
+                }
+                System.out.println();
+            }
+        }
+    }
+
     static class ListUtil {
         static class ListNode {
             int val;
@@ -481,5 +510,8 @@ public class Solution {
         String s = "bcabvxcjpwrtup123213sfs";
         String s1 = counter.removeDuplicate(s);
         System.out.println(s1);
+
+        Shape shape = new Shape();
+        shape.diamond(11, true);
     }
 }
