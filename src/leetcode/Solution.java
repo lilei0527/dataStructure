@@ -24,7 +24,7 @@ public class Solution {
                     } else {
                         if (col == row - sideLength + 1 ||
                                 col == 3 * sideLength - row - 3 ||
-                                (isCross && row < (3 * sideLength - 4) / 2 + 1 &&
+                                (isCross && row < 1.5 * (sideLength - 1) &&
                                         (col == 2 * sideLength - row - 2 || col == row))) {
                             System.out.print("*");
                         } else {
