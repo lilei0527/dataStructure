@@ -111,9 +111,9 @@ public class Solution {
     }
 
     static class Ip {
-        private List<String> ips = new ArrayList<>();
+        private final List<String> ips = new ArrayList<>();
         private String ip;
-        private int[] segment = new int[3];
+        private final int[] segment = new int[3];
 
         /**
          * @author lilei
@@ -122,7 +122,7 @@ public class Solution {
          * 比如给定25525512122，可能的ip为255.255.12.122或者255.255.121.22
          **/
         public List<String> getIps(String ip) {
-            if (!isNumber(ip)) return ips;
+            if (isNotNumber(ip)) return ips;
             this.ip = ip;
             addIp(0, 0, 0);
             return ips;
@@ -169,15 +169,15 @@ public class Solution {
             }
         }
 
-        private boolean isNumber(String s) {
+        private boolean isNotNumber(String s) {
             char[] chars = s.toCharArray();
             for (char c : chars) {
                 if (c == '.') continue;
                 if (c <= '0' || c >= '9') {
-                    return false;
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
 
         private int getLastSegment(String ip, int index) {
@@ -203,15 +203,15 @@ public class Solution {
                 if (s.length() > 3) return false;
                 if (s.length() != 1 && s.charAt(0) == '0') return false;
                 if (getLastSegment(s, 0) > 255) return false;
-                if (!isNumber(s)) return false;
+                if (isNotNumber(s)) return false;
             }
             return true;
         }
     }
 
     static class MedianFinder {
-        private PriorityQueue<Double> maxheap = new PriorityQueue<>((x, y) -> (int) (y - x));
-        private PriorityQueue<Double> minheap = new PriorityQueue<>();
+        private final PriorityQueue<Double> maxheap = new PriorityQueue<>((x, y) -> (int) (y - x));
+        private final PriorityQueue<Double> minheap = new PriorityQueue<>();
 
         /**
          * initialize your data structure here.
