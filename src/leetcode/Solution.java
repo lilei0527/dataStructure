@@ -8,6 +8,67 @@ import java.util.*;
  **/
 @SuppressWarnings("unused")
 public class Solution {
+    static class NQueens {
+
+        public List<int[][]> getNQueens(int n) {
+            List<int[][]>list = new ArrayList<>();
+            int[] segment = new int[n];
+            fill(0, n, segment,list);
+            return list;
+        }
+
+        private void fill(int row, int n, int[] segment,List<int[][]>list) {
+            if (row == n) {
+                int[][] queens = new int[n][n];
+                for (int i = 0; i < segment.length; i++) {
+                    queens[i][segment[i]] = 1;
+                }
+                list.add(queens);
+                return;
+            }
+
+            int index = 0;
+            int[] unused = new int[n - row];
+            for (int i = 0; i < n; i++) {
+                boolean flag = true;
+                for (int j = 0; j < row; j++) {
+                    if (i == segment[j]) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    unused[index++] = i;
+                }
+            }
+
+            for (int i : unused) {
+                segment[row] = i;
+                fill(row + 1, n, segment,list);
+            }
+        }
+
+        @SuppressWarnings("SameParameterValue")
+        private void print(int n){
+            List<int[][]> nQueens = getNQueens(n);
+            for(int[][] ints:nQueens){
+                for (int[] anInt : ints) {
+                    for (int j = 0; j < anInt.length; j++) {
+                        if (anInt[j] == 1) {
+                            System.out.print("Q");
+                        } else {
+                            System.out.print(" ");
+                        }
+                        if (j == n - 1) {
+                            System.out.println();
+                        }
+                    }
+                }
+                System.out.println("--------------------");
+            }
+        }
+    }
+
     static class Shape {
         public void diamond(int sideLength, boolean isCross) {
             for (int row = 0; row < 2 * sideLength - 1; row++) {
@@ -471,47 +532,50 @@ public class Solution {
 
 
     public static void main(String[] args) {
-        Ip ip = new Ip();
-        List<String> ips = ip.getIps("1231232123");
-        boolean b = ip.validIp4("12.23.34.12");
-        System.out.println(b);
-        System.out.println(ips);
-
-
-        MedianFinder medianFinder = new MedianFinder();
-        medianFinder.addNum(1);
-        medianFinder.addNum(9);
-        medianFinder.addNum(3);
-        medianFinder.addNum(2);
-        medianFinder.addNum(2);
-        System.out.println("中位数" + medianFinder.findMedian());
-
-
-        Counter counter = new Counter();
-        Integer[] element = {1, 22, 22, 22, 22, 1, 1, 22, 14, 12, 12, 12, 12};
-        List<Integer> integers = counter.topK(element, 10);
-        System.out.println("字符前K个频率最高" + integers);
-
-        int[] nums = {-1, 2, 1, -1, 2, -1, 2};
-        System.out.println("最大连续子数组" + counter.maxSubArray(nums));
-        System.out.println("查找最大连续元素个数" + counter.maxRepeat(element, 123));
-        System.out.println("最大连续元素" + counter.maxRepeat(element));
-        System.out.println("最大连续元素和个数" + counter.maxRepeatAndCount(element));
-        System.out.println("所有连续元素信息" + counter.repeatAndCount(element));
-        System.out.println("移除连续元素后" + counter.removeRepeat(element));
-
-        Permutation permutation = new Permutation();
-        Integer[] integers1 = {1, 2, 3};
-        Set<List<Integer>> rank = permutation.rank(integers1);
-        System.out.println(rank);
-        System.out.println(rank.size());
-
-
-        String s = "bcabvxcjpwrtup123213sfs";
-        String s1 = counter.removeDuplicate(s);
-        System.out.println(s1);
-
-        Shape shape = new Shape();
-        shape.diamond(11, true);
+//        Ip ip = new Ip();
+//        List<String> ips = ip.getIps("1231232123");
+//        boolean b = ip.validIp4("12.23.34.12");
+//        System.out.println(b);
+//        System.out.println(ips);
+//
+//
+//        MedianFinder medianFinder = new MedianFinder();
+//        medianFinder.addNum(1);
+//        medianFinder.addNum(9);
+//        medianFinder.addNum(3);
+//        medianFinder.addNum(2);
+//        medianFinder.addNum(2);
+//        System.out.println("中位数" + medianFinder.findMedian());
+//
+//
+//        Counter counter = new Counter();
+//        Integer[] element = {1, 22, 22, 22, 22, 1, 1, 22, 14, 12, 12, 12, 12};
+//        List<Integer> integers = counter.topK(element, 10);
+//        System.out.println("字符前K个频率最高" + integers);
+//
+//        int[] nums = {-1, 2, 1, -1, 2, -1, 2};
+//        System.out.println("最大连续子数组" + counter.maxSubArray(nums));
+//        System.out.println("查找最大连续元素个数" + counter.maxRepeat(element, 123));
+//        System.out.println("最大连续元素" + counter.maxRepeat(element));
+//        System.out.println("最大连续元素和个数" + counter.maxRepeatAndCount(element));
+//        System.out.println("所有连续元素信息" + counter.repeatAndCount(element));
+//        System.out.println("移除连续元素后" + counter.removeRepeat(element));
+//
+//        Permutation permutation = new Permutation();
+//        Integer[] integers1 = {1, 2, 3};
+//        Set<List<Integer>> rank = permutation.rank(integers1);
+//        System.out.println(rank);
+//        System.out.println(rank.size());
+//
+//
+//        String s = "bcabvxcjpwrtup123213sfs";
+//        String s1 = counter.removeDuplicate(s);
+//        System.out.println(s1);
+//
+//        Shape shape = new Shape();
+//        shape.diamond(11, true);
+//
+        NQueens nQueens = new NQueens();
+        nQueens.print(6);
     }
 }
