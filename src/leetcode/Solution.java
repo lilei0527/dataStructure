@@ -10,18 +10,18 @@ import java.util.*;
 public class Solution {
     static class NQueens {
 
-        public List<int[][]> getNQueens(int n) {
-            List<int[][]>list = new ArrayList<>();
+        public List<Map<Integer,Integer>> getNQueens(int n) {
+            List<Map<Integer,Integer>>list = new ArrayList<>();
             int[] segment = new int[n];
             fill(0, n, segment,list);
             return list;
         }
 
-        private void fill(int row, int n, int[] segment,List<int[][]>list) {
+        private void fill(int row, int n, int[] segment,List<Map<Integer,Integer>>list) {
             if (row == n) {
-                int[][] queens = new int[n][n];
+                Map<Integer,Integer>queens = new TreeMap<>();
                 for (int i = 0; i < segment.length; i++) {
-                    queens[i][segment[i]] = 1;
+                    queens.put(i,segment[i]);
                 }
                 list.add(queens);
                 return;
@@ -50,13 +50,13 @@ public class Solution {
 
         @SuppressWarnings("SameParameterValue")
         private void print(int n){
-            List<int[][]> nQueens = getNQueens(n);
-            for(int[][] ints:nQueens){
-                for (int[] anInt : ints) {
-                    for (int j = 0; j < anInt.length; j++) {
-                        if (anInt[j] == 1) {
+            List<Map<Integer, Integer>> nQueens = getNQueens(n);
+            for(Map<Integer,Integer>map:nQueens) {
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < n; j++) {
+                        if(j==map.get(i)){
                             System.out.print("Q");
-                        } else {
+                        }else {
                             System.out.print(" ");
                         }
                         if (j == n - 1) {
@@ -575,7 +575,11 @@ public class Solution {
 //        Shape shape = new Shape();
 //        shape.diamond(11, true);
 //
-        NQueens nQueens = new NQueens();
-        nQueens.print(6);
+//        NQueens nQueens = new NQueens();
+//        nQueens.print(10);
+        long s =0xffffL;
+        long s1 =0xffffffffffffffffL;
+        System.out.println(s);
+        System.out.println(s1);
     }
 }
