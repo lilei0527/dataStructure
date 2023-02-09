@@ -123,6 +123,8 @@ public class Solution {
 
         public boolean hasCycle(ListNode head) {
             ListNode fast = head;
+
+
             while (fast != null && fast.next != null) {
                 fast = fast.next.next;
                 head = head.next;
@@ -530,6 +532,45 @@ public class Solution {
         }
     }
 
+    /**
+     请你按照从括号内到外的顺序，逐层反转每对匹配括号中的字符串，并返回最终的结果。
+
+     注意，您的结果中 不应 包含任何括号。
+     示例 1：
+
+     输入：s = “(abcd)”
+     输出：“dcba”
+
+     示例 2：
+
+     输入：s = “(u(love)i)”
+     输出：“iloveu”
+
+     示例 3：
+
+     输入：s = “(ed(et(oc))el)”
+     输出：“leetcode”
+     */
+    public static class StringUtil{
+        public String reverseBracketStr(String s){
+            LinkedList<String> stack = new LinkedList<>();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < s.length(); i++) {
+                char ch = s.charAt(i);
+                if (ch == '(') {
+                    stack.push(sb.toString());
+                    sb.setLength(0);
+                } else if (ch == ')') {
+                    sb.reverse();
+                    sb.insert(0, stack.pop());
+                } else {
+                    sb.append(ch);
+                }
+            }
+            return sb.toString();
+        }
+    }
+
 
     public static void main(String[] args) {
 //        Ip ip = new Ip();
@@ -577,9 +618,8 @@ public class Solution {
 //
 //        NQueens nQueens = new NQueens();
 //        nQueens.print(10);
-        long s =0xffffL;
-        long s1 =0xffffffffffffffffL;
+        StringUtil stringUtil = new StringUtil();
+        String s = stringUtil.reverseBracketStr("(ed(et(oc)(od))el)");
         System.out.println(s);
-        System.out.println(s1);
     }
 }
