@@ -106,9 +106,17 @@ public class Solution {
             ListNode(int val) {
                 this.val = val;
             }
+
+            @Override
+            public String toString() {
+                return "ListNode{" +
+                        "val=" + val +
+                        ", next=" + next +
+                        '}';
+            }
         }
 
-        public ListNode ReverseList(ListNode head) {
+        public static ListNode ReverseList(ListNode head) {
             if (head == null) return null;
             ListNode pre = null, next;
             while (head.next != null) {
@@ -121,7 +129,7 @@ public class Solution {
             return head;
         }
 
-        public boolean hasCycle(ListNode head) {
+        public static boolean hasCycle(ListNode head) {
             ListNode fast = head;
 
 
