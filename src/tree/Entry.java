@@ -10,6 +10,7 @@ public class Entry<K, V> implements Comparable<Entry<K,V>> {
     public String toString() {
         return "Entry{" +
                 "key=" + key +
+                ", value=" + value +
                 '}';
     }
 

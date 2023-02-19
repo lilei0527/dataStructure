@@ -10,7 +10,7 @@ public class BPlusTree<K extends Comparable<K>, V> implements Tree<K, V> {
     private static final String PREN_ODE = "PREN_ODE";
     private static final String NEXT_NODE = "NEXT_NODE";
     //B+树的阶数
-    private int rank;
+    private final int rank;
     //根节点
     private Node<K, V> root;
     //头结点
@@ -203,6 +203,16 @@ public class BPlusTree<K extends Comparable<K>, V> implements Tree<K, V> {
     //打印B+树
     public void print() {
         print(root);
+    }
+
+    @Override
+    public List<Entry<K, V>> bfsScan() {
+        return null;
+    }
+
+    @Override
+    public List<Entry<K, V>> dfsScan(DFSType type) {
+        return null;
     }
 
     //打印B+树

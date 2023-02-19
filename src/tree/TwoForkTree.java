@@ -1,6 +1,10 @@
 package tree;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author lilei
  * create at 2020/3/7 11:49
@@ -75,7 +79,7 @@ public abstract class TwoForkTree<K extends Comparable<K>, V> implements Tree<K,
                     i += line[i].length() > 4 ? 2 : line[i].length() - 1;
                 }
             }
-            System.out.println(sb.toString());
+            System.out.println(sb);
         }
     }
 
@@ -121,6 +125,81 @@ public abstract class TwoForkTree<K extends Comparable<K>, V> implements Tree<K,
         }
     }
 
+    //广度优先遍历
+    public List<Entry<K, V>> bfsScan(){
+        List<Entry<K,V>> result = new ArrayList<>();
+        if(root==null){
+            return new ArrayList<>();
+        }
+        bfsScan(Collections.singletonList(root),result);
+        return result;
+    }
+
+    public void bfsScan(List<TreeNode<K, V>> nodes, List<Entry<K, V>> result) {
+        if (nodes.isEmpty()) {
+            return;
+        }
+        List<TreeNode<K, V>> child = new ArrayList<>();
+        for (TreeNode<K, V> node : nodes) {
+            result.add(node.entry);
+            if (node.left != null) {
+                child.add(node.left);
+            }
+            if (node.right != null) {
+                child.add(node.right);
+            }
+        }
+        bfsScan(child, result);
+    }
+
+    public List<Entry<K, V>> dfsScan(DFSType type){
+        List<Entry<K,V>> result = new ArrayList<>();
+        if(root==null){
+            return new ArrayList<>();
+        }
+        switch (type){
+            case FRONT:dfsScanFront(root,result);
+            case MIDDLE:dfsScanMiddle(root,result);
+            case BEHIND:dfsScanBehind(root,result);
+        }
+        return result;
+    }
+
+    //深度优先-前序遍历
+    public  void dfsScanFront(TreeNode<K, V> node,List<Entry<K, V>> result){
+        result.add(node.entry);
+        if(node.left!=null){
+            dfsScanFront(node.left,result);
+        }
+        if(node.right!=null){
+            dfsScanFront(node.right,result);
+        }
+    }
+
+    //深度优先-中序遍历
+    public  void dfsScanMiddle(TreeNode<K, V> node,List<Entry<K, V>> result){
+
+        if(node.left!=null){
+            dfsScanMiddle(node.left,result);
+        }
+
+        result.add(node.entry);
+
+        if(node.right!=null){
+            dfsScanMiddle(node.right,result);
+        }
+    }
+
+    //深度优先-后序遍历
+    public  void dfsScanBehind(TreeNode<K, V> node,List<Entry<K, V>> result){
+        if(node.left!=null){
+            dfsScanBehind(node.left,result);
+        }
+        if(node.right!=null){
+            dfsScanBehind(node.right,result);
+        }
+        result.add(node.entry);
+    }
 
     K getKey(TreeNode<K, V> treeNode) {
         return treeNode.entry.key;

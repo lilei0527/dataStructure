@@ -4,6 +4,8 @@ import tree.akl.AvlTree;
 import tree.bPlusTree.BPlusTree;
 import tree.rbTree.RbTree;
 
+import java.util.List;
+
 public class TreeTest {
     public static void main(String[] args) {
 
@@ -49,6 +51,25 @@ public class TreeTest {
         bPlusTree.insert(14, 561);
         bPlusTree.print();
 
+        System.out.println();
+        System.out.println("bfs遍历:");
+        List<Entry<Integer, Integer>> entries = avlTree.bfsScan();
+        System.out.println(entries);
+
+        System.out.println();
+        System.out.println("dfs前序遍历:");
+        List<Entry<Integer, Integer>> entries1 = avlTree.dfsScan(Tree.DFSType.FRONT);
+        System.out.println(entries1);
+
+        System.out.println();
+        System.out.println("dfs中序遍历:");
+        List<Entry<Integer, Integer>> entries2 = avlTree.dfsScan(Tree.DFSType.MIDDLE);
+        System.out.println(entries2);
+
+        System.out.println();
+        System.out.println("dfs后序遍历:");
+        List<Entry<Integer, Integer>> entries3 = avlTree.dfsScan(Tree.DFSType.BEHIND);
+        System.out.println(entries3);
 
     }
 }
