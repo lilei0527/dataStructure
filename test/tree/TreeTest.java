@@ -5,6 +5,7 @@ import tree.bPlusTree.BPlusTree;
 import tree.rbTree.RbTree;
 
 import java.util.List;
+import java.util.TreeMap;
 
 public class TreeTest {
     public static void main(String[] args) {
@@ -70,6 +71,15 @@ public class TreeTest {
         System.out.println("dfs后序遍历:");
         List<Entry<Integer, Integer>> entries3 = avlTree.dfsScan(Tree.DFSType.BEHIND);
         System.out.println(entries3);
+
+        System.out.println();
+        TreeMap<String,String> treeMap = new TreeMap<>();
+        treeMap.put("1","11");
+        treeMap.put("1","22");
+        System.out.println(treeMap);
+
+        String s = "11122";
+
 
     }
 }
