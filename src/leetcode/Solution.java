@@ -8,6 +8,45 @@ import java.util.*;
  **/
 @SuppressWarnings("unused")
 public class Solution {
+
+
+    /**
+     * 幂集。编写一种方法，返回某集合的所有子集。集合中不包含重复的元素。
+     *  输入： nums = [1,2,3]
+     *  输出：
+     *  [3],
+     *  [1],
+     *  [2],
+     *  [1,2,3],
+     *  [1,3],
+     *  [2,3],
+     *  [1,2],
+     *  []
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        subsets(nums,0,list,result);
+        return result;
+    }
+
+    public void subsets(int[] nums,int index,List<Integer> list,List<List<Integer>> result){
+        if(index == nums.length){
+            result.add(new ArrayList<>(list));
+            return;
+        }
+
+        //选择index位置上的数
+        list.add(nums[index]);
+        subsets(nums,index+1,list,result);
+
+        //不选择index位置上的数
+        list.remove(list.size()-1);
+        subsets(nums,index+1,list,result);
+
+    }
+
+
     static class NQueens {
 
         public List<Map<Integer,Integer>> getNQueens(int n) {
@@ -200,6 +239,28 @@ public class Solution {
                 used[i] = true;
                 dfs(deep + 1, all, signal, es, used);
                 used[i] = false;
+            }
+        }
+
+
+
+        public List<List<Integer>> permute(Integer[] nums) {
+            List<Integer> ints = Arrays.asList(nums);
+            List<List<Integer>> result= new ArrayList<>();
+            backtrack(nums.length,ints,result,0);
+            return result;
+        }
+
+        private void backtrack(int length,List<Integer>list,List<List<Integer>> result,int index){
+            if(index==length){
+                result.add(new ArrayList<>(list));
+                return;
+            }
+
+            for (int i = index; i < length; i++) {
+                Collections.swap(list,index,i);
+                backtrack(length,list,result,index+1);
+                Collections.swap(list,index,i);
             }
         }
     }
@@ -677,21 +738,28 @@ public class Solution {
 //        String s = stringUtil.reverseBracketStr("(ed(et(oc)(od))el)");
 //        System.out.println(s);
 
-        ListUtil.ListNode listNode1 = new ListUtil.ListNode(1);
-        ListUtil.ListNode listNode3 = new ListUtil.ListNode(3);
-        ListUtil.ListNode listNode5 = new ListUtil.ListNode(5);
-        listNode1.next = listNode3;
-        listNode3.next = listNode5;
+//        ListUtil.ListNode listNode1 = new ListUtil.ListNode(1);
+//        ListUtil.ListNode listNode3 = new ListUtil.ListNode(3);
+//        ListUtil.ListNode listNode5 = new ListUtil.ListNode(5);
+//        listNode1.next = listNode3;
+//        listNode3.next = listNode5;
+//
+//        ListUtil.ListNode listNode2 = new ListUtil.ListNode(2);
+//        ListUtil.ListNode listNode4 = new ListUtil.ListNode(4);
+//        ListUtil.ListNode listNode6 = new ListUtil.ListNode(6);
+//        listNode2.next = listNode4;
+//        listNode4.next = listNode6;
+//
+//        ListUtil.ListNode listNode = ListUtil.mergeList(listNode1, listNode2);
+//        System.out.println(listNode);
 
-        ListUtil.ListNode listNode2 = new ListUtil.ListNode(2);
-        ListUtil.ListNode listNode4 = new ListUtil.ListNode(4);
-        ListUtil.ListNode listNode6 = new ListUtil.ListNode(6);
-        listNode2.next = listNode4;
-        listNode4.next = listNode6;
+//        Permutation permutation = new Permutation();
+        int[] temp = new int[]{1,2,3};
+//        List<List<Integer>> permute = permutation.permute(temp);
+//        System.out.println(permute);
 
-        ListUtil.ListNode listNode = ListUtil.mergeList(listNode1, listNode2);
-        System.out.println(listNode);
-
-
+        Solution solution = new Solution();
+        List<List<Integer>> subsets = solution.subsets(temp);
+        System.out.println(subsets);
     }
 }
