@@ -9,6 +9,52 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
 
+    /**
+     * 给你一个字符串 s，找到 s 中最长的回文子串。
+     *
+     * 如果字符串的反序与原始字符串相同，则该字符串称为回文字符串。
+     *
+     *
+     * 示例 1：
+     *
+     * 输入：s = "babad"
+     * 输出："bab"
+     * 解释："aba" 同样是符合题意的答案。
+     * 示例 2：
+     *
+     * 输入：s = "cbbd"
+     * 输出："bb"
+     */
+
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() < 1) {
+            return "";
+        }
+
+        String result = "";
+        int maxLen = 0;
+        int maxIndex = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int one = getPalindromeLen(s, i, i);
+            int two = getPalindromeLen(s, i, i+1);
+            int m = Math.max(one, two);
+            if(m>maxLen){
+                maxLen = m;
+                maxIndex = i;
+            }
+        }
+        return s.substring(maxIndex-(maxLen-1)/2,maxIndex+maxLen/2+1);
+    }
+
+    private int getPalindromeLen(String s,int left,int right){
+        while (left>=0&&right<s.length()&&s.charAt(left)==s.charAt(right)){
+            left--;
+            right++;
+        }
+        return right-left-1;
+    }
+
+
 
     /**
      * 幂集。编写一种方法，返回某集合的所有子集。集合中不包含重复的元素。
@@ -754,12 +800,14 @@ public class Solution {
 //        System.out.println(listNode);
 
 //        Permutation permutation = new Permutation();
-        int[] temp = new int[]{1,2,3};
-//        List<List<Integer>> permute = permutation.permute(temp);
-//        System.out.println(permute);
-
+//        int[] temp = new int[]{1,2,3};
+////        List<List<Integer>> permute = permutation.permute(temp);
+////        System.out.println(permute);
+//
         Solution solution = new Solution();
-        List<List<Integer>> subsets = solution.subsets(temp);
-        System.out.println(subsets);
+//        List<List<Integer>> subsets = solution.subsets(temp);
+//        System.out.println(subsets);
+
+        System.out.println(solution.longestPalindrome("babad"));
     }
 }
