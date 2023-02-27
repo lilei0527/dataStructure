@@ -10,6 +10,60 @@ import java.util.*;
 public class Solution {
 
     /**
+     *
+     * 给你一个整数数组 nums，请你找出并返回能被三整除的元素最大和
+     */
+    public int maxSumDivThree(int[] nums) {
+        int[] remainder = new int[3];
+        for (int num : nums) {
+            int a = remainder[0] + num;
+            int b = remainder[1] + num;
+            int c = remainder[2] + num;
+
+            remainder[a % 3] = Math.max(remainder[a % 3], a);
+            remainder[b % 3] = Math.max(remainder[b % 3], b);
+            remainder[c % 3] = Math.max(remainder[c % 3], c);
+        }
+        return remainder[0];
+
+
+    }
+
+
+
+    /**
+     *接雨水
+     *
+     * 给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水
+     */
+
+    public int trap(int[] height) {
+        int result = 0;
+        int left=0;
+        int right=height.length-1;
+        int leftMax=0;
+        int rightMax=0;
+        while (left<right){
+            if(height[left]<height[right]){
+                if(height[left]>leftMax){
+                    leftMax=height[left];
+                }else {
+                    result+=leftMax-height[left];
+                }
+                left++;
+            }else {
+                if(height[right]>rightMax){
+                    rightMax=height[right];
+                }else {
+                    result+=rightMax-height[right];
+                }
+                right--;
+            }
+        }
+        return result;
+    }
+
+    /**
      * 给你一个字符串 s，找到 s 中最长的回文子串。
      *
      * 如果字符串的反序与原始字符串相同，则该字符串称为回文字符串。
@@ -780,9 +834,9 @@ public class Solution {
 //
 //        NQueens nQueens = new NQueens();
 //        nQueens.print(10);
-//        StringUtil stringUtil = new StringUtil();
-//        String s = stringUtil.reverseBracketStr("(ed(et(oc)(od))el)");
-//        System.out.println(s);
+        StringUtil stringUtil = new StringUtil();
+        String s = stringUtil.reverseBracketStr("(ed(et(oc)(od))el)");
+        System.out.println(s);
 
 //        ListUtil.ListNode listNode1 = new ListUtil.ListNode(1);
 //        ListUtil.ListNode listNode3 = new ListUtil.ListNode(3);
@@ -804,10 +858,14 @@ public class Solution {
 ////        List<List<Integer>> permute = permutation.permute(temp);
 ////        System.out.println(permute);
 //
-        Solution solution = new Solution();
+//        Solution solution = new Solution();
 //        List<List<Integer>> subsets = solution.subsets(temp);
 //        System.out.println(subsets);
 
-        System.out.println(solution.longestPalindrome("babad"));
+//        System.out.println(solution.longestPalindrome("babad"));
+
+//        StringUtil stringUtil = new StringUtil();
+//        List<String> strings = stringUtil.generateParenthesis(3);
+//        System.out.println(strings);
     }
 }
