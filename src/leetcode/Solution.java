@@ -10,6 +10,50 @@ import java.util.*;
 public class Solution {
 
     /**
+     * 给你一个只包含 '('和 ')'的字符串，找出最长有效（格式正确且连续）括号子串的长度。
+     *
+     *
+     * 示例 1：
+     *
+     * 输入：s = "(()"
+     * 输出：2
+     * 解释：最长有效括号子串是 "()"
+     * 示例 2：
+     *
+     * 输入：s = ")()())"
+     * 输出：4
+     * 解释：最长有效括号子串是 "()()"
+     * 示例 3：
+     *
+     * 输入：s = ""
+     * 输出：0
+     *
+     */
+    public int longestValidParentheses(String s) {
+        if(s==null||s.isEmpty()){
+            return 0;
+        }
+
+        int max = 0;
+        Stack<Integer>stack = new Stack<>();
+        stack.push(-1);
+        for (int i = 0; i < s.length(); i++) {
+            if(s.charAt(i)=='('){
+                stack.push(i);
+            }else {
+                stack.pop();
+                if(stack.isEmpty()){
+                    stack.push(i);
+                }else {
+                    max = Math.max(max,i-stack.peek());
+                }
+            }
+        }
+
+        return max;
+    }
+
+    /**
      *
      * 给你一个整数数组 nums，请你找出并返回能被三整除的元素最大和
      */
@@ -867,5 +911,9 @@ public class Solution {
 //        StringUtil stringUtil = new StringUtil();
 //        List<String> strings = stringUtil.generateParenthesis(3);
 //        System.out.println(strings);
+
+        Solution solution = new Solution();
+        System.out.println(solution.longestValidParentheses(")()())"));
+
     }
 }
