@@ -10,6 +10,31 @@ import java.util.*;
 public class Solution {
 
     /**
+     * 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点
+     */
+    public ListUtil.ListNode removeNthFromEnd(ListUtil.ListNode head, int n) {
+        ListUtil.ListNode quick = head;
+        for (int i = 0; i < n-1; i++) {
+            quick = quick.next;
+        }
+        ListUtil.ListNode slow = head;
+        ListUtil.ListNode pre = null;
+
+        while (quick.next!=null){
+            quick = quick.next;
+            pre = slow;
+            slow = slow.next;
+        }
+
+        if(pre==null){
+            return slow.next;
+        }else {
+            pre.next = slow.next;
+            return head;
+        }
+    }
+
+    /**
      * 给你一个只包含 '('和 ')'的字符串，找出最长有效（格式正确且连续）括号子串的长度。
      *
      *
