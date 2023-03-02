@@ -2,12 +2,39 @@ package leetcode;
 
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 /**
  * @author lilei
  **/
 @SuppressWarnings("unused")
 public class Solution {
+
+    /**
+     * 编写一个函数来查找字符串数组中的最长公共前缀。
+     *
+     * 如果不存在公共前缀，返回空字符串 ""。
+     */
+    public String longestCommonPrefix(String[] strs) {
+        if(strs.length==0){
+            return "";
+        }
+
+        int length = strs[0].length();
+        for (int i = 0; i < length; i++) {
+            char c = strs[0].charAt(i);
+            boolean isSame = true;
+            for (int j = 0; j < strs.length; j++) {
+                if(strs[j].length()==i||strs[j].charAt(i)!=c){
+                    return strs[0].substring(0,i);
+                }
+            }
+
+        }
+        return strs[0];
+    }
+
+
 
     /**
      * 给定一个字符串 s ，请你找出其中不含有重复字符的最长子串的长度。
