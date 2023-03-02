@@ -10,6 +10,45 @@ import java.util.*;
 public class Solution {
 
     /**
+     * 给定一个字符串 s ，请你找出其中不含有重复字符的最长子串的长度。
+     *
+     *
+     * 输入: s = "abcabcbb"
+     * 输出: 3
+     * 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+     * 示例 2:
+     *
+     * 输入: s = "bbbbb"
+     * 输出: 1
+     * 解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+     * 示例 3:
+     *
+     * 输入: s = "pwwkew"
+     * 输出: 3
+     * 解释: 因为无重复字符的最长子串是"wke"，所以其长度为 3。
+     *     请注意，你的答案必须是 子串 的长度，"pwke"是一个子序列，不是子串。
+     */
+    public int lengthOfLongestSubstring(String s) {
+        if(s==null||s.isEmpty()){
+            return 0;
+        }
+        int preMax = 1;
+        int max = 1;
+        for (int i = 1; i < s.length(); i++) {
+            String temp = s.substring(i-preMax,i);//前一个元素不重复的最长字符串
+            char c = s.charAt(i);
+            int index = temp.indexOf(c);//目前字符在前一个元素不重复的最长字符串d的最后索引
+            if(index!=-1){
+                preMax=temp.length()-index;
+            }else {
+                preMax=preMax+1;
+            }
+            max = Math.max(max,preMax);
+        }
+        return max;
+    }
+
+    /**
      *
      * 给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
      *
@@ -990,10 +1029,16 @@ public class Solution {
 //        List<String> strings = stringUtil.generateParenthesis(3);
 //        System.out.println(strings);
 
-        Solution solution = new Solution();
+//        Solution solution = new Solution();
 //        System.out.println(solution.longestValidParentheses(")()())"));
-        int[] nums = new int[]{10,9,2,4,5,3,7};
-        System.out.println(solution.lengthOfLIS(nums));
+//        int[] nums = new int[]{10,9,2,4,5,3,7};
+//        System.out.println(solution.lengthOfLIS(nums));
+
+        Solution solution = new Solution();
+        System.out.println(solution.lengthOfLongestSubstring("pwwkew"));
+
+
+
 
     }
 }
