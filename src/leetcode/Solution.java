@@ -139,7 +139,46 @@ public class Solution {
         return rightIndex-leftIndex-1;
     }
 
+    /**
+     * 给定一个非负整数，你至多可以交换一次数字中的任意两位。返回你能得到的最大值。
+     *
+     * 示例 1 :
+     *
+     * 输入: 2736
+     * 输出: 7236
+     * 解释: 交换数字2和数字7。
+     * 示例 2 :
+     *
+     * 输入: 9973
+     * 输出: 9973
+     * 解释: 不需要交换。
+     *
+     */
 
+    public int maximumSwap(int num) {
+        String s = String.valueOf(num);
+        int maxLeft=0;
+        int maxRight=0;
+        for (int i = 0; i < s.length(); i++){
+            int maxChar = s.charAt(i)-'0';
+            maxLeft = i;
+            maxRight = i;
+            for (int j = i + 1; j < s.length(); j++) {
+                int rightChar = s.charAt(j) - '0';
+                if (rightChar >= maxChar) {
+                    maxChar = rightChar;
+                    maxRight = j;
+                }
+            }
+            if(s.charAt(i)-'0'!=s.charAt(maxRight) - '0'){//如果左边不是最大值,直接交换就好
+                break;
+            }
+        }
+        char[] chars = s.toCharArray();
+        swap(chars,maxLeft,maxRight);
+        String result = new String(chars);
+        return Integer.parseInt(result);
+    }
 
     //单调递增子序列长度
     public int getLength(int[] nums){
