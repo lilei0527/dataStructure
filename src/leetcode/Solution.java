@@ -2,13 +2,231 @@ package leetcode;
 
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 /**
  * @author lilei
  **/
 @SuppressWarnings("unused")
 public class Solution {
+
+    //2023.3.3回顾
+
+    //全排列
+    public List<String>rank(String s){
+        List<String>result = new ArrayList<>();
+        char[] chars = s.toCharArray();
+        rank(result,0,chars);
+        return result;
+    }
+
+    private void rank(List<String>result,int start,char[] chars){
+        if(start==chars.length){
+            result.add(new String(chars));
+            return;
+        }
+
+        for (int i = start; i < chars.length; i++) {
+            swap(chars,start,i);
+            rank(result,start+1,chars);
+            swap(chars,start,i);
+        }
+
+
+    }
+
+    private void swap(char[]chars,int i,int j){
+        char temp = chars[i];
+        chars[i] = chars[j];
+        chars[j] = temp;
+    }
+
+    //合法的括号匹配
+    public List<String> getBrackets(int n){
+        List<String>result = new ArrayList<>();
+        getBrackets(n,0,0,result,new StringBuilder());
+        return result;
+    }
+
+    public void getBrackets(int n,int leftCount,int rightCount,List<String>result,StringBuilder stringBuilder){
+        if(leftCount+rightCount==2*n){
+            result.add(stringBuilder.toString());
+            return;
+        }
+
+        if(leftCount<n){
+            stringBuilder.append("(");
+            getBrackets(n,leftCount+1,rightCount,result,stringBuilder);
+            stringBuilder.deleteCharAt(stringBuilder.length()-1);
+        }
+
+        if(rightCount<leftCount){
+            stringBuilder.append(")");
+            getBrackets(n,leftCount,rightCount+1,result,stringBuilder);
+            stringBuilder.deleteCharAt(stringBuilder.length()-1);
+        }
+    }
+
+
+    //反转括号内字符串
+    private String reverse(String s){
+        StringBuilder stringBuilder = new StringBuilder();
+        Stack<String>stack = new Stack<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if(c=='('){
+                stack.push(stringBuilder.toString());
+                stringBuilder.setLength(0);
+            }else if(c==')'){
+                stringBuilder.reverse();
+                stringBuilder.insert(0,stack.pop());
+            }else {
+                stringBuilder.append(c);
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+
+
+    //找出最长有效（格式正确且连续）括号子串的长度
+    private int getLength(String s){
+        int max =0;
+        Stack<Integer>stack = new Stack<>();
+        stack.push(-1);
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if(c=='('){
+                stack.push(i);
+            }else {
+                stack.pop();
+                if(stack.isEmpty()){
+                    stack.push(i);
+                }else {
+                    max = Math.max(max,i-stack.peek());
+                }
+            }
+        }
+        return max;
+    }
+
+
+
+    //最长回文子串
+    private String getMaxRepeat(String s){
+        int maxIndex=0;
+        int maxLength = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int maxLength1 = getMaxRepeat(i, i, s);
+            int maxLength2 = getMaxRepeat(i, i+1, s);
+            int maxLength3 = Math.max(maxLength1,maxLength2);
+            if(maxLength3>=maxLength){
+                maxIndex = i;
+                maxLength = maxLength3;
+            }
+        }
+        return s.substring(maxIndex-(maxLength-1)/2,maxIndex+maxLength/2+1);
+    }
+
+
+    private int getMaxRepeat(int leftIndex,int rightIndex,String s){
+        while (leftIndex>=0&&rightIndex<s.length()){
+            if(s.charAt(leftIndex)!=s.charAt(rightIndex)){
+                break;
+            }
+            leftIndex--;
+            rightIndex++;
+        }
+        return rightIndex-leftIndex-1;
+    }
+
+
+
+    //单调递增子序列长度
+    public int getLength(int[] nums){
+        if(nums.length==0){
+            return 0;
+        }
+        int[]dp = new int[nums.length];
+        dp[0]=1;
+        int max = 1;
+        for (int i = 1; i < nums.length; i++) {
+            int dpMax = 1;
+            for (int j = 0; j < dp.length; j++) {
+                if(nums[i]>nums[j]){
+                    dpMax = Math.max(dpMax,dp[j]+1);
+                }
+            }
+
+            dp[i]=dpMax;
+            max = Math.max(dpMax,max);
+        }
+        return max;
+    }
+
+
+    /**
+     * 给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是 回文串 。返回 s 所有可能的分割方案。
+     *
+     * 回文串 是正着读和反着读都一样的字符串。
+     *
+     *
+     * 示例 1：
+     *
+     * 输入：s = "aab"
+     * 输出：[["a","a","b"],["aa","b"]]
+     * 示例 2：
+     *
+     * 输入：s = "a"
+     * 输出：[["a"]]
+     *
+     */
+    public List<List<String>> partition(String s) {
+        List<List<String>>result = new ArrayList<>();
+        List<String>list = new ArrayList<>();
+
+        int[][]arrs =new int[s.length()][s.length()];
+        for (int i = 0; i < arrs.length; i++) {
+            Arrays.fill(arrs[i],0);
+        }
+        dfs(s,0,list,result,arrs);
+        return result;
+    }
+    
+    
+    private void dfs(String s,int start,List<String>list,List<List<String>>result,int[][]arrs){
+        if(start==s.length()){
+            result.add(new ArrayList<>(list));
+        }
+
+
+
+        for (int i = start; i < s.length(); i++) {
+            if(isPalindrome(start,i,arrs,s)==1){
+                list.add(s.substring(start,i+1));
+                dfs(s,i+1,list,result,arrs);
+                list.remove(list.size()-1);
+            }
+        }
+    }
+
+    private int isPalindrome(int i,int j,int[][]arrs,String s){
+        if(arrs[i][j]!=0){
+            return arrs[i][j];
+        }
+
+        if(i>=j){
+            arrs[i][j] = 1;
+        }else if(s.charAt(i)==s.charAt(j)){
+            arrs[i][j] = isPalindrome(i+1,j-1,arrs,s);
+        }else {
+            arrs[i][j] = -1;
+        }
+
+        return arrs[i][j];
+    }
+
+
+
 
     /**
      * 编写一个函数来查找字符串数组中的最长公共前缀。
@@ -1063,7 +1281,9 @@ public class Solution {
 
         Solution solution = new Solution();
         System.out.println(solution.lengthOfLongestSubstring("pwwkew"));
-
+        System.out.println(solution.rank("123"));
+        System.out.println(solution.getBrackets(3));
+        System.out.println(solution.partition("123"));
 
 
 
