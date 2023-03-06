@@ -9,6 +9,31 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
 
+    public int[] merger(int[]arr1,int[]arr2){
+        int []result = new int[arr1.length+arr2.length];
+        int step=0;
+        int i=0;
+        int j=0;
+        while (i < arr1.length && j < arr2.length){
+            if(arr1[i]<=arr2[j]){
+                result[step++]=arr1[i++];
+            }else {
+                result[step++]=arr2[j++];
+            }
+        }
+
+        if(i==arr1.length){
+            for (int start = j; start < arr2.length; start++) {
+                result[step++]=arr2[start];
+            }
+        } else if(j==arr2.length){
+            for (int start = i; start < arr1.length; start++) {
+                result[step++]=arr1[start];
+            }
+        }
+        return result;
+    }
+
     //2023.3.3回顾
 
     //全排列
@@ -1325,6 +1350,11 @@ public class Solution {
         System.out.println(solution.partition("123"));
 
 
+
+        int [] arr1 = new int[]{1,4,7,99,109};
+        int [] arr2 = new int[]{3,4,9,18,100};
+        System.out.println(Arrays.toString(solution.merger(arr1, arr2))
+        );
 
     }
 }
