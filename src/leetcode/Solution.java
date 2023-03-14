@@ -8,6 +8,83 @@ import java.util.*;
  **/
 @SuppressWarnings("unused")
 public class Solution {
+    /**
+     * 最长连续序列
+     *
+     * 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+     *
+     * 请你设计并实现时间复杂度为O(n) 的算法解决此问题。
+     *
+     *
+     *
+     * 示例 1：
+     *
+     * 输入：nums = [100,4,200,1,3,2]
+     * 输出：4
+     * 解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。
+     * 示例 2：
+     *
+     * 输入：nums = [0,3,7,2,5,8,4,6,0,1]
+     * 输出：9
+     */
+    public int longestConsecutive(int[] nums) {
+        Set<Integer>set = new HashSet<>();
+        for (int num : nums) {
+            set.add(num);
+        }
+
+        int max=0;
+        for (Integer integer : set) {
+            if(!set.contains(integer-1)){
+                int n = 1;
+                while (set.contains(integer+1)){
+                    n++;
+                    integer++;
+                }
+                max = Math.max(n,max);
+            }
+        }
+
+        return max;
+    }
+
+
+    /**
+     *
+     *给你一个整数 n ，返回 和为 n 的完全平方数的最少数量 。
+     *
+     * 完全平方数 是一个整数，其值等于另一个整数的平方；换句话说，其值等于一个整数自乘的积。例如，1、4、9 和 16 都是完全平方数，而 3 和 11 不是。
+     *
+     *
+     *
+     * 示例1：
+     *
+     * 输入：n = 12
+     * 输出：3
+     * 解释：12 = 4 + 4 + 4
+     * 示例 2：
+     *
+     * 输入：n = 13
+     * 输出：2
+     * 解释：13 = 4 + 9
+     *
+     */
+
+    public int numSquares(int n) {
+        int[] dp = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            dp[i] = i;
+            for (int j = 1; i - j * j >= 0; j++) {
+
+                dp[i] = Math.min(dp[i], dp[i - j * j] + 1);
+            }
+
+
+        }
+        return dp[n];
+    }
+
+
 
     public int[] merger(int[]arr1,int[]arr2){
         int []result = new int[arr1.length+arr2.length];
