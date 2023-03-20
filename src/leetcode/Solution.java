@@ -9,21 +9,39 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
     /**
+     * 给你一个整数数组 nums，请你找出数组中乘积最大的非空连续子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
+     *
+     * 测试用例的答案是一个32-位 整数。
+     *
+     * 子数组 是数组的连续子序列。
+     */
+    public int maxProduct(int[] nums) {
+        int max = Integer.MIN_VALUE, imax = 1, imin = 1;
+        for(int i=0; i<nums.length; i++){
+            if(nums[i] < 0){
+                int tmp = imax;
+                imax = imin;
+                imin = tmp;
+            }
+            imax = Math.max(imax*nums[i], nums[i]);
+            imin = Math.min(imin*nums[i], nums[i]);
+            max = Math.max(max, imax);
+        }
+        return max;
+    }
+
+
+
+    /**
      * 最长连续序列
-     *
      * 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
-     *
      * 请你设计并实现时间复杂度为O(n) 的算法解决此问题。
      *
-     *
-     *
      * 示例 1：
-     *
      * 输入：nums = [100,4,200,1,3,2]
      * 输出：4
      * 解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。
      * 示例 2：
-     *
      * 输入：nums = [0,3,7,2,5,8,4,6,0,1]
      * 输出：9
      */
@@ -1432,6 +1450,9 @@ public class Solution {
         int [] arr2 = new int[]{3,4,9,18,100};
         System.out.println(Arrays.toString(solution.merger(arr1, arr2))
         );
+
+        int [] arr3 = new int[]{-2,0,-1};
+        System.out.println(solution.maxProduct(arr3));
 
     }
 }
