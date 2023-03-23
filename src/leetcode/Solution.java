@@ -8,6 +8,144 @@ import java.util.*;
  **/
 @SuppressWarnings("unused")
 public class Solution {
+
+    /**
+     * 给定一个包含非负整数的 mxn网格grid ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+     *
+     * 说明：一个机器人每次只能向下或者向右移动一步。
+     *
+
+     * 输入：grid = [[1,3,1],[1,5,1],[4,2,1]]
+     * 输出：7
+     * 解释：因为路径 1→3→1→1→1 的总和最小。
+     * 示例 2：
+     *
+     * 输入：grid = [[1,2,3],[4,5,6]]
+     * 输出：12
+     *
+     */
+    public int minPathSum(int[][] grid) {
+        int x = grid.length;
+        int y = grid[0].length;
+        int [][]dp = new int[x][y];
+        dp[0][0] = grid[0][0];
+        for (int i = 1; i < y; i++) {
+            dp[0][i] = grid[0][i]+dp[0][i-1];
+        }
+        for (int i = 1; i < x; i++) {
+            dp[i][0] = grid[i][0]+dp[i-1][0];
+        }
+        for (int i = 1; i < x; i++) {
+            for (int j = 1; j < y; j++) {
+                dp[i][j] = grid[i][j]+Math.min(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+        return dp[x-1][y-1];
+    }
+
+
+    /**
+     * 给你一个由'1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+     *
+     * 岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+     *
+     * 此外，你可以假设该网格的四条边均被水包围。
+     *
+     *
+     *
+     * 示例 1：
+     *
+     * 输入：grid = [
+     *   ["1","1","1","1","0"],
+     *   ["1","1","0","1","0"],
+     *   ["1","1","0","0","0"],
+     *   ["0","0","0","0","0"]
+     * ]
+     * 输出：1
+     * 示例 2：
+     *
+     * 输入：grid = [
+     *   ["1","1","0","0","0"],
+     *   ["1","1","0","0","0"],
+     *   ["0","0","1","0","0"],
+     *   ["0","0","0","1","1"]
+     * ]
+     * 输出：3
+     */
+    public int numIslands(char[][] grid) {
+        int x = grid.length;
+        int y = grid[0].length;
+        int num = 0;
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                if(grid[i][j]=='1'){
+                    num++;
+                    dfs(grid,i,j);
+                }
+            }
+        }
+
+
+        return num;
+    }
+
+    private void dfs(char[][]grid,int x,int y){
+        int xMax = grid.length;
+        int yMax = grid[0].length;
+        if (x < 0 || y < 0 || x >= xMax || y >= yMax || grid[x][y] == '0') {
+            return;
+        }
+
+        grid[x][y]='0';
+        dfs(grid,x-1,y);
+        dfs(grid,x+1,y);
+        dfs(grid,x,y-1);
+        dfs(grid,x,y+1);
+    }
+
+    /**
+     * 给定整数数组 nums 和整数 k，请返回数组中第 k 个最大的元素。
+     *
+     * 请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
+     */
+    public int findKthLargest(int[] nums, int k) {
+       return findKthLargest(nums,0,nums.length-1,nums.length-k);
+    }
+
+    public int findKthLargest(int[] nums, int left, int right, int index) {
+        int baseLeft = left;
+        int baseRight = right;
+
+        if (left == index) {
+            return nums[index];
+        }
+
+        while (left != right) {
+            while (left<right&&nums[right] >= nums[baseLeft]) {
+                right--;
+            }
+            while (left<right&&nums[left] <= nums[baseLeft]) {
+                left++;
+            }
+            int temp = nums[left];
+            nums[left] = nums[right];
+            nums[right] = temp;
+        }
+
+        int temp = nums[left];
+        nums[left] = nums[baseLeft];
+        nums[baseLeft] = temp;
+
+        if (left < index) {
+            return findKthLargest(nums, left + 1, baseRight, index);
+        } else {
+            return findKthLargest(nums, baseLeft, left - 1, index);
+        }
+    }
+
+
+
+
     /**
      * 给你一个整数数组 nums，请你找出数组中乘积最大的非空连续子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
      *
@@ -1399,9 +1537,9 @@ public class Solution {
 //
 //        NQueens nQueens = new NQueens();
 //        nQueens.print(10);
-        StringUtil stringUtil = new StringUtil();
-        String s = stringUtil.reverseBracketStr("(ed(et(oc)(od))el)");
-        System.out.println(s);
+//        StringUtil stringUtil = new StringUtil();
+//        String s = stringUtil.reverseBracketStr("(ed(et(oc)(od))el)");
+//        System.out.println(s);
 
 //        ListUtil.ListNode listNode1 = new ListUtil.ListNode(1);
 //        ListUtil.ListNode listNode3 = new ListUtil.ListNode(3);
@@ -1438,21 +1576,37 @@ public class Solution {
 //        int[] nums = new int[]{10,9,2,4,5,3,7};
 //        System.out.println(solution.lengthOfLIS(nums));
 
+//        Solution solution = new Solution();
+//        System.out.println(solution.lengthOfLongestSubstring("pwwkew"));
+//        System.out.println(solution.rank("123"));
+//        System.out.println(solution.getBrackets(3));
+//        System.out.println(solution.partition("123"));
+//
+//
+//
+//        int [] arr1 = new int[]{1,4,7,99,109};
+//        int [] arr2 = new int[]{3,4,9,18,100};
+//        System.out.println(Arrays.toString(solution.merger(arr1, arr2))
+//        );
+//
+//        int [] arr3 = new int[]{-2,0,-1};
+//        System.out.println(solution.maxProduct(arr3));
+
+//        Solution solution = new Solution();
+//        int [] arr4 = new int[]{3,2,3,19,6,4,8};
+//        System.out.println(solution.findKthLargest(arr4, 2));
+//
+//
+//        int [] arr1 = new int[]{1,4,7,99,109};
+//        int [] arr2 = new int[]{3,4,9,18,100};
+//        System.out.println(Arrays.toString(solution.merger(arr1, arr2))
+//        );
+//
+//        int [] arr3 = new int[]{-2,0,-1};
+//        System.out.println(solution.maxProduct(arr3));
+
         Solution solution = new Solution();
-        System.out.println(solution.lengthOfLongestSubstring("pwwkew"));
-        System.out.println(solution.rank("123"));
-        System.out.println(solution.getBrackets(3));
-        System.out.println(solution.partition("123"));
-
-
-
-        int [] arr1 = new int[]{1,4,7,99,109};
-        int [] arr2 = new int[]{3,4,9,18,100};
-        System.out.println(Arrays.toString(solution.merger(arr1, arr2))
-        );
-
-        int [] arr3 = new int[]{-2,0,-1};
-        System.out.println(solution.maxProduct(arr3));
-
+        char[][]grid = new char[][]{{'1','1','1'},{'0','1','0'},{'1','1','1'}};
+        System.out.println(solution.numIslands(grid));
     }
 }
