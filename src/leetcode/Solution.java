@@ -9,7 +9,46 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
     /**
-     * 一个整型数组 nums 里除两个数字之外，其他数字都出现了两次。请写程序找出这两个只出现一次的数字。要求时间复杂度是O(n)，空间复杂度是O(1)。
+     * 给你一个 32 位的有符号整数 x ，返回将 x 中的数字部分反转后的结果。
+     *
+     * 如果反转后整数超过 32 位的有符号整数的范围[−2的31次方, 2的31次方 − 1] ，就返回 0。
+     *
+     * 假设环境不允许存储 64 位整数（有符号或无符号）。
+     *
+     *
+     * 示例 1：
+     *
+     * 输入：x = 123
+     * 输出：321
+     * 示例 2：
+     *
+     * 输入：x = -123
+     * 输出：-321
+     * 示例 3：
+     *
+     * 输入：x = 120
+     * 输出：21
+     * 示例 4：
+     *
+     * 输入：x = 0
+     * 输出：0
+     *
+     */
+    public int reverse(int x) {
+        int result = 0;
+        while (x!=0){
+            if (result < Integer.MIN_VALUE / 10 || result > Integer.MAX_VALUE / 10) {
+                return 0;
+            }
+            result = result*10+x%10;
+            x = x/10;
+        }
+
+        return result;
+    }
+
+    /**
+     * 两数相加
      */
     public ListUtil.ListNode addTwoNumbers(ListUtil.ListNode l1, ListUtil.ListNode l2) {
         ListUtil.ListNode node = new ListUtil.ListNode(0);
@@ -1520,6 +1559,7 @@ public class Solution {
 
 
     public static void main(String[] args) {
+        Solution solution = new Solution();
 //        Ip ip = new Ip();
 //        List<String> ips = ip.getIps("1231232123");
 //        boolean b = ip.validIp4("12.23.34.12");
@@ -1633,8 +1673,9 @@ public class Solution {
 //        int [] arr3 = new int[]{-2,0,-1};
 //        System.out.println(solution.maxProduct(arr3));
 
-        Solution solution = new Solution();
-        char[][]grid = new char[][]{{'1','1','1'},{'0','1','0'},{'1','1','1'}};
-        System.out.println(solution.numIslands(grid));
+//        char[][]grid = new char[][]{{'1','1','1'},{'0','1','0'},{'1','1','1'}};
+//        System.out.println(solution.numIslands(grid));
+
+        System.out.println(solution.reverse(1534236469));
     }
 }
