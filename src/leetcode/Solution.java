@@ -8,6 +8,34 @@ import java.util.*;
  **/
 @SuppressWarnings("unused")
 public class Solution {
+    /**
+     * 一个整型数组 nums 里除两个数字之外，其他数字都出现了两次。请写程序找出这两个只出现一次的数字。要求时间复杂度是O(n)，空间复杂度是O(1)。
+     */
+    public ListUtil.ListNode addTwoNumbers(ListUtil.ListNode l1, ListUtil.ListNode l2) {
+        ListUtil.ListNode node = new ListUtil.ListNode(0);
+        ListUtil.ListNode head = node;
+        int j = 0;//进位
+        while (l1!=null||l2!=null){
+            int val1=0,val2=0;
+            if(l1!=null){
+                val1 = l1.val;
+                l1 = l1.next;
+            }
+            if(l2!=null){
+                val2 = l2.val;
+                l2 = l2.next;
+            }
+
+            node.next = new ListUtil.ListNode((val1+val2+j)%10);
+            node = node.next;
+            j=(val1+val2+j)/10;
+        }
+        if(j==1){
+            node.next = new ListUtil.ListNode(1);
+        }
+        return head.next;
+    }
+
 
     /**
      * 给定一个包含非负整数的 mxn网格grid ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
