@@ -9,6 +9,46 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
     /**
+     * 螺旋矩阵
+     */
+    public List<Integer> spiralOrder(int[][] matrix) {
+        int colLength = matrix.length;
+        int rowLength = matrix[0].length;
+
+        int circle = 0;
+        List<Integer> list = new ArrayList<>();
+
+        while (true) {
+            for (int k = circle; k < rowLength - circle; k++) {
+                list.add(matrix[circle][k]);
+                if(list.size() == rowLength * colLength){
+                    return list;
+                }
+            }
+            for (int k = circle+1; k < colLength - circle; k++) {
+                list.add(matrix[k][rowLength-circle-1]);
+                if(list.size() == rowLength * colLength){
+                    return list;
+                }
+            }
+            for (int k = rowLength-circle-2; k >= circle; k--) {
+                list.add(matrix[colLength-circle-1][k]);
+                if(list.size() == rowLength * colLength){
+                    return list;
+                }
+            }
+            for (int k = colLength-circle-2; k > circle; k--) {
+                list.add(matrix[k][circle]);
+                if(list.size() == rowLength * colLength){
+                    return list;
+                }
+            }
+            circle++;
+        }
+    }
+
+
+    /**
      * 给你一个 32 位的有符号整数 x ，返回将 x 中的数字部分反转后的结果。
      *
      * 如果反转后整数超过 32 位的有符号整数的范围[−2的31次方, 2的31次方 − 1] ，就返回 0。
