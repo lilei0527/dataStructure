@@ -9,6 +9,129 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
     /**
+     * 给你一个 无重复元素 的整数数组candidates 和一个目标整数target，找出candidates中可以使数字和为目标数target
+     * 的 所有不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
+     *
+     * candidates 中的 同一个 数字可以 无限制重复被选取 。如果至少一个数字的被选数量不同，则两种组合是不同的。
+     *
+     * 对于给定的输入，保证和为target 的不同组合数少于 150 个。
+     *
+     *
+     *
+     * 示例1：
+     *
+     * 输入：candidates = [2,3,6,7], target = 7
+     * 输出：[[2,2,3],[7]]
+     * 解释：
+     * 2 和 3 可以形成一组候选，2 + 2 + 3 = 7 。注意 2 可以使用多次。
+     * 7 也是一个候选， 7 = 7 。
+     * 仅有这两种组合。
+     * 示例2：
+     *
+     * 输入: candidates = [2,3,5], target = 8
+     * 输出: [[2,2,2,2],[2,3,3],[3,5]]
+     * 示例 3：
+     *
+     * 输入: candidates = [2], target = 1
+     * 输出: []
+     *
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>>result =new ArrayList<>();
+//        Arrays.sort(candidates);
+        backTrack(candidates,0,target,0,result,new ArrayList<>());
+        return result;
+    }
+
+    private void backTrack(int[] candidates,int sum,int target,
+                           int index,List<List<Integer>>result,
+                           List<Integer> list){
+        if(sum==target){
+            result.add(new ArrayList<>(list));
+        }
+        if(sum>target){
+            return; 
+        }
+
+        for (int i = index; i < candidates.length; i++) {
+            list.add(candidates[i]);
+            backTrack(candidates,sum+candidates[i],target,i,result,list);
+            list.remove(list.size()-1);
+        }
+    }
+
+    /**
+     *  在排序数组中查找元素的第一个和最后一个位置
+     *  给你一个按照非递减顺序排列的整数数组 nums，和一个目标值 target。请你找出给定目标值在数组中的开始位置和结束位置。
+     *
+     * 如果数组中不存在目标值 target，返回[-1, -1]。
+     *
+     * 你必须设计并实现时间复杂度为O(log n)的算法解决此问题。
+     *
+     */
+    public int[] searchRange(int[] nums, int target) {
+        int left = 0,right = nums.length-1;
+        int index = -1;
+        while (left<=right){
+            int mid = (left+right)/2;
+            if(nums[mid]<target){
+                left = mid+1;
+            }else if(nums[mid]>target){
+                right = mid-1;
+            }else {
+                index = mid;
+                break;
+            }
+        }
+
+        int [] result = new int[2];
+        if(index==-1){
+            result[0] = -1;
+            result[1]=-1;
+        }else {
+            int l=index,r=index;
+            while (l>=0&&nums[l]==target){
+                l--;
+            }
+            while (r<=nums.length-1&&nums[r]==target){
+                r++;
+            }
+            result[0]=l+1;
+            result[1]=r-1;
+        }
+        return result;
+    }
+
+    /**
+     * 下一个排列
+     */
+    public void nextPermutation(int[] nums) {
+        int len = nums.length;
+        if(len<=1) return;
+
+        for(int i=len-2;i>=0;i--){
+            if(nums[i]<nums[i+1]){            //找到相邻升序
+                for(int j=len-1;j>i;j--){
+                    if(nums[j]>nums[i]){    //找到最右边大于nums[i-1]的数，并交换
+                        int tmp = nums[i];
+                        nums[i] = nums[j];
+
+
+                        nums[j] = tmp;
+                        break;
+                    }
+                }
+                Arrays.sort(nums,i+1,len);      //将后面降序变为升序
+                return;
+            }
+        }
+        Arrays.sort(nums);
+    }
+
+
+
+
+    /**
      *电话号码的字母组合
      *
      * 给定一个仅包含数字2-9的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
@@ -555,6 +678,14 @@ public class Solution {
         chars[i] = chars[j];
         chars[j] = temp;
     }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+
 
     //合法的括号匹配
     public List<String> getBrackets(int n){
@@ -1868,7 +1999,13 @@ public class Solution {
 //        System.out.println(solution.numIslands(grid));
 
 //        System.out.println(solution.reverse(1534236469));
-        System.out.println(solution.letterCombinations("23"));
+//        System.out.println(solution.letterCombinations("23"));
+//        int [] arr= new int[]{1,2,3};
+//        solution.nextPermutation(arr);
+//        System.out.println(Arrays.toString(arr));
+
+        int [] arr= new int[]{7,3,9,6};
+        System.out.println(solution.combinationSum(arr, 6));
 
     }
 }
