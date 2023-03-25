@@ -9,6 +9,48 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
     /**
+     * 盛最多水的容器
+     */
+    public int maxArea(int[] height) {
+        int max =0;
+        int left = 0,right = height.length-1;
+        while (left<right){
+            max = Math.max(max,(right-left)*(Math.min(height[left],height[right])));
+            if(height[left]<=height[right]){
+                left++;
+            }else {
+                right--;
+            }
+        }
+        return max;
+    }
+
+    /**
+     *  有效的数独
+     *  空白格用 '.' 表示。
+     */
+    public boolean isValidSudoku(char[][] board) {
+        int [][]row = new int[9][9];
+        int [][]col = new int[9][9];
+        int [][][]san = new int[3][3][9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                char c = board[i][j];
+                if(c!='.'){
+                    int index = c-'0'-1;
+                    row[i][index]++;
+                    col[j][index]++;
+                    san[i/3][j/3][index]++;
+                    if(row[i][index]>1||col[j][index]>1||san[i/3][j/3][index]>1){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
      * 给你一个整数数组 nums ，判断是否存在三元组 [nums[i], nums[j], nums[k]]
      * 满足 i != j、i != k 且 j != k ，同时还满足 nums[i] + nums[j] + nums[k] == 0 。请
      *
