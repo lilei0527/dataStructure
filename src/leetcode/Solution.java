@@ -9,6 +9,49 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
     /**
+     *电话号码的字母组合
+     *
+     * 给定一个仅包含数字2-9的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
+     *
+     * 给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
+     *
+     */
+    public List<String> letterCombinations(String digits) {
+        List<String> combinations = new ArrayList<>();
+        if (digits.length() == 0) {
+            return combinations;
+        }
+        Map<Character, String> phoneMap = new HashMap<Character, String>() {{
+            put('2', "abc");
+            put('3', "def");
+            put('4', "ghi");
+            put('5', "jkl");
+            put('6', "mno");
+            put('7', "pqrs");
+            put('8', "tuv");
+            put('9', "wxyz");
+        }};
+        backTrack(combinations,phoneMap,digits,0,new StringBuilder());
+        return combinations;
+    }
+
+    private void backTrack(List<String>result,Map<Character, String> phoneMap,
+                           String digits,int digitIndex, StringBuilder stringBuilder){
+        if(digitIndex==digits.length()){
+            result.add(stringBuilder.toString());
+            return;
+        }
+        String s = phoneMap.get(digits.charAt(digitIndex));
+        for (int i = 0; i < s.length(); i++) {
+            stringBuilder.append(s.charAt(i));
+            backTrack(result,phoneMap,digits,digitIndex+1,stringBuilder);
+            stringBuilder.deleteCharAt(stringBuilder.length()-1);
+        }
+    }
+
+
+
+    /**
      * 盛最多水的容器
      */
     public int maxArea(int[] height) {
@@ -1824,6 +1867,8 @@ public class Solution {
 //        char[][]grid = new char[][]{{'1','1','1'},{'0','1','0'},{'1','1','1'}};
 //        System.out.println(solution.numIslands(grid));
 
-        System.out.println(solution.reverse(1534236469));
+//        System.out.println(solution.reverse(1534236469));
+        System.out.println(solution.letterCombinations("23"));
+
     }
 }
