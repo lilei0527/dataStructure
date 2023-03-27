@@ -9,6 +9,22 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
     /**
+     * 旋转图像
+     */
+    public void rotate(int[][] matrix) {
+        int x=matrix.length;
+        for (int i = 0; i < x/2; i++) {
+            for (int j = 0; j<(x+1)/2; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[x - j - 1][i];
+                matrix[x - j - 1][i] = matrix[x - i - 1][x-j-1];
+                matrix[x - i - 1][x-j-1] = matrix[j][x-i-1];
+                matrix[j][x-i-1] = temp;
+            }
+        }
+    }
+
+    /**
      * 给你一个 无重复元素 的整数数组candidates 和一个目标整数target，找出candidates中可以使数字和为目标数target
      * 的 所有不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
      *
