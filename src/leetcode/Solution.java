@@ -9,6 +9,48 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
     /**
+     * 给定一个m x n 二维字符网格board 和一个字符串单词word 。如果word 存在于网格中，返回 true ；否则，返回 false 。
+     *
+     * 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+     *
+     */
+    public boolean exist(char[][] board, String word) {
+        int xLen = board.length;
+        int yLen = board[0].length;
+        for (int i = 0; i < xLen; i++) {
+            for (int j = 0; j < yLen; j++) {
+                if(exist(board,word,0,i,j)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean exist(char[][] board, String word, int index, int x, int y) {
+        int xLen = board.length;
+        int yLen = board[0].length;
+        if (x < 0 || x >= xLen || y < 0 || y >= yLen || board[x][y] != word.charAt(index)) {
+            return false;
+        }
+
+        if (index == word.length() - 1) {
+            return true;
+        }
+
+        char temp = board[x][y];
+        board[x][y] = ' ';
+        if (exist(board, word, index + 1, x + 1, y) ||
+                exist(board, word, index + 1, x - 1, y) ||
+                exist(board, word, index + 1, x, y + 1) ||
+                exist(board, word, index + 1, x, y - 1)) {
+            return true;
+        }
+        board[x][y] = temp;
+        return false;
+    }
+
+    /**
      * 给定一个包含红色、白色和蓝色、共n 个元素的数组nums，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
      *
      * 我们使用整数 0、1 和 2 分别表示红色、白色和蓝色。
