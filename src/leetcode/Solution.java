@@ -42,6 +42,40 @@ public class Solution {
 
 
     /**
+     * 层序遍历
+     */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>>result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        List<TreeNode>treeNodes= new ArrayList<>();
+        treeNodes.add(root);
+        levelOrder(treeNodes,result);
+        return result;
+    }
+
+    private void levelOrder(List<TreeNode>nodes,List<List<Integer>>result) {
+        if(nodes.isEmpty()){
+            return;
+        }
+        List<Integer>list = new ArrayList<>();
+        List<TreeNode>treeNodes = new ArrayList<>();
+        for (TreeNode node : nodes) {
+            list.add(node.val);
+            if(node.left!=null){
+                treeNodes.add(node.left);
+            }
+            if(node.right!=null){
+                treeNodes.add(node.right);
+            }
+        }
+        result.add(list);
+        levelOrder(treeNodes,result);
+    }
+
+
+    /**
      * 给定一个m x n 二维字符网格board 和一个字符串单词word 。如果word 存在于网格中，返回 true ；否则，返回 false 。
      *
      * 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
