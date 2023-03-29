@@ -9,6 +9,91 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
 
+
+     public static class ListNode {
+          int val;
+          ListNode next;
+         ListNode(int x) {
+              val = x;
+              next = null;
+         }
+      }
+
+    /**
+     * 环形链表
+     * 给定一个链表的头节点  head ，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+     */
+    public ListNode detectCycle(ListNode head) {
+        Set<ListNode>visited = new HashSet<>();
+        while (head!=null){
+            if(!visited.contains(head)){
+                visited.add(head);
+                head=head.next;
+            }else {
+                return head;
+            }
+        }
+        return null;
+    }
+
+    public ListNode detectCycle1(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast!=null&&fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+            if(slow==fast){
+                while (head!=fast){
+                    head = head.next;
+                    fast = fast.next;
+                }
+                return fast;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * 单词拆分
+     *
+     * 给你一个字符串 s 和一个字符串列表 wordDict 作为字典。请你判断是否可以利用字典中出现的单词拼接出 s 。
+     *
+     * 注意：不要求字典中出现的单词全部都使用，并且字典中的单词可以重复使用。
+     *
+     *输入: s = "leetcode", wordDict = ["leet", "code"]
+     * 输出: true
+     * 解释: 返回 true 因为 "leetcode" 可以由 "leet" 和 "code" 拼接成。
+     * 示例 2：
+     *
+     * 输入: s = "applepenapple", wordDict = ["apple", "pen"]
+     * 输出: true
+     * 解释: 返回 true 因为 "applepenapple" 可以由 "apple" "pen" "apple" 拼接成。
+     *      注意，你可以重复使用字典中的单词。
+     * 示例 3：
+     *
+     * 输入: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+     * 输出: false
+     *
+     */
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Set<String> wordDictSet = new HashSet(wordDict);
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && wordDictSet.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[s.length()];
+    }
+
+
+
+
     /**
      *  验证二叉搜索树
      */
@@ -2366,8 +2451,15 @@ public class Solution {
 //        solution.nextPermutation(arr);
 //        System.out.println(Arrays.toString(arr));
 
-        int [] arr= new int[]{7,3,9,6};
-        System.out.println(solution.combinationSum(arr, 6));
+//        int [] arr= new int[]{7,3,9,6};
+//        System.out.println(solution.combinationSum(arr, 6));
+
+        List<String>list = new ArrayList<>();
+        list.add("car");
+        list.add("ca");
+        list.add("rs");
+        boolean leetcode = solution.wordBreak("cars", list);
+        System.out.println(leetcode);
 
     }
 }
