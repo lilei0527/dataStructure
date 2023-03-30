@@ -9,8 +9,56 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
 
+    /**
+     * 排序链表
+     * 给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表
+     */
+    public ListNode sortList(ListNode head) {
+        if(head==null||head.next==null){
+            return head;
+        }
+        //找到中间节点
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast.next != null){
+            if(fast.next.next==null){
+                break;
+            }
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        ListNode mid = slow;
+        slow.next=null;
+        ListNode sortList1 = sortList(head);
+        ListNode sortList2 = sortList(mid);
+        return merge(sortList1,sortList2);
+    }
 
-     public static class ListNode {
+    //合并两个有序链表
+    private ListNode merge(ListNode node1,ListNode node2){
+        ListNode dummy = new ListNode(-1);
+        ListNode head = dummy;
+        while (node1!=null&&node2!=null){
+            if(node1.val<=node2.val){
+                dummy.next = node1;
+                node1 = node1.next;
+            }else {
+                dummy.next = node2;
+                node2 = node2.next;
+            }
+            dummy = dummy.next;
+        }
+        if(node1==null){
+            dummy.next = node2;
+        }
+        if(node2==null){
+            dummy.next = node1;
+        }
+        return head.next;
+    }
+
+
+    public static class ListNode {
           int val;
           ListNode next;
          ListNode(int x) {
