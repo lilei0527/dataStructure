@@ -9,6 +9,28 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
     /**
+     * 从前序与中序遍历序列构造二叉树
+     */
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        Map<Integer,Integer>map = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i],i);
+        }
+        return buildTree(preorder,inorder,0,preorder.length-1,0,inorder.length-1,map);
+    }
+
+    public TreeNode buildTree(int[] preorder,int[]inorder,int preLeft,int preRight,int inLeft,int inRight,Map<Integer,Integer>map){
+        if(preLeft>preRight){
+            return null;
+        }
+        TreeNode node = new TreeNode(preorder[preLeft]);
+        int mid = map.get(preorder[preLeft]);
+        node.left = buildTree(preorder,inorder,preLeft+1,mid-inLeft+preLeft,inLeft,mid-1,map);
+        node.right = buildTree(preorder,inorder,mid-inLeft+preLeft+1,preRight,mid+1,inRight,map);
+        return node;
+    }
+
+    /**
      * 课程表
      *
      现在你总共有 numCourses 门课需要选，记为0到numCourses - 1。给你一个数组prerequisites ，其中 prerequisites[i] = [ai, bi] ，表示在选修课程 ai 前 必须 先选修bi 。
