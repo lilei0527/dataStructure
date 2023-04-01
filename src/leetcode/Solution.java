@@ -8,6 +8,37 @@ import java.util.*;
  **/
 @SuppressWarnings("unused")
 public class Solution {
+
+    /**
+     * 最大正方形
+     * 在一个由 '0' 和 '1' 组成的二维矩阵内，找到只包含 '1' 的最大正方形，并返回其面积。
+     * 输入：matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+     * 输出：4
+     *
+     */
+    public int maximalSquare(char[][] matrix) {
+        int x=matrix.length;
+        int y=matrix[0].length;
+        int[][] dp = new int[x][y];
+        int max=0;
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                if(matrix[i][j]=='1'){
+                    if(i==0||j==0){
+                        dp[i][j]=1;
+                    }else {
+                        int min = Math.min(dp[i - 1][j - 1], dp[i - 1][j]);
+                        dp[i][j]=Math.min(min,dp[i][j-1])+1;
+                    }
+                    max = Math.max(max,dp[i][j]);
+                }
+            }
+        }
+        return max*max;
+    }
+
+
+
     /**
      * 从前序与中序遍历序列构造二叉树
      */
@@ -1120,10 +1151,6 @@ public class Solution {
         int baseLeft = left;
         int baseRight = right;
 
-        if (left == index) {
-            return nums[index];
-        }
-
         while (left != right) {
             while (left<right&&nums[right] >= nums[baseLeft]) {
                 right--;
@@ -1139,6 +1166,10 @@ public class Solution {
         int temp = nums[left];
         nums[left] = nums[baseLeft];
         nums[baseLeft] = temp;
+
+        if (left == index) {
+            return nums[index];
+        }
 
         if (left < index) {
             return findKthLargest(nums, left + 1, baseRight, index);
