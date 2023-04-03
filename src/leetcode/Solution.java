@@ -10,6 +10,28 @@ import java.util.*;
  **/
 @SuppressWarnings("unused")
 public class Solution {
+    /**
+     * 搜索二维矩阵 II
+     * 编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target 。该矩阵具有以下特性：
+     *
+     * 每行的元素从左到右升序排列。
+     * 每列的元素从上到下升序排列。
+     */
+    public boolean searchMatrix(int[][] matrix, int target) {
+        //左下角开始查找
+        int x=matrix.length-1;
+        int y=0;
+        while (x>=0&&y<matrix[0].length){
+            if(matrix[x][y]<target){
+                y++;
+            }else if(matrix[x][y]>target){
+                x--;
+            }else {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * 除自身以外数组的乘积
