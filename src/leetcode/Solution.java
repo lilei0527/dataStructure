@@ -1,6 +1,8 @@
 package leetcode;
 
 
+import tree.TreeNode;
+
 import java.util.*;
 
 /**
@@ -8,6 +10,65 @@ import java.util.*;
  **/
 @SuppressWarnings("unused")
 public class Solution {
+
+    /**
+     * 二叉树的最近公共祖先
+     *
+     */
+    public TreeNode lowestCommonAncestor1(TreeNode root, TreeNode p, TreeNode q) {
+        if(root==null || root==p || root==q){
+            return root;
+        }
+        TreeNode left = lowestCommonAncestor(root.left,p,q);
+        TreeNode right = lowestCommonAncestor(root.right,p,q);
+
+        if(left!=null&&right!=null){
+            return root;
+        }
+
+        if(left!=null){
+            return left;
+        }
+
+        if(right!=null){
+            return right;
+        }
+
+        return null;
+    }
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        Map<Integer,TreeNode>parentMap = new HashMap<>();
+        dfs(root,parentMap);//存储所有节点val和对应parent的关系
+
+        //依次先找到p的所有父节点的val
+        List<Integer>pp = new ArrayList<>();
+        while (p!=null){
+            pp.add(p.val);
+            p = parentMap.get(p.val);
+        }
+
+        while (q!=null){
+            if(pp.contains(q.val)){
+                return q;
+            }
+            q=parentMap.get(q.val);
+        }
+        return null;
+    }
+
+    public void dfs(TreeNode node,Map<Integer,TreeNode>map){
+        if(node.left!=null){
+            map.put(node.left.val,node);
+            dfs(node.left,map);
+        }
+        if(node.right!=null){
+            map.put(node.right.val,node);
+            dfs(node.right,map);
+        }
+    }
+
+
 
 
     /**
