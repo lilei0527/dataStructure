@@ -12,6 +12,27 @@ import java.util.*;
 public class Solution {
 
     /**
+     * 除自身以外数组的乘积
+     */
+    public int[] productExceptSelf(int[] nums) {
+        int [] result = new int[nums.length];
+        int [] after = new int[nums.length];
+
+        //计算前缀之积
+        result[0]=1;
+        for (int i = 1; i < nums.length; i++) {
+            result[i] = nums[i-1] * result[i-1];
+        }
+
+        after[nums.length-1]=1;
+        for (int i = nums.length-2; i >=0; i--) {
+            after[i] = after[i+1]*nums[i+1];
+            result[i] = result[i] * after[i];
+        }
+        return result;
+    }
+
+    /**
      * 二叉树的最近公共祖先
      *
      */
