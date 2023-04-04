@@ -4,12 +4,45 @@ package leetcode;
 import tree.TreeNode;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author lilei
  **/
 @SuppressWarnings("unused")
 public class Solution {
+    /**
+     * 前K个高频元素
+     * 给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。
+     *
+     * 示例 1:
+     *
+     * 输入: nums = [1,1,1,2,2,3], k = 2
+     * 输出: [1,2]
+     * 示例 2:
+     *
+     * 输入: nums = [1], k = 1
+     * 输出: [1]
+     *
+     */
+    public int[] topKFrequent(int[] nums, int k) {
+        int [] res=new int[k];
+        Map<Integer,Integer> map=new HashMap<>();
+        for(int num:nums){
+            map.put(num,map.getOrDefault(num,0)+1);
+        }
+        PriorityQueue<Integer> pq= new PriorityQueue<>((x, y) -> map.get(y) - map.get(x));
+        for(Integer key:map.keySet()){
+            pq.offer(key);
+            if(pq.size()> k){
+                pq.poll();
+            }
+        }
+        for(int i=0;i<k;i++){
+            res[i]= pq.poll();
+        }
+        return res;
+    }
 
 
     /**
@@ -2833,12 +2866,16 @@ public class Solution {
 //        int [] arr= new int[]{7,3,9,6};
 //        System.out.println(solution.combinationSum(arr, 6));
 
-        List<String>list = new ArrayList<>();
-        list.add("car");
-        list.add("ca");
-        list.add("rs");
-        boolean leetcode = solution.wordBreak("cars", list);
-        System.out.println(leetcode);
+//        List<String>list = new ArrayList<>();
+//        list.add("car");
+//        list.add("ca");
+//        list.add("rs");
+//        boolean leetcode = solution.wordBreak("cars", list);
+//        System.out.println(leetcode);
+
+        int [] arr= new int[]{1,1,1,2,2,2,2,3,3,3,3,3};
+        int[] ints = solution.topKFrequent(arr, 1);
+        System.out.println(Arrays.toString(ints));
 
     }
 }
