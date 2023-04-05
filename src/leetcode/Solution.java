@@ -12,6 +12,73 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public class Solution {
     /**
+     * 给定一个经过编码的字符串，返回它解码后的字符串。
+     *
+     * 编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
+     *
+     * 你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
+     *
+     * 此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像3a或2[4]的输入。
+     *
+     *
+     *
+     * 示例 1：
+     *
+     * 输入：s = "3[a]2[bc]"
+     * 输出："aaabcbc"
+     * 示例 2：
+     *
+     * 输入：s = "3[a2[c]]"
+     * 输出："accaccacc"
+     * 示例 3：
+     *
+     * 输入：s = "2[abc]3[cd]ef"
+     * 输出："abcabccdcdcdef"
+     * 示例 4：
+     *
+     * 输入：s = "abc3[cd]xyz"
+     * 输出："abccdcdcdxyz"
+     *
+     *
+     *
+     */
+    public String decodeString(String s) {
+        Stack<StringBuilder>letterStack=new Stack<>();
+        Stack<Integer>digitStack = new Stack<>();
+
+        StringBuilder letterSb = new StringBuilder();
+        StringBuilder digitSb = new StringBuilder();
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+
+            if(Character.isDigit(c)){
+                digitSb.append(c);
+            }else if(c=='['){
+                int digit = Integer.parseInt(digitSb.toString());
+                digitStack.add(digit);
+                letterStack.add(new StringBuilder(letterSb));
+                digitSb.setLength(0);
+                letterSb.setLength(0);
+            }else if(c==']'){
+                StringBuilder temp = new StringBuilder();
+                Integer digit = digitStack.pop();
+                    for (int j = 0; j < digit; j++) {
+                        temp.append(letterSb);
+                    }
+                StringBuilder letter = letterStack.pop();
+                letterSb = letter.append(temp);
+
+            }else {
+                letterSb.append(c);
+            }
+        }
+
+        return letterSb.toString();
+    }
+
+
+    /**
      * 前K个高频元素
      * 给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。
      *
@@ -2873,9 +2940,11 @@ public class Solution {
 //        boolean leetcode = solution.wordBreak("cars", list);
 //        System.out.println(leetcode);
 
-        int [] arr= new int[]{1,1,1,2,2,2,2,3,3,3,3,3};
-        int[] ints = solution.topKFrequent(arr, 1);
-        System.out.println(Arrays.toString(ints));
+//        int [] arr= new int[]{1,1,1,2,2,2,2,3,3,3,3,3};
+//        int[] ints = solution.topKFrequent(arr, 1);
+//        System.out.println(Arrays.toString(ints));
+
+        System.out.println(solution.decodeString("2[abc]3[cd]ef"));
 
     }
 }
