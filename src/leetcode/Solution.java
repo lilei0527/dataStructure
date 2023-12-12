@@ -2274,16 +2274,14 @@ public class Solution {
         }
 
         public static ListNode ReverseList(ListNode head) {
-            if (head == null) return null;
-            ListNode pre = null, next;
-            while (head.next != null) {
-                next = head.next;
+            ListNode pre = null;
+            while (head!=null){
+                ListNode next = head.next;
                 head.next = pre;
                 pre = head;
                 head = next;
             }
-            head.next = pre;
-            return head;
+            return pre;
         }
 
         public static boolean hasCycle(ListNode head) {
