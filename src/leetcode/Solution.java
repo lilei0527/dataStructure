@@ -458,7 +458,7 @@ public class Solution {
             fast = fast.next.next;
             slow = slow.next;
         }
-        ListNode mid = slow;
+        ListNode mid = slow.next;
         slow.next=null;
         ListNode sortList1 = sortList(head);
         ListNode sortList2 = sortList(mid);
@@ -495,6 +495,13 @@ public class Solution {
          ListNode(int x) {
               val = x;
               next = null;
+         }
+
+         public static void print(ListNode node){
+             if(node!=null){
+                System.out.println(node.val);
+                print(node.next);
+             }
          }
       }
 
