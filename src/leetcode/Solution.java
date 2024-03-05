@@ -300,16 +300,15 @@ public class Solution {
         }
 
         public static ListNode ReverseList(ListNode head) {
-            if (head == null) return null;
-            ListNode pre = null, next;
-            while (head.next != null) {
-                next = head.next;
-                head.next = pre;
-                pre = head;
-                head = next;
+            ListNode cur = head;
+            ListNode pre = null;
+            while (cur!=null){
+                ListNode next = cur.next;
+                cur.next = pre;
+                pre = cur;
+                cur = next;
             }
-            head.next = pre;
-            return head;
+            return pre;
         }
 
         public static boolean hasCycle(ListNode head) {
