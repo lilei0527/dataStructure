@@ -125,31 +125,26 @@ public class Solution {
      */
 
     public String longestPalindrome(String s) {
-        if (s == null || s.length() < 1) {
+        if (s == null || s.length()<2) {
             return "";
         }
 
         String result = "";
-        int maxLen = 0;
-        int maxIndex = 0;
         for (int i = 0; i < s.length(); i++) {
-            int one = getPalindromeLen(s, i, i);
-            int two = getPalindromeLen(s, i, i+1);
-            int m = Math.max(one, two);
-            if(m>maxLen){
-                maxLen = m;
-                maxIndex = i;
-            }
+            String oneString = getPalindromeLen(s, i, i);
+            String twoString = getPalindromeLen(s, i, i+1);
+            String tempMax= oneString.length()>twoString.length()? oneString :twoString;
+            result = tempMax.length()> result.length()?tempMax:result;
         }
-        return s.substring(maxIndex-(maxLen-1)/2,maxIndex+maxLen/2+1);
+        return result;
     }
 
-    private int getPalindromeLen(String s,int left,int right){
+    private String getPalindromeLen(String s,int left,int right){
         while (left>=0&&right<s.length()&&s.charAt(left)==s.charAt(right)){
             left--;
             right++;
         }
-        return right-left-1;
+        return s.substring(left+1,right);
     }
 
 
@@ -297,6 +292,26 @@ public class Solution {
                         ", next=" + next +
                         '}';
             }
+        }
+
+        //
+        public ListNode removeNthFromEnd(ListNode head, int n) {
+            ListNode fast = head;
+            for (int i = 0; i < n; i++) {
+                fast = fast.next;
+            }
+
+            ListNode slow = new ListNode(-1);
+            slow.next = head;
+            ListNode temp = slow;
+            while (fast != null) {
+                fast = fast.next;
+                slow = slow.next;
+            }
+
+            slow.next = slow.next.next;
+            return temp.next;
+
         }
 
         public static ListNode ReverseList(ListNode head) {
