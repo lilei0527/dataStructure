@@ -313,6 +313,44 @@ public class Solution {
             return dummy.next;
         }
 
+        //回文链表
+        public boolean isPalindrome(ListNode head) {
+            ListNode mid = mid(head);
+            ListNode reverseList = reverseList(mid.next);
+            boolean result = true;
+            while (reverseList!=null){
+                if(reverseList.val!=head.val){
+                    result = false;
+                    break;
+                }
+                head = head.next;
+                reverseList = reverseList.next;
+            }
+            mid.next = reverseList(reverseList);
+            return result;
+        }
+
+        public ListNode mid(ListNode node){
+            ListNode fast = node;
+            ListNode slow = node;
+            while (fast.next!=null&&fast.next.next!=null){
+                fast = fast.next.next;
+                slow = slow.next;
+            }
+            return slow;
+        }
+
+        public boolean isEqual(ListNode listNode1,ListNode listNode2){
+            while (listNode1!=null&&listNode2!=null){
+                if(listNode1.val!= listNode2.val){
+                    return false;
+                }
+                listNode1 = listNode1.next;
+                listNode2 = listNode2.next;
+            }
+            return listNode1 == null && listNode2 == null;
+        }
+
 
         public ListNode removeNthFromEnd(ListNode head, int n) {
             ListNode fast = head;
@@ -333,7 +371,7 @@ public class Solution {
 
         }
 
-        public static ListNode ReverseList(ListNode head) {
+        public static ListNode reverseList(ListNode head) {
             ListNode cur = head;
             ListNode pre = null;
             while (cur!=null){
