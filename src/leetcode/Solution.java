@@ -11,6 +11,40 @@ import java.util.stream.Collectors;
  **/
 @SuppressWarnings("unused")
 public class Solution {
+    /**
+     * 字母异位词分组
+     * 给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。
+     * 字母异位词 是由重新排列源单词的所有字母得到的一个新单词。
+     * 输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+     * 输出: [["bat"],["nat","tan"],["ate","eat","tea"]]
+     */
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String,List<String>>map = new HashMap<>();
+        for (String str : strs) {
+            int[]count = new int[26];
+            for (char c : str.toCharArray()) {
+                count[c-'a']++;
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int i=0;i<26;i++){
+                if(count[i]>0){
+                    sb.append((char) ('a' + i));
+                    sb.append(count[i]);
+                }
+            }
+            List<String> list = map.get(sb.toString());
+            if(list==null){
+                List<String>ss = new ArrayList<>();
+                ss.add(str);
+                map.put(sb.toString(),ss);
+            }else {
+                list.add(str);
+            }
+        }
+
+        return new ArrayList<>(map.values());
+    }
+
 
     /**
      * 两数之和
@@ -946,23 +980,23 @@ public class Solution {
      * 输出: [["a"]]
      *
      */
-    public List<List<String>> groupAnagrams(String[] strs) {
-        Map<String,List<String>>map = new HashMap<>();
-        for (String str : strs) {
-            char[] chars = str.toCharArray();
-            Arrays.sort(chars);
-            String s = new String(chars);
-            List<String> list = map.get(s);
-            if(list==null){
-                List<String> stringList = new ArrayList<>();
-                stringList.add(str);
-                map.put(s,stringList);
-            }else {
-                list.add(str);
-            }
-        }
-        return new ArrayList<>(map.values());
-    }
+//    public List<List<String>> groupAnagrams(String[] strs) {
+//        Map<String,List<String>>map = new HashMap<>();
+//        for (String str : strs) {
+//            char[] chars = str.toCharArray();
+//            Arrays.sort(chars);
+//            String s = new String(chars);
+//            List<String> list = map.get(s);
+//            if(list==null){
+//                List<String> stringList = new ArrayList<>();
+//                stringList.add(str);
+//                map.put(s,stringList);
+//            }else {
+//                list.add(str);
+//            }
+//        }
+//        return new ArrayList<>(map.values());
+//    }
 
 
 
@@ -2989,13 +3023,9 @@ public class Solution {
 //        int [] arr= new int[]{1,1,1,2,2,2,2,3,3,3,3,3};
 //        int[] ints = solution.topKFrequent(arr, 1);
 //        System.out.println(Arrays.toString(ints));
+        String[]s = {"eat","tea","tan","ate","nat","bat"};
+        System.out.println(solution.groupAnagrams(s));
 
-        System.out.println(solution.decodeString("2[abc]3[cd]ef"));
-
-        for (int i = 0; i < 10; i++) {
-            Thread.sleep(100000);
-            System.out.println("xiuxi");
-        }
 
 
     }
