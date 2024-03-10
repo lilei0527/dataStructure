@@ -11,6 +11,26 @@ import java.util.stream.Collectors;
  **/
 @SuppressWarnings("unused")
 public class Solution {
+
+    /**
+     * 两数之和
+     */
+    public int[] twoSum(int[] nums, int target) {
+        int []res = new int[2];
+        Map<Integer,Integer>map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int look = target-nums[i];
+            Integer integer = map.get(look);
+            if(integer!=null){
+                res[0]=integer;
+                res[1]=i;
+            }else {
+                map.put(nums[i],i);
+            }
+        }
+        return res;
+    }
+
     /**
      * 轮转数组
      * 给定一个整数数组 nums，将数组中的元素向右轮转 k 个位置，其中 k 是非负数。
