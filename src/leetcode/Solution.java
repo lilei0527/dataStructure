@@ -9,6 +9,41 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
     /**
+     * 三数之和
+     */
+    public List<List<Integer>> threeSum1(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>>res = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            if(i>0&&nums[i]==nums[i-1]){//元素重复跳过
+                continue;
+            }
+            //判断两数之和
+            int left = i+1;int right = nums.length-1;
+            while (left<right){
+                if(left!=i+1&&nums[left]==nums[left-1]){
+                    left++;
+                    continue;
+                }
+                if(nums[left]+nums[right]+nums[i]<0){
+                    left++;
+                }else if(nums[left]+nums[right]+nums[i]>0){
+                    right--;
+                }else {
+                    List<Integer>list = new ArrayList<>();
+                    list.add(nums[left]);
+                    list.add(nums[right]);
+                    list.add(nums[i]);
+                    res.add(list);
+                    left++;
+                    right--;
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
      *移动和
      */
     public void moveZeroes(int[] nums) {
