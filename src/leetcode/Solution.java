@@ -8,6 +8,22 @@ import java.util.*;
  **/
 @SuppressWarnings("unused")
 public class Solution {
+    /**
+     *移动和
+     */
+    public void moveZeroes(int[] nums) {
+       int left=0;
+       int right=0;
+       while (right<nums.length){
+           if(nums[right]!=0){
+               int temp=nums[left];
+               nums[left]=nums[right];
+               nums[right]=temp;
+               left++;
+           }
+           right++;
+       }
+    }
 
     /**
      * 给你一个只包含 '('和 ')'的字符串，找出最长有效（格式正确且连续）括号子串的长度。
