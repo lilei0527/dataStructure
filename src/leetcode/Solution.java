@@ -9,6 +9,28 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Solution {
     /**
+     * 盛最多水的容器
+     */
+    public int maxArea(int[] height) {
+        int left = 0;
+        int right = height.length-1;
+        int max=0;
+        while(left<right){
+            int x = right-left;
+            int y = Math.min(height[left],height[right]);
+            max = Math.max(max,x*y);
+            //往左找一个比height[left]大的
+            if (height[left]<=height[right]){
+                left++;
+            }else {
+                right--;
+            }
+        }
+        return max;
+    }
+
+
+    /**
      * 三数之和
      */
     public List<List<Integer>> threeSum1(int[] nums) {
