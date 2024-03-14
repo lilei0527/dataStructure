@@ -1182,22 +1182,6 @@ public class Solution {
 
 
 
-    /**
-     * 盛最多水的容器
-     */
-    public int maxArea(int[] height) {
-        int max =0;
-        int left = 0,right = height.length-1;
-        while (left<right){
-            max = Math.max(max,(right-left)*(Math.min(height[left],height[right])));
-            if(height[left]<=height[right]){
-                left++;
-            }else {
-                right--;
-            }
-        }
-        return max;
-    }
 
     /**
      *  有效的数独
@@ -2442,40 +2426,6 @@ public class Solution {
             return dummy.next;
         }
 
-        //回文链表
-        public boolean isPalindrome(ListNode head) {
-            ListNode mid = mid(head);
-            ListNode reverseList = reverseList(mid.next);
-            boolean result = true;
-            while (reverseList!=null){
-                if(reverseList.val!=head.val){
-                    result = false;
-                    break;
-                }
-                head = head.next;
-                reverseList = reverseList.next;
-        public static ListNode ReverseList(ListNode head) {
-            ListNode pre = null;
-            while (head!=null){
-                ListNode next = head.next;
-                head.next = pre;
-                pre = head;
-                head = next;
-            }
-            return pre;
-            mid.next = reverseList(reverseList);
-            return result;
-        }
-
-        public ListNode mid(ListNode node){
-            ListNode fast = node;
-            ListNode slow = node;
-            while (fast.next!=null&&fast.next.next!=null){
-                fast = fast.next.next;
-                slow = slow.next;
-            }
-            return slow;
-        }
 
         public boolean isEqual(ListNode listNode1,ListNode listNode2){
             while (listNode1!=null&&listNode2!=null){
