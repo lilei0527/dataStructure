@@ -1,9 +1,14 @@
 package math;
 
+import java.util.Random;
+
 /**
  * @author lilei
  **/
 public class MathUtil {
+    MathUtil(){
+
+    }
     public static double pow(double x, int n) {
         if (n == 0) {
             return 1;
@@ -24,6 +29,10 @@ public class MathUtil {
     }
 
     public static void main(String[] args) {
+        Random random = new Random();
+        int i = random.nextInt();
+        System.out.println(i);
+        System.out.println(Math.random());
         System.out.println(MathUtil.pow(2, -2));
     }
 }
