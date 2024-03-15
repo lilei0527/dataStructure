@@ -2053,30 +2053,7 @@ public class Solution {
     }
 
 
-    /**
-     * 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点
-     */
-    public ListUtil.ListNode removeNthFromEnd(ListUtil.ListNode head, int n) {
-        ListUtil.ListNode quick = head;
-        for (int i = 0; i < n-1; i++) {
-            quick = quick.next;
-        }
-        ListUtil.ListNode slow = head;
-        ListUtil.ListNode pre = null;
 
-        while (quick.next!=null){
-            quick = quick.next;
-            pre = slow;
-            slow = slow.next;
-        }
-
-        if(pre==null){
-            return slow.next;
-        }else {
-            pre.next = slow.next;
-            return head;
-        }
-    }
     /**
      * 盛最多水的容器
      */
@@ -2484,23 +2461,25 @@ public class Solution {
         }
 
 
+        //删除倒数第n个节点
         public ListNode removeNthFromEnd(ListNode head, int n) {
             ListNode fast = head;
+            ListNode dummy = new ListNode(-1);
+            dummy.next = head;
+            ListNode slow = dummy;
             for (int i = 0; i < n; i++) {
                 fast = fast.next;
             }
 
-            ListNode slow = new ListNode(-1);
-            slow.next = head;
-            ListNode temp = slow;
-            while (fast != null) {
+            while (fast!=null){
                 fast = fast.next;
                 slow = slow.next;
             }
 
-            slow.next = slow.next.next;
-            return temp.next;
-
+            if(slow.next!=null){
+                slow.next = slow.next.next;
+            }
+            return dummy.next;
         }
 
         public static ListNode reverseList(ListNode head) {
