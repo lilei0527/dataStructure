@@ -1384,32 +1384,30 @@ public class Solution {
         return result;
     }
 
-    /**
-     * 两数相加
-     */
-    public ListUtil.ListNode addTwoNumbers(ListUtil.ListNode l1, ListUtil.ListNode l2) {
-        ListUtil.ListNode node = new ListUtil.ListNode(0);
-        ListUtil.ListNode head = node;
-        int j = 0;//进位
+
+    //两数相加
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(-1);
+        ListNode cur = dummy;
+        int jin = 0;
         while (l1!=null||l2!=null){
-            int val1=0,val2=0;
-            if(l1!=null){
-                val1 = l1.val;
+            int i1 = l1==null?0:l1.val;
+            int i2 = l2==null?0:l2.val;
+            int sum = jin+i1+i2;
+            jin = sum/10;
+            cur.next = new ListNode(sum%10);
+            cur = cur.next;
+            if (l1 != null) {
                 l1 = l1.next;
             }
-            if(l2!=null){
-                val2 = l2.val;
+            if (l2 != null) {
                 l2 = l2.next;
             }
-
-            node.next = new ListUtil.ListNode((val1+val2+j)%10);
-            node = node.next;
-            j=(val1+val2+j)/10;
         }
-        if(j==1){
-            node.next = new ListUtil.ListNode(1);
+        if(jin>0){
+            cur.next = new ListNode(jin);
         }
-        return head.next;
+        return dummy.next;
     }
 
 
