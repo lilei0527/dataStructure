@@ -13,10 +13,13 @@ public class Solution {
      * 找到字符串中所有字母异位词
      */
     public List<Integer> findAnagrams(String s, String p) {
-        int[]sCount = new int[23];
-        int[]pCount = new int[23];
+        if (s.length() < p.length()) {
+            return new ArrayList<>();
+        }
+        int[]sCount = new int[26];
+        int[]pCount = new int[26];
         for (int i = 0; i < p.length(); i++) {
-            sCount[p.charAt(i)-'a']++;
+            sCount[s.charAt(i)-'a']++;
             pCount[p.charAt(i)-'a']++;
         }
 
@@ -24,25 +27,17 @@ public class Solution {
         int left = 0;
         int right = p.length()-1;
 
-        // 首个位置先比较一下，每个字出现频率相同则满足异构词条件
-        if (Arrays.equals(sCount, pCount)) {
-            res.add(0);
-        }
-
         while (true){
-            //左划出
-            sCount[s.charAt(left)-'a']--;
-
-
-            left++;
-            right++;
-
-            if (right >= s.length()) break;
-
-            sCount[s.charAt(right)-'a']++;
             if (Arrays.equals(sCount, pCount)) {
                 res.add(left);
             }
+
+            if(right==s.length()-1){
+                break;
+            }
+
+            sCount[s.charAt(left++)-'a']--;
+            sCount[s.charAt(++right)-'a']++;
         }
 
         return res;
