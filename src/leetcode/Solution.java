@@ -2438,6 +2438,22 @@ public class Solution {
             }
         }
 
+        /**
+         * 相交链表
+         * 给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。
+         */
+        public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+            ListNode node = null;
+            ListNode an = headA;
+            ListNode bn = headB;
+            while (an!=bn){
+                an = an==null?headB:an.next;
+                bn = bn==null?headA:bn.next;
+            }
+            return an;
+        }
+
+
         //两两交换链表中的节点
         public ListNode swapPairs(ListNode head) {
             ListNode dummy = new ListNode(-1);
