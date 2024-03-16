@@ -770,6 +770,27 @@ public class Solution {
                 &&idValidBST1(node.left,min,node.val)&&idValidBST1(node.right,node.val,max);
     }
 
+    int res;
+    //二叉搜索树中第K小的元素
+    public int kthSmallest(TreeNode root, int k) {
+        Deque<TreeNode>deque = new LinkedList<>();
+        while (root!=null||!deque.isEmpty()){
+            while (root!=null){
+                deque.push(root);
+                root=root.left;
+            }
+            root = deque.pop();
+            k--;
+            if(k==0){
+                break;
+            }
+            root=root.right;
+        }
+        assert root != null;
+        return root.val;
+    }
+
+
     /**
      * 层序遍历
      */
