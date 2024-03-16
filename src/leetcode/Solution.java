@@ -361,6 +361,27 @@ public class Solution {
         return root;
     }
 
+    //对称二叉树
+    public boolean isSymmetric(TreeNode root) {
+        return isEqual(root,root);
+    }
+
+    public boolean isEqual(TreeNode left,TreeNode right){
+        if(left==null&&right==null){
+            return true;
+        }
+        if(left==null||right==null){
+            return false;
+        }
+        if(left.val==right.val){
+           return isEqual(left.left,right.right)&&isEqual(left.right,right.left);
+        }else{
+            return false;
+        }
+
+    }
+
+
     /**
      *  零钱兑换
      * 给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。
