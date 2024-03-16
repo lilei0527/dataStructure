@@ -382,6 +382,27 @@ public class Solution {
     }
 
 
+    int maxPath = 0;
+    //二叉树的直径
+    public int diameterOfBinaryTree(TreeNode root) {
+        maxDepth1(root);
+        return maxPath-1;
+    }
+
+    public int maxDepth1(TreeNode root) {
+        if(root==null){
+            return 0;
+        }
+
+        int leftMaxDepth = maxDepth1(root.left);
+        int rightMaxDepth = maxDepth1(root.right);
+        maxPath = Math.max(maxPath,leftMaxDepth+rightMaxDepth+1);
+        return Math.max(leftMaxDepth,rightMaxDepth)+1;
+    }
+
+
+
+
     /**
      *  零钱兑换
      * 给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。
