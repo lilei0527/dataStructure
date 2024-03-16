@@ -325,6 +325,22 @@ public class Solution {
         }
     }
 
+    //二叉树中序遍历
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer>list = new ArrayList<>();
+        midDfs(root,list);
+        return list;
+    }
+
+    public void midDfs(TreeNode node,List<Integer>list){
+        if(node==null){
+            return;
+        }
+        midDfs(node.left,list);
+        list.add(node.val);
+        midDfs(node.right,list);
+    }
+
 
 
 
