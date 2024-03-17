@@ -790,6 +790,25 @@ public class Solution {
         return root.val;
     }
 
+    List<Integer>list=new ArrayList<>();
+    //二叉树的右视图
+    public List<Integer> rightSideView(TreeNode root) {
+        rightSideView(root,0);
+        return list;
+    }
+
+    public void rightSideView(TreeNode node,int depth){
+        if(node==null){
+            return;
+        }
+        if(list.size()==depth){
+            list.add(node.val);
+        }
+        depth++;
+        rightSideView(node.left,depth);
+        rightSideView(node.right,depth);
+    }
+
 
     /**
      * 层序遍历
