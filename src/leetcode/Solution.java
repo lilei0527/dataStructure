@@ -472,27 +472,10 @@ public class Solution {
 
 
 
-    /**
-     * 从前序与中序遍历序列构造二叉树
-     */
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
-        Map<Integer,Integer>map = new HashMap<>();
-        for (int i = 0; i < inorder.length; i++) {
-            map.put(inorder[i],i);
-        }
-        return buildTree(preorder,inorder,0,preorder.length-1,0,inorder.length-1,map);
-    }
 
-    public TreeNode buildTree(int[] preorder,int[]inorder,int preLeft,int preRight,int inLeft,int inRight,Map<Integer,Integer>map){
-        if(preLeft>preRight){
-            return null;
-        }
-        TreeNode node = new TreeNode(preorder[preLeft]);
-        int mid = map.get(preorder[preLeft]);
-        node.left = buildTree(preorder,inorder,preLeft+1,mid-inLeft+preLeft,inLeft,mid-1,map);
-        node.right = buildTree(preorder,inorder,mid-inLeft+preLeft+1,preRight,mid+1,inRight,map);
-        return node;
-    }
+
+
+
 
     /**
      * 课程表
@@ -807,6 +790,32 @@ public class Solution {
         depth++;
         rightSideView(node.left,depth);
         rightSideView(node.right,depth);
+    }
+
+    //二叉树展开为链表
+    public void flatten(TreeNode root) {
+        List<TreeNode>nodes = new ArrayList<>();
+        flatten(root,nodes);
+
+        for (int i = 0; i < nodes.size(); i++) {
+            TreeNode node = nodes.get(i);
+            node.left=null;
+            if(i<nodes.size()-1){
+                node.right=nodes.get(i+1);
+            }else {
+                node.right=null;
+            }
+
+        }
+    }
+
+    public void flatten(TreeNode root,List<TreeNode>list) {
+        if(root==null){
+            return;
+        }
+        list.add(root);
+        flatten(root.left,list);
+        flatten(root.right,list);
     }
 
 
