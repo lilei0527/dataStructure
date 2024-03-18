@@ -1,6 +1,7 @@
 package leetcode;
 
 
+import tree.Tree;
 import tree.TreeNode;
 
 import java.util.*;
@@ -292,6 +293,44 @@ public class Solution {
         }
 
         return null;
+    }
+
+    //二叉树的最近公共祖先
+    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+        HashMap<Integer, TreeNode> parentMap = new HashMap<>();
+        //计算所有
+        dfsP(root,parentMap);
+
+        Set<TreeNode>pParent = new HashSet<>();
+        //寻找p的所有父节点
+        while (p!=null){
+            pParent.add(p);
+            p = parentMap.get(p.val);
+        }
+
+        //寻找q和p的最近公共节点
+        while (q!=null){
+            if(pParent.contains(q)){
+                return q;
+            }
+            q=parentMap.get(q.val);
+        }
+        return null;
+    }
+
+    public void dfsP(TreeNode node,Map<Integer, TreeNode>parentMap){
+        if(node==null){
+            return;
+        }
+
+        if(node.left!=null){
+            parentMap.put(node.left.val,node);
+            dfsP(node.left,parentMap);
+        }
+        if(node.right!=null){
+            parentMap.put(node.right.val,node);
+            dfsP(node.right,parentMap);
+        }
     }
 
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
@@ -739,6 +778,29 @@ public class Solution {
             this.right = right;
         }
     }
+
+    //从前序与中序遍历序列构造二叉树
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        int n = preorder.length;
+        Map<Integer,Integer>indexMap = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            indexMap.put(inorder[i], i);
+        }
+        return buildTree(preorder,inorder,0,preorder.length-1,0,indexMap);
+    }
+
+    public TreeNode buildTree(int[] preorder, int[] inorder,int left,int right,int root,Map<Integer,Integer>indexMap) {
+        if(left>right){
+            return null;
+        }
+        Integer mid = indexMap.get(preorder[root]);
+        TreeNode node = new TreeNode(preorder[root]);
+        node.left = buildTree(preorder,inorder,left,mid-1,root+1,indexMap);
+        node.right = buildTree(preorder,inorder,mid+1,right,root+1+mid-left,indexMap);
+        return node;
+    }
+
+
 
     //验证二叉搜索树
     public boolean isValidBST1(TreeNode root){
