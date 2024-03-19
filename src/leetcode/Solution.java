@@ -1,6 +1,8 @@
 package leetcode;
 
 
+import tree.Tree;
+import tree.TreeNode;
 
 import java.util.*;
 
@@ -325,6 +327,44 @@ public class Solution {
         return null;
     }
 
+    //二叉树的最近公共祖先
+    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+        HashMap<Integer, TreeNode> parentMap = new HashMap<>();
+        //计算所有
+        dfsP(root,parentMap);
+
+        Set<TreeNode>pParent = new HashSet<>();
+        //寻找p的所有父节点
+        while (p!=null){
+            pParent.add(p);
+            p = parentMap.get(p.val);
+        }
+
+        //寻找q和p的最近公共节点
+        while (q!=null){
+            if(pParent.contains(q)){
+                return q;
+            }
+            q=parentMap.get(q.val);
+        }
+        return null;
+    }
+
+    public void dfsP(TreeNode node,Map<Integer, TreeNode>parentMap){
+        if(node==null){
+            return;
+        }
+
+        if(node.left!=null){
+            parentMap.put(node.left.val,node);
+            dfsP(node.left,parentMap);
+        }
+        if(node.right!=null){
+            parentMap.put(node.right.val,node);
+            dfsP(node.right,parentMap);
+        }
+    }
+
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         Map<Integer,TreeNode>parentMap = new HashMap<>();
         dfs(root,parentMap);//存储所有节点val和对应parent的关系
@@ -356,7 +396,93 @@ public class Solution {
         }
     }
 
+    //二叉树中序遍历
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer>list = new ArrayList<>();
+        midDfs(root,list);
+        return list;
+    }
 
+    public void midDfs(TreeNode node,List<Integer>list){
+        if(node==null){
+            return;
+        }
+        midDfs(node.left,list);
+        list.add(node.val);
+        midDfs(node.right,list);
+    }
+
+    // 二叉树的最大深度
+    public int maxDepth(TreeNode root) {
+        if(root==null){
+            return 0;
+        }
+        return Math.max(maxDepth(root.left),maxDepth(root.right))+1;
+    }
+
+    //翻转二叉树
+    public TreeNode invertTree(TreeNode root) {
+        if(root==null){
+            return null;
+        }
+        TreeNode left = invertTree(root.left);
+        TreeNode right = invertTree(root.right);
+        root.right = left;
+        root.left = right;
+        return root;
+    }
+
+    //对称二叉树
+    public boolean isSymmetric(TreeNode root) {
+        return isEqual(root,root);
+    }
+
+    public boolean isEqual(TreeNode left,TreeNode right){
+        if(left==null&&right==null){
+            return true;
+        }
+        if(left==null||right==null){
+            return false;
+        }
+        if(left.val==right.val){
+           return isEqual(left.left,right.right)&&isEqual(left.right,right.left);
+        }else{
+            return false;
+        }
+
+    }
+
+
+    int maxPath = 0;
+    //二叉树的直径
+    public int diameterOfBinaryTree(TreeNode root) {
+        maxDepth1(root);
+        return maxPath-1;
+    }
+
+    public int maxDepth1(TreeNode root) {
+        if(root==null){
+            return 0;
+        }
+
+        int leftMaxDepth = maxDepth1(root.left);
+        int rightMaxDepth = maxDepth1(root.right);
+        maxPath = Math.max(maxPath,leftMaxDepth+rightMaxDepth+1);
+        return Math.max(leftMaxDepth,rightMaxDepth)+1;
+    }
+
+    //将有序数组转换为二叉搜索树
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return sortedArrayToBST(nums,0,nums.length-1);
+    }
+
+    public TreeNode sortedArrayToBST(int[]nums,int left,int right){
+        int mid = (left+right)/2;
+        TreeNode node = new TreeNode(nums[mid]);
+        node.left = sortedArrayToBST(nums,left,mid-1);
+        node.right = sortedArrayToBST(nums,mid+1,right);
+        return node;
+    }
 
 
     /**
@@ -417,27 +543,10 @@ public class Solution {
 
 
 
-    /**
-     * 从前序与中序遍历序列构造二叉树
-     */
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
-        Map<Integer,Integer>map = new HashMap<>();
-        for (int i = 0; i < inorder.length; i++) {
-            map.put(inorder[i],i);
-        }
-        return buildTree(preorder,inorder,0,preorder.length-1,0,inorder.length-1,map);
-    }
 
-    public TreeNode buildTree(int[] preorder,int[]inorder,int preLeft,int preRight,int inLeft,int inRight,Map<Integer,Integer>map){
-        if(preLeft>preRight){
-            return null;
-        }
-        TreeNode node = new TreeNode(preorder[preLeft]);
-        int mid = map.get(preorder[preLeft]);
-        node.left = buildTree(preorder,inorder,preLeft+1,mid-inLeft+preLeft,inLeft,mid-1,map);
-        node.right = buildTree(preorder,inorder,mid-inLeft+preLeft+1,preRight,mid+1,inRight,map);
-        return node;
-    }
+
+
+
 
     /**
      * 课程表
@@ -701,20 +810,106 @@ public class Solution {
             this.right = right;
         }
     }
-    public boolean isValidBST(TreeNode root) {
-        return isValidBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
+
+    //从前序与中序遍历序列构造二叉树
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        int n = preorder.length;
+        Map<Integer,Integer>indexMap = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            indexMap.put(inorder[i], i);
+        }
+        return buildTree(preorder,inorder,0,preorder.length-1,0,indexMap);
     }
 
-    public boolean isValidBST(TreeNode node, long lower, long upper) {
-        if (node == null) {
+    public TreeNode buildTree(int[] preorder, int[] inorder,int left,int right,int root,Map<Integer,Integer>indexMap) {
+        if(left>right){
+            return null;
+        }
+        Integer mid = indexMap.get(preorder[root]);
+        TreeNode node = new TreeNode(preorder[root]);
+        node.left = buildTree(preorder,inorder,left,mid-1,root+1,indexMap);
+        node.right = buildTree(preorder,inorder,mid+1,right,root+1+mid-left,indexMap);
+        return node;
+    }
+
+
+
+    //验证二叉搜索树
+    public boolean isValidBST1(TreeNode root){
+        return idValidBST1(root,Long.MIN_VALUE,Long.MAX_VALUE);
+    }
+
+    public boolean idValidBST1(TreeNode node,long min,long max){
+        if(node==null){
             return true;
         }
-        if (node.val <= lower || node.val >= upper) {
-            return false;
-        }
+        return node.val>min&&node.val<max
+                &&idValidBST1(node.left,min,node.val)&&idValidBST1(node.right,node.val,max);
+    }
 
-        return isValidBST(node.left, lower, node.val) &&
-                isValidBST(node.right, node.val, upper);
+    int res;
+    //二叉搜索树中第K小的元素
+    public int kthSmallest(TreeNode root, int k) {
+        Deque<TreeNode>deque = new LinkedList<>();
+        while (root!=null||!deque.isEmpty()){
+            while (root!=null){
+                deque.push(root);
+                root=root.left;
+            }
+            root = deque.pop();
+            k--;
+            if(k==0){
+                break;
+            }
+            root=root.right;
+        }
+        assert root != null;
+        return root.val;
+    }
+
+    List<Integer>list=new ArrayList<>();
+    //二叉树的右视图
+    public List<Integer> rightSideView(TreeNode root) {
+        rightSideView(root,0);
+        return list;
+    }
+
+    public void rightSideView(TreeNode node,int depth){
+        if(node==null){
+            return;
+        }
+        if(list.size()==depth){
+            list.add(node.val);
+        }
+        depth++;
+        rightSideView(node.left,depth);
+        rightSideView(node.right,depth);
+    }
+
+    //二叉树展开为链表
+    public void flatten(TreeNode root) {
+        List<TreeNode>nodes = new ArrayList<>();
+        flatten(root,nodes);
+
+        for (int i = 0; i < nodes.size(); i++) {
+            TreeNode node = nodes.get(i);
+            node.left=null;
+            if(i<nodes.size()-1){
+                node.right=nodes.get(i+1);
+            }else {
+                node.right=null;
+            }
+
+        }
+    }
+
+    public void flatten(TreeNode root,List<TreeNode>list) {
+        if(root==null){
+            return;
+        }
+        list.add(root);
+        flatten(root.left,list);
+        flatten(root.right,list);
     }
 
 
