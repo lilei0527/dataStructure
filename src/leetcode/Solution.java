@@ -779,14 +779,30 @@ public class Solution {
         }
     }
 
-    //从前序与中序遍历序列构造二叉树
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
-        int n = preorder.length;
-        Map<Integer,Integer>indexMap = new HashMap<>();
-        for (int i = 0; i < n; i++) {
-            indexMap.put(inorder[i], i);
+    //437. 路径总和 III
+    //给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
+    //路径 不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
+    int count = 0;
+
+    public int pathSum(TreeNode root, int targetSum) {
+        Map<Long, Integer> map = new HashMap<>();
+        map.put(0L, 1);
+        dfs(root, targetSum, 0, map);
+        return count;
+    }
+
+    private void dfs(TreeNode node, int targetSum, long sum, Map<Long, Integer> map) {
+        if (node == null) {
+            return;
         }
-        return buildTree(preorder,inorder,0,preorder.length-1,0,indexMap);
+        sum += node.val;
+        if (map.containsKey(sum - targetSum)) {
+            count += map.get(sum - targetSum);
+        }
+        map.put(sum, map.getOrDefault(sum, 0) + 1);
+        dfs(node.left, targetSum, sum, map);
+        dfs(node.right, targetSum, sum, map);
+        map.put(sum, map.get(sum) - 1);
     }
 
     public TreeNode buildTree(int[] preorder, int[] inorder,int left,int right,int root,Map<Integer,Integer>indexMap) {
