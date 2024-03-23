@@ -3032,6 +3032,54 @@ public class Solution {
         }
     }
 
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>>res = new ArrayList<>();
+        List<Integer>list=new ArrayList<>();
+        partition(res,list,n,0,new HashSet<>(),new HashSet<>(),new HashSet<>());
+        return res;
+    }
+
+    public void partition(List<List<String>>res,List<Integer>list,int n,int row,Set<Integer>leftSet,Set<Integer>rightSet,Set<Integer>set){
+        if(list.size()==n){
+            List<String>stringList=new ArrayList<>();
+            for (Integer integer : list) {
+                char[]chars = new char[n];
+                for (int i = 0; i < n; i++) {
+                    if(i==integer){
+                        chars[i]='Q';
+                    }else {
+                        chars[i]='.';
+                    }
+                }
+                stringList.add(new String(chars));
+            }
+            res.add(stringList);
+            return;
+        }
+
+        for (int i = 0; i < n; i++) {
+            if(set.contains(i)){
+                continue;
+            }
+            if(rightSet.contains(i+row)){
+                continue;
+            }
+            if(leftSet.contains(i-row)){
+                continue;
+            }
+
+            set.add(i);
+            leftSet.add(i-row);
+            rightSet.add(i+row);
+            list.add(i);
+            partition(res,list,n,row+1,leftSet,rightSet,set);
+            list.remove(list.size()-1);
+            set.remove(i);
+            leftSet.remove(i-row);
+            rightSet.remove(i+row);
+        }
+    }
+
     /**
      请你按照从括号内到外的顺序，逐层反转每对匹配括号中的字符串，并返回最终的结果。
 
@@ -3051,8 +3099,7 @@ public class Solution {
      输入：s = “(ed(et(oc))el)”
      输出：“leetcode”
      */
-    public static class StringUtil{
-        public String reverseBracketStr(String s){
+        public String reverseBracketStr(String s) {
             LinkedList<String> stack = new LinkedList<>();
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < s.length(); i++) {
@@ -3093,7 +3140,7 @@ public class Solution {
             }
         }
 
-    }
+
 
 
     public static void main(String[] args) throws InterruptedException {
@@ -3236,7 +3283,7 @@ public class Solution {
         String[]s = {"eat","tea","tan","ate","nat","bat"};
         System.out.println(solution.groupAnagrams(s));
 
-
+        solution.solveNQueens(4);
 
     }
 }
