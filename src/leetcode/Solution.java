@@ -3117,7 +3117,45 @@ public class Solution {
     }
 
     //分格回文串
+    public List<List<String>> partition1(String s) {
+        List<List<String>>res = new ArrayList<>();
+        List<String>list1= new ArrayList<>();
+        int[][]dp = new int[s.length()][s.length()];
+        partition(s,0,res,list1,dp);
+        return res;
+    }
 
+    public void partition(String s,int start,List<List<String>>res,List<String>list,int[][]dp){
+        if(start>=s.length()){
+            res.add(new ArrayList<>(list));
+        }
+
+        for (int i = start; i < s.length(); i++) {
+            if(isHuiWen(s,start,i,dp)==1){
+                list.add(s.substring(start,i+1));
+                partition(s,i+1,res,list,dp);
+                list.remove(list.size()-1);
+            }
+        }
+    }
+
+    public int isHuiWen(String s,int i,int j,int [][]dp){
+        if(dp[i][j]!=0){
+            return dp[i][j];
+        }
+
+        if(i>=j){
+            return 1;
+        }
+
+        if(s.charAt(i)==s.charAt(j)){
+            return isHuiWen(s,i+1,j-1,dp);
+        }else {
+            dp[i][j]=-1;
+            return -1;
+        }
+
+    }
 
     /**
      请你按照从括号内到外的顺序，逐层反转每对匹配括号中的字符串，并返回最终的结果。
