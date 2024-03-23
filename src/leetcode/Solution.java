@@ -3234,6 +3234,23 @@ public class Solution {
             return ints[n];
         }
 
+        //杨辉三角
+        public List<List<Integer>> generate(int numRows) {
+            List<List<Integer>>res = new ArrayList<>();
+            for (int i = 0; i < numRows; i++) {
+                List<Integer>list1 = new ArrayList<>();
+                for (int j = 0; j <= i; j++) {
+                    if(j==0||j==i){
+                        list1.add(1);
+                    }else {
+                        list1.add(res.get(i-1).get(j-1)+res.get(i-1).get(j));
+                    }
+                }
+                res.add(list1);
+            }
+            return res;
+        }
+
 
 
 
