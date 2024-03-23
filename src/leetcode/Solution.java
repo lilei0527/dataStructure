@@ -937,41 +937,41 @@ public class Solution {
      * 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
      *
      */
-    public boolean exist(char[][] board, String word) {
-        int xLen = board.length;
-        int yLen = board[0].length;
-        for (int i = 0; i < xLen; i++) {
-            for (int j = 0; j < yLen; j++) {
-                if(exist(board,word,0,i,j)){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean exist(char[][] board, String word, int index, int x, int y) {
-        int xLen = board.length;
-        int yLen = board[0].length;
-        if (x < 0 || x >= xLen || y < 0 || y >= yLen || board[x][y] != word.charAt(index)) {
-            return false;
-        }
-
-        if (index == word.length() - 1) {
-            return true;
-        }
-
-        char temp = board[x][y];
-        board[x][y] = ' ';
-        if (exist(board, word, index + 1, x + 1, y) ||
-                exist(board, word, index + 1, x - 1, y) ||
-                exist(board, word, index + 1, x, y + 1) ||
-                exist(board, word, index + 1, x, y - 1)) {
-            return true;
-        }
-        board[x][y] = temp;
-        return false;
-    }
+//    public boolean exist(char[][] board, String word) {
+//        int xLen = board.length;
+//        int yLen = board[0].length;
+//        for (int i = 0; i < xLen; i++) {
+//            for (int j = 0; j < yLen; j++) {
+//                if(exist(board,word,0,i,j)){
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
+//
+//    public boolean exist(char[][] board, String word, int index, int x, int y) {
+//        int xLen = board.length;
+//        int yLen = board[0].length;
+//        if (x < 0 || x >= xLen || y < 0 || y >= yLen || board[x][y] != word.charAt(index)) {
+//            return false;
+//        }
+//
+//        if (index == word.length() - 1) {
+//            return true;
+//        }
+//
+//        char temp = board[x][y];
+//        board[x][y] = ' ';
+//        if (exist(board, word, index + 1, x + 1, y) ||
+//                exist(board, word, index + 1, x - 1, y) ||
+//                exist(board, word, index + 1, x, y + 1) ||
+//                exist(board, word, index + 1, x, y - 1)) {
+//            return true;
+//        }
+//        board[x][y] = temp;
+//        return false;
+//    }
 
     /**
      * 给定一个包含红色、白色和蓝色、共n 个元素的数组nums，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
@@ -3080,6 +3080,45 @@ public class Solution {
         }
     }
 
+    //79. 单词搜索
+    public boolean exist(char[][] board, String word) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                 if(exist(board,word,0,i,j)){
+                     return true;
+                 }
+            }
+        }
+        return false;
+    }
+
+    public boolean exist(char[][]board,String word,int step,int i,int j){
+        int index = word.indexOf(step);
+        if(i<0||i>=board.length||j<0||j>=board[0].length||board[i][j]!=word.charAt(step)){
+            return false;
+        }
+
+        if(step==word.length()-1){
+            return true;
+        }
+
+        char temp = board[i][j];
+        board[i][j]=' ';
+        if(
+        exist(board,word,step+1,i+1,j)||
+        exist(board,word,step+1,i,j+1)||
+        exist(board,word,step+1,i-1,j)||
+        exist(board,word,step+1,i,j-1)){
+            return true;
+        }
+        board[i][j] = temp;
+
+        return false;
+    }
+
+    //分格回文串
+
+
     /**
      请你按照从括号内到外的顺序，逐层反转每对匹配括号中的字符串，并返回最终的结果。
 
@@ -3280,10 +3319,8 @@ public class Solution {
 //        int [] arr= new int[]{1,1,1,2,2,2,2,3,3,3,3,3};
 //        int[] ints = solution.topKFrequent(arr, 1);
 //        System.out.println(Arrays.toString(ints));
-        String[]s = {"eat","tea","tan","ate","nat","bat"};
-        System.out.println(solution.groupAnagrams(s));
-
-        solution.solveNQueens(4);
+        char[][] chars={{'A','B','C','D'},{'S','F','C','S'},{'A','D','E','E'}};
+        boolean abcced = solution.exist(chars, "ABCCED");
 
     }
 }
