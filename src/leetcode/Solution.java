@@ -1,6 +1,7 @@
 package leetcode;
 
 
+import jdk.jfr.internal.tool.Main;
 import tree.Tree;
 import tree.TreeNode;
 
@@ -1765,6 +1766,39 @@ public class Solution {
             max = Math.max(max, imax);
         }
         return max;
+    }
+
+    /**
+     *416. 分割等和子集
+     * 给你一个 只包含正整数 的 非空 数组 nums 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+     *
+     *dp[i][j]  0-i之间是否存在加和等于j
+     *
+     * nums[i]>j    return false
+     * nums[i]==j   dp[i][j] =true
+     * num[i]<j     dp[i][j] = dp[i-1][j-num[i]]
+     */
+    public boolean canPartition(int[] nums) {
+        int sum = Arrays.stream(nums).sum();
+        if(sum%2!=0){
+            return false;//奇数
+        }
+
+        int half = sum/2;
+        boolean []dp = new boolean[half+1];
+        dp[0] = true;
+        if(nums[0]<=half){
+            dp[nums[0]]=true;//初始化首行数据
+        }
+        for (int i = 1; i < nums.length; i++) {
+            for (int j = half; j >=nums[i]; j--) {
+                dp[i] = dp[i] || dp[j-nums[i]];
+                if(dp[half]){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
