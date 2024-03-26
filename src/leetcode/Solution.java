@@ -1808,12 +1808,12 @@ public class Solution {
         int half = sum/2;
         boolean []dp = new boolean[half+1];
         dp[0] = true;
-        if(nums[0]<=half){
-            dp[nums[0]]=true;//初始化首行数据
-        }
-        for (int i = 1; i < nums.length; i++) {
+//        if(nums[0]<=half){
+//            dp[nums[0]]=true;//初始化首行数据
+//        }
+        for (int i = 0; i < nums.length; i++) {
             for (int j = half; j >=nums[i]; j--) {
-                dp[i] = dp[i] || dp[j-nums[i]];
+                dp[j] = dp[j] || dp[j-nums[i]];
                 if(dp[half]){
                     return true;
                 }
