@@ -3302,6 +3302,49 @@ public class Solution {
             return needJump==1;
         }
 
+    //跳跃游戏II
+    //给定一个长度为 n 的 0 索引整数数组 nums。初始位置为 nums[0]。
+    //
+    //每个元素 nums[i] 表示从索引 i 向前跳转的最大长度。换句话说，如果你在 nums[i] 处，你可以跳转到任意 nums[i + j] 处:
+    //
+    //0 <= j <= nums[i]
+    //i + j < n
+    //返回到达 nums[n - 1] 的最小跳跃次数。生成的测试用例可以到达 nums[n - 1]。
+    public int jumpDP(int[] nums) {
+        int[] dp = new int[nums.length];
+        dp[0] = 0;
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = nums.length;
+            for (int j = 0; j < i; j++) {
+                if(j + nums[j]>=i){
+                    dp[i] = Math.min(dp[i],dp[j]+1);
+                }
+            }
+        }
+        if(dp[nums.length-1]>=nums.length){
+            return 0;
+        }
+
+        return dp[nums.length-1];
+    }
+
+    //贪心 每一步都选择更远的位置
+    public int jumpTX(int[] nums) {
+        int step = 0;
+        int maxIndex = 0;
+        int end = 0;
+        for (int i = 0; i < nums.length; i++) {
+            maxIndex = Math.max(maxIndex,i+nums[i]);//每次step最大的索引
+
+            if(i==end){//如果走到了最大的索引那就代表
+                end = maxIndex;
+                step++;
+            }
+        }
+
+        return step;
+    }
+
 
 
     public static void main(String[] args) throws InterruptedException {
