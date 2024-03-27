@@ -3306,6 +3306,20 @@ public class Solution {
             return res;
         }
 
+        //买卖股票的最佳时机
+        public int maxProfit(int[] prices) {
+            int min=prices[0];
+            int profit = 0;
+            for (int price : prices) {
+                if(price<min){
+                    min = price;
+                }else {
+                    profit = Math.max(price-min,profit);
+                }
+            }
+            return profit;
+        }
+
 
 
 
