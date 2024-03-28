@@ -1,6 +1,7 @@
 package leetcode;
 
 
+import jdk.jfr.internal.tool.Main;
 import tree.Tree;
 import tree.TreeNode;
 
@@ -498,20 +499,41 @@ public class Solution {
         Arrays.fill(dp,amount+1);
         dp[0]=0;
 
-        for (int i = 1; i <= amount; i++) {
-            for (int j = 0; j < coins.length; j++) {
-                if(coins[j]<=i){
+        for (int j = 0; j < coins.length; j++) {
+            for (int i = coins[j]; i <= amount; i++) {
                     //总金额为i的最小硬币数量
                     dp[i] = Math.min(dp[i],dp[i-coins[j]]+1);
-                }
             }
         }
-
         if(dp[amount]>amount){
             return -1;
         }
         return dp[amount];
     }
+
+
+    //零钱兑换
+    //给你一个整数数组 coins 表示不同面额的硬币，另给一个整数 amount 表示总金额。
+    //
+    //请你计算并返回可以凑成总金额的硬币组合数。如果任何硬币组合都无法凑出总金额，返回 0 。
+    //
+    //假设每一种面额的硬币有无限个。
+    //
+    //题目数据保证结果符合 32 位带符号整数。
+    public int change(int amount, int[] coins) {
+        int []dp=new int[amount+1];
+        dp[0] = 1;
+        for (int i = 0; i < coins.length; i++) {
+            for (int j = coins[i]; j <= amount ; j++) {
+                dp[j] = dp[j]+dp[j-coins[i]];
+            }
+        }
+        return dp[amount];
+    }
+
+
+
+
 
     /**
      * 最大正方形
@@ -811,14 +833,30 @@ public class Solution {
         }
     }
 
-    //从前序与中序遍历序列构造二叉树
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
-        int n = preorder.length;
-        Map<Integer,Integer>indexMap = new HashMap<>();
-        for (int i = 0; i < n; i++) {
-            indexMap.put(inorder[i], i);
+    //437. 路径总和 III
+    //给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
+    //路径 不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
+    int count = 0;
+
+    public int pathSum(TreeNode root, int targetSum) {
+        Map<Long, Integer> map = new HashMap<>();
+        map.put(0L, 1);
+        dfs(root, targetSum, 0, map);
+        return count;
+    }
+
+    private void dfs(TreeNode node, int targetSum, long sum, Map<Long, Integer> map) {
+        if (node == null) {
+            return;
         }
-        return buildTree(preorder,inorder,0,preorder.length-1,0,indexMap);
+        sum += node.val;
+        if (map.containsKey(sum - targetSum)) {
+            count += map.get(sum - targetSum);
+        }
+        map.put(sum, map.getOrDefault(sum, 0) + 1);
+        dfs(node.left, targetSum, sum, map);
+        dfs(node.right, targetSum, sum, map);
+        map.put(sum, map.get(sum) - 1);
     }
 
     public TreeNode buildTree(int[] preorder, int[] inorder,int left,int right,int root,Map<Integer,Integer>indexMap) {
@@ -953,41 +991,41 @@ public class Solution {
      * 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
      *
      */
-    public boolean exist(char[][] board, String word) {
-        int xLen = board.length;
-        int yLen = board[0].length;
-        for (int i = 0; i < xLen; i++) {
-            for (int j = 0; j < yLen; j++) {
-                if(exist(board,word,0,i,j)){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean exist(char[][] board, String word, int index, int x, int y) {
-        int xLen = board.length;
-        int yLen = board[0].length;
-        if (x < 0 || x >= xLen || y < 0 || y >= yLen || board[x][y] != word.charAt(index)) {
-            return false;
-        }
-
-        if (index == word.length() - 1) {
-            return true;
-        }
-
-        char temp = board[x][y];
-        board[x][y] = ' ';
-        if (exist(board, word, index + 1, x + 1, y) ||
-                exist(board, word, index + 1, x - 1, y) ||
-                exist(board, word, index + 1, x, y + 1) ||
-                exist(board, word, index + 1, x, y - 1)) {
-            return true;
-        }
-        board[x][y] = temp;
-        return false;
-    }
+//    public boolean exist(char[][] board, String word) {
+//        int xLen = board.length;
+//        int yLen = board[0].length;
+//        for (int i = 0; i < xLen; i++) {
+//            for (int j = 0; j < yLen; j++) {
+//                if(exist(board,word,0,i,j)){
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
+//
+//    public boolean exist(char[][] board, String word, int index, int x, int y) {
+//        int xLen = board.length;
+//        int yLen = board[0].length;
+//        if (x < 0 || x >= xLen || y < 0 || y >= yLen || board[x][y] != word.charAt(index)) {
+//            return false;
+//        }
+//
+//        if (index == word.length() - 1) {
+//            return true;
+//        }
+//
+//        char temp = board[x][y];
+//        board[x][y] = ' ';
+//        if (exist(board, word, index + 1, x + 1, y) ||
+//                exist(board, word, index + 1, x - 1, y) ||
+//                exist(board, word, index + 1, x, y + 1) ||
+//                exist(board, word, index + 1, x, y - 1)) {
+//            return true;
+//        }
+//        board[x][y] = temp;
+//        return false;
+//    }
 
     /**
      * 给定一个包含红色、白色和蓝色、共n 个元素的数组nums，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
@@ -1117,37 +1155,6 @@ public class Solution {
     }
 
 
-    /**
-     * 跳跃游戏
-     * 给定一个非负整数数组 nums ，你最初位于数组的 第一个下标 。
-     *
-     * 数组中的每个元素代表你在该位置可以跳跃的最大长度。
-     *
-     * 判断你是否能够到达最后一个下标。
-     *
-     *
-     *
-     * 示例1：
-     *
-     * 输入：nums = [2,3,1,1,4]
-     * 输出：true
-     * 解释：可以先跳 1 步，从下标 0 到达下标 1, 然后再从下标 1 跳 3 步到达最后一个下标。
-     * 示例2：
-     *
-     * 输入：nums = [3,2,1,0,4]
-     * 输出：false
-     * 解释：无论怎样，总会到达下标为 3 的位置。但该下标的最大跳跃长度是 0 ， 所以永远不可能到达最后一个下标。
-     *
-     */
-    public boolean canJump(int[] nums) {
-        int canJumpMinIndex = nums.length-1;
-        for (int i = nums.length-2; i >=0; i--) {
-            if(nums[i]>=canJumpMinIndex-i){
-                canJumpMinIndex = i;
-            }
-        }
-        return canJumpMinIndex == 0;
-    }
 
     /**
      * 最大子数组和
@@ -1763,6 +1770,39 @@ public class Solution {
             max = Math.max(max, imax);
         }
         return max;
+    }
+
+    /**
+     *416. 分割等和子集
+     * 给你一个 只包含正整数 的 非空 数组 nums 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+     *
+     *dp[i][j]  0-i之间是否存在加和等于j
+     *
+     * nums[i]>j    return false
+     * nums[i]==j   dp[i][j] =true
+     * num[i]<j     dp[i][j] = dp[i-1][j-num[i]]
+     */
+    public boolean canPartition(int[] nums) {
+        int sum = Arrays.stream(nums).sum();
+        if(sum%2!=0){
+            return false;//奇数
+        }
+
+        int half = sum/2;
+        boolean []dp = new boolean[half+1];
+        dp[0] = true;
+//        if(nums[0]<=half){
+//            dp[nums[0]]=true;//初始化首行数据
+//        }
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = half; j >=nums[i]; j--) {
+                dp[j] = dp[j] || dp[j-nums[i]];
+                if(dp[half]){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
@@ -3145,6 +3185,131 @@ public class Solution {
         }
     }
 
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>>res = new ArrayList<>();
+        List<Integer>list=new ArrayList<>();
+        partition(res,list,n,0,new HashSet<>(),new HashSet<>(),new HashSet<>());
+        return res;
+    }
+
+    public void partition(List<List<String>>res,List<Integer>list,int n,int row,Set<Integer>leftSet,Set<Integer>rightSet,Set<Integer>set){
+        if(list.size()==n){
+            List<String>stringList=new ArrayList<>();
+            for (Integer integer : list) {
+                char[]chars = new char[n];
+                for (int i = 0; i < n; i++) {
+                    if(i==integer){
+                        chars[i]='Q';
+                    }else {
+                        chars[i]='.';
+                    }
+                }
+                stringList.add(new String(chars));
+            }
+            res.add(stringList);
+            return;
+        }
+
+        for (int i = 0; i < n; i++) {
+            if(set.contains(i)){
+                continue;
+            }
+            if(rightSet.contains(i+row)){
+                continue;
+            }
+            if(leftSet.contains(i-row)){
+                continue;
+            }
+
+            set.add(i);
+            leftSet.add(i-row);
+            rightSet.add(i+row);
+            list.add(i);
+            partition(res,list,n,row+1,leftSet,rightSet,set);
+            list.remove(list.size()-1);
+            set.remove(i);
+            leftSet.remove(i-row);
+            rightSet.remove(i+row);
+        }
+    }
+
+    //79. 单词搜索
+    public boolean exist(char[][] board, String word) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                 if(exist(board,word,0,i,j)){
+                     return true;
+                 }
+            }
+        }
+        return false;
+    }
+
+    public boolean exist(char[][]board,String word,int step,int i,int j){
+        int index = word.indexOf(step);
+        if(i<0||i>=board.length||j<0||j>=board[0].length||board[i][j]!=word.charAt(step)){
+            return false;
+        }
+
+        if(step==word.length()-1){
+            return true;
+        }
+
+        char temp = board[i][j];
+        board[i][j]=' ';
+        if(
+        exist(board,word,step+1,i+1,j)||
+        exist(board,word,step+1,i,j+1)||
+        exist(board,word,step+1,i-1,j)||
+        exist(board,word,step+1,i,j-1)){
+            return true;
+        }
+        board[i][j] = temp;
+
+        return false;
+    }
+
+    //分格回文串
+    public List<List<String>> partition1(String s) {
+        List<List<String>>res = new ArrayList<>();
+        List<String>list1= new ArrayList<>();
+        int[][]dp = new int[s.length()][s.length()];
+        partition(s,0,res,list1,dp);
+        return res;
+    }
+
+    public void partition(String s,int start,List<List<String>>res,List<String>list,int[][]dp){
+        if(start>=s.length()){
+            res.add(new ArrayList<>(list));
+        }
+
+        for (int i = start; i < s.length(); i++) {
+            if(isHuiWen(s,start,i,dp)==1){
+                list.add(s.substring(start,i+1));
+                partition(s,i+1,res,list,dp);
+                list.remove(list.size()-1);
+            }
+        }
+    }
+
+    public int isHuiWen(String s,int i,int j,int [][]dp){
+        if(dp[i][j]!=0){
+            return dp[i][j];
+        }
+
+        if(i>=j){
+            return 1;
+        }
+
+        if(s.charAt(i)==s.charAt(j)){
+            return isHuiWen(s,i+1,j-1,dp);
+        }else {
+            dp[i][j]=-1;
+            return -1;
+        }
+
+    }
+
     /**
      请你按照从括号内到外的顺序，逐层反转每对匹配括号中的字符串，并返回最终的结果。
 
@@ -3164,8 +3329,7 @@ public class Solution {
      输入：s = “(ed(et(oc))el)”
      输出：“leetcode”
      */
-    public static class StringUtil{
-        public String reverseBracketStr(String s){
+        public String reverseBracketStr(String s) {
             LinkedList<String> stack = new LinkedList<>();
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < s.length(); i++) {
@@ -3206,7 +3370,110 @@ public class Solution {
             }
         }
 
+
+        //爬楼梯
+        //假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+        //每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+        public int climbStairs(int n) {
+            if(n==1){
+                return 1;
+            }
+            int []ints = new int[n+1];
+            ints[2]=2;
+            ints[1]=1;
+            for (int i = 3; i <= n; i++) {
+                ints[i] = ints[i-1]+ints[i-2];
+            }
+            return ints[n];
+        }
+
+        //杨辉三角
+        public List<List<Integer>> generate(int numRows) {
+            List<List<Integer>>res = new ArrayList<>();
+            for (int i = 0; i < numRows; i++) {
+                List<Integer>list1 = new ArrayList<>();
+                for (int j = 0; j <= i; j++) {
+                    if(j==0||j==i){
+                        list1.add(1);
+                    }else {
+                        list1.add(res.get(i-1).get(j-1)+res.get(i-1).get(j));
+                    }
+                }
+                res.add(list1);
+            }
+            return res;
+        }
+
+        //买卖股票的最佳时机
+        public int maxProfit(int[] prices) {
+            int min=prices[0];
+            int profit = 0;
+            for (int price : prices) {
+                if(price<min){
+                    min = price;
+                }else {
+                    profit = Math.max(price-min,profit);
+                }
+            }
+            return profit;
+        }
+
+        //跳跃游戏
+        public boolean canJump(int[] nums) {
+            int needJump = 1;//最少需要跳的步数
+            for (int i = nums.length-2; i>=0 ; i--) {
+                if(nums[i]<needJump){
+                    needJump++;
+                }else {
+                    needJump=1;
+                }
+            }
+            return needJump==1;
+        }
+
+    //跳跃游戏II
+    //给定一个长度为 n 的 0 索引整数数组 nums。初始位置为 nums[0]。
+    //
+    //每个元素 nums[i] 表示从索引 i 向前跳转的最大长度。换句话说，如果你在 nums[i] 处，你可以跳转到任意 nums[i + j] 处:
+    //
+    //0 <= j <= nums[i]
+    //i + j < n
+    //返回到达 nums[n - 1] 的最小跳跃次数。生成的测试用例可以到达 nums[n - 1]。
+    public int jumpDP(int[] nums) {
+        int[] dp = new int[nums.length];
+        dp[0] = 0;
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = nums.length;
+            for (int j = 0; j < i; j++) {
+                if(j + nums[j]>=i){
+                    dp[i] = Math.min(dp[i],dp[j]+1);
+                }
+            }
+        }
+        if(dp[nums.length-1]>=nums.length){
+            return 0;
+        }
+
+        return dp[nums.length-1];
     }
+
+    //贪心 每一步都选择更远的位置
+    public int jumpTX(int[] nums) {
+        int step = 0;
+        int maxIndex = 0;
+        int end = 0;
+        for (int i = 0; i < nums.length; i++) {
+            maxIndex = Math.max(maxIndex,i+nums[i]);//每次step最大的索引
+
+            if(i==end){//如果走到了最大的索引那就代表
+                end = maxIndex;
+                step++;
+            }
+        }
+
+        return step;
+    }
+
 
 
     public static void main(String[] args) throws InterruptedException {
@@ -3346,10 +3613,8 @@ public class Solution {
 //        int [] arr= new int[]{1,1,1,2,2,2,2,3,3,3,3,3};
 //        int[] ints = solution.topKFrequent(arr, 1);
 //        System.out.println(Arrays.toString(ints));
-        String[]s = {"eat","tea","tan","ate","nat","bat"};
-        System.out.println(solution.groupAnagrams(s));
-
-
+        char[][] chars={{'A','B','C','D'},{'S','F','C','S'},{'A','D','E','E'}};
+        boolean abcced = solution.exist(chars, "ABCCED");
 
     }
 }
