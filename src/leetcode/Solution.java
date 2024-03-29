@@ -1,18 +1,48 @@
 package leetcode;
 
 
-import jdk.jfr.internal.tool.Main;
-import tree.Tree;
-import tree.TreeNode;
+import javafx.util.Pair;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author lilei
  **/
 @SuppressWarnings("unused")
 public class Solution {
+    /**
+     * 找到字符串中所有字母异位词
+     */
+    public List<Integer> findAnagrams(String s, String p) {
+        if (s.length() < p.length()) {
+            return new ArrayList<>();
+        }
+        int[]sCount = new int[26];
+        int[]pCount = new int[26];
+        for (int i = 0; i < p.length(); i++) {
+            sCount[s.charAt(i)-'a']++;
+            pCount[p.charAt(i)-'a']++;
+        }
+
+        List<Integer>res = new ArrayList<>();
+        int left = 0;
+        int right = p.length()-1;
+
+        while (true){
+            if (Arrays.equals(sCount, pCount)) {
+                res.add(left);
+            }
+
+            if(right==s.length()-1){
+                break;
+            }
+
+            sCount[s.charAt(left++)-'a']--;
+            sCount[s.charAt(++right)-'a']++;
+        }
+
+        return res;
+    }
     /**
      * 字母异位词分组
      * 给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。
@@ -1259,7 +1289,7 @@ public class Solution {
             result.add(new ArrayList<>(list));
         }
         if(sum>target){
-            return; 
+            return;
         }
 
         for (int i = index; i < candidates.length; i++) {
@@ -1383,22 +1413,6 @@ public class Solution {
 
 
 
-    /**
-     * 盛最多水的容器
-     */
-    public int maxArea(int[] height) {
-        int max =0;
-        int left = 0,right = height.length-1;
-        while (left<right){
-            max = Math.max(max,(right-left)*(Math.min(height[left],height[right])));
-            if(height[left]<=height[right]){
-                left++;
-            }else {
-                right--;
-            }
-        }
-        return max;
-    }
 
     /**
      *  有效的数独
@@ -1570,32 +1584,30 @@ public class Solution {
         return result;
     }
 
-    /**
-     * 两数相加
-     */
-    public ListUtil.ListNode addTwoNumbers(ListUtil.ListNode l1, ListUtil.ListNode l2) {
-        ListUtil.ListNode node = new ListUtil.ListNode(0);
-        ListUtil.ListNode head = node;
-        int j = 0;//进位
+
+    //两数相加
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(-1);
+        ListNode cur = dummy;
+        int jin = 0;
         while (l1!=null||l2!=null){
-            int val1=0,val2=0;
-            if(l1!=null){
-                val1 = l1.val;
+            int i1 = l1==null?0:l1.val;
+            int i2 = l2==null?0:l2.val;
+            int sum = jin+i1+i2;
+            jin = sum/10;
+            cur.next = new ListNode(sum%10);
+            cur = cur.next;
+            if (l1 != null) {
                 l1 = l1.next;
             }
-            if(l2!=null){
-                val2 = l2.val;
+            if (l2 != null) {
                 l2 = l2.next;
             }
-
-            node.next = new ListUtil.ListNode((val1+val2+j)%10);
-            node = node.next;
-            j=(val1+val2+j)/10;
         }
-        if(j==1){
-            node.next = new ListUtil.ListNode(1);
+        if(jin>0){
+            cur.next = new ListNode(jin);
         }
-        return head.next;
+        return dummy.next;
     }
 
 
@@ -2119,8 +2131,8 @@ public class Solution {
         dfs(s,0,list,result,arrs);
         return result;
     }
-    
-    
+
+
     private void dfs(String s,int start,List<String>list,List<List<String>>result,int[][]arrs){
         if(start==s.length()){
             result.add(new ArrayList<>(list));
@@ -2274,29 +2286,79 @@ public class Solution {
     }
 
 
+
     /**
-     * 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点
+     * 盛最多水的容器
      */
-    public ListUtil.ListNode removeNthFromEnd(ListUtil.ListNode head, int n) {
-        ListUtil.ListNode quick = head;
-        for (int i = 0; i < n-1; i++) {
-            quick = quick.next;
+    public int maxArea(int[] height) {
+        int left = 0;
+        int right = height.length-1;
+        int max=0;
+        while(left<right){
+            int x = right-left;
+            int y = Math.min(height[left],height[right]);
+            max = Math.max(max,x*y);
+            //往左找一个比height[left]大的
+            if (height[left]<=height[right]){
+                left++;
+            }else {
+                right--;
+            }
         }
-        ListUtil.ListNode slow = head;
-        ListUtil.ListNode pre = null;
+        return max;
+    }
 
-        while (quick.next!=null){
-            quick = quick.next;
-            pre = slow;
-            slow = slow.next;
-        }
 
-        if(pre==null){
-            return slow.next;
-        }else {
-            pre.next = slow.next;
-            return head;
+    /**
+     * 三数之和
+     */
+    public List<List<Integer>> threeSum1(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>>res = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            if(i>0&&nums[i]==nums[i-1]){//元素重复跳过
+                continue;
+            }
+            //判断两数之和
+            int left = i+1;int right = nums.length-1;
+            while (left<right){
+                if(left!=i+1&&nums[left]==nums[left-1]){
+                    left++;
+                    continue;
+                }
+                if(nums[left]+nums[right]+nums[i]<0){
+                    left++;
+                }else if(nums[left]+nums[right]+nums[i]>0){
+                    right--;
+                }else {
+                    List<Integer>list = new ArrayList<>();
+                    list.add(nums[left]);
+                    list.add(nums[right]);
+                    list.add(nums[i]);
+                    res.add(list);
+                    left++;
+                    right--;
+                }
+            }
         }
+        return res;
+    }
+
+    /**
+     *移动和
+     */
+    public void moveZeroes(int[] nums) {
+       int left=0;
+       int right=0;
+       while (right<nums.length){
+           if(nums[right]!=0){
+               int temp=nums[left];
+               nums[left]=nums[right];
+               nums[right]=temp;
+               left++;
+           }
+           right++;
+       }
     }
 
     /**
@@ -2415,31 +2477,26 @@ public class Solution {
      */
 
     public String longestPalindrome(String s) {
-        if (s == null || s.length() < 1) {
+        if (s == null || s.length()<2) {
             return "";
         }
 
         String result = "";
-        int maxLen = 0;
-        int maxIndex = 0;
         for (int i = 0; i < s.length(); i++) {
-            int one = getPalindromeLen(s, i, i);
-            int two = getPalindromeLen(s, i, i+1);
-            int m = Math.max(one, two);
-            if(m>maxLen){
-                maxLen = m;
-                maxIndex = i;
-            }
+            String oneString = getPalindromeLen(s, i, i);
+            String twoString = getPalindromeLen(s, i, i+1);
+            String tempMax= oneString.length()>twoString.length()? oneString :twoString;
+            result = tempMax.length()> result.length()?tempMax:result;
         }
-        return s.substring(maxIndex-(maxLen-1)/2,maxIndex+maxLen/2+1);
+        return result;
     }
 
-    private int getPalindromeLen(String s,int left,int right){
+    private String getPalindromeLen(String s,int left,int right){
         while (left>=0&&right<s.length()&&s.charAt(left)==s.charAt(right)){
             left--;
             right++;
         }
-        return right-left-1;
+        return s.substring(left+1,right);
     }
 
 
@@ -2589,13 +2646,83 @@ public class Solution {
             }
         }
 
-        public static ListNode ReverseList(ListNode head) {
+        /**
+         * 相交链表
+         * 给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。
+         */
+        public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+            ListNode node = null;
+            ListNode an = headA;
+            ListNode bn = headB;
+            while (an!=bn){
+                an = an==null?headB:an.next;
+                bn = bn==null?headA:bn.next;
+            }
+            return an;
+        }
+
+
+        //两两交换链表中的节点
+        public ListNode swapPairs(ListNode head) {
+            ListNode dummy = new ListNode(-1);
+            dummy.next = head;
+            ListNode cur = dummy;
+            while (cur.next!=null&&cur.next.next!=null){
+
+                ListNode node1 = cur.next;
+                ListNode node2 = cur.next.next;
+
+                cur.next = node2;
+                node1.next = node2.next;
+                node2.next = node1;
+
+                cur = node1;
+            }
+            return dummy.next;
+        }
+
+
+        public boolean isEqual(ListNode listNode1,ListNode listNode2){
+            while (listNode1!=null&&listNode2!=null){
+                if(listNode1.val!= listNode2.val){
+                    return false;
+                }
+                listNode1 = listNode1.next;
+                listNode2 = listNode2.next;
+            }
+            return listNode1 == null && listNode2 == null;
+        }
+
+
+        //删除倒数第n个节点
+        public ListNode removeNthFromEnd(ListNode head, int n) {
+            ListNode fast = head;
+            ListNode dummy = new ListNode(-1);
+            dummy.next = head;
+            ListNode slow = dummy;
+            for (int i = 0; i < n; i++) {
+                fast = fast.next;
+            }
+
+            while (fast!=null){
+                fast = fast.next;
+                slow = slow.next;
+            }
+
+            if(slow.next!=null){
+                slow.next = slow.next.next;
+            }
+            return dummy.next;
+        }
+
+        public static ListNode reverseList(ListNode head) {
+            ListNode cur = head;
             ListNode pre = null;
-            while (head!=null){
-                ListNode next = head.next;
-                head.next = pre;
-                pre = head;
-                head = next;
+            while (cur!=null){
+                ListNode next = cur.next;
+                cur.next = pre;
+                pre = cur;
+                cur = next;
             }
             return pre;
         }
@@ -3345,6 +3472,101 @@ public class Solution {
         return step;
     }
 
+    //划分字母区间
+    //给你一个字符串 s 。我们要把这个字符串划分为尽可能多的片段，同一字母最多出现在一个片段中。
+    //
+    //注意，划分结果需要满足：将所有划分结果按顺序连接，得到的字符串仍然是 s 。
+    //
+    //返回一个表示每个字符串片段的长度的列表。
+    public List<Integer> partitionLabels(String s) {
+        List<Integer> list1 = new ArrayList<>();
+        int maxIndex = 0;
+        int beginIndex = -1;
+
+        for (int i = 0; i < s.length(); i++) {
+            int last = s.lastIndexOf(s.charAt(i));
+            maxIndex = Math.max(last, maxIndex);
+
+            if (i == maxIndex) {
+                list1.add(maxIndex-beginIndex);
+                beginIndex = maxIndex;
+            }
+        }
+
+        return list1;
+    }
+
+    //腐烂的橘子
+    //值 0 代表空单元格；
+    //值 1 代表新鲜橘子；
+    //值 2 代表腐烂的橘子。
+    public int orangesRotting(int[][] grid) {
+            int day = -1;
+            Queue<List<Pair<Integer,Integer>>>queue = new LinkedList<>();//新腐烂的橘子
+       int rotNums = 0;
+       int totalNums = 0;
+       List<Pair<Integer,Integer>>list1 = new ArrayList<>();
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+
+                if(grid[i][j]==2){
+                    Pair<Integer,Integer> pair = new Pair<>(i,j);
+                    list1.add(pair);
+                }
+
+                if(grid[i][j]==2||grid[i][j]==1){
+                    totalNums++;
+                }
+            }
+        }
+        queue.offer(list1);
+
+        boolean hasRot = true;
+        while (hasRot&&!queue.isEmpty()){
+            day++;
+            List<Pair<Integer, Integer>> poll = queue.poll();
+
+            List<Pair<Integer,Integer>>list2 = new ArrayList<>();
+            for (Pair<Integer, Integer> pair : poll) {
+                int x = pair.getKey();
+                int y = pair.getValue();
+
+                rotNums++;
+
+                if(x+1<grid.length&&grid[x+1][y]==1){//新鲜的橘子被感染
+                    grid[x+1][y]=2;
+                    list2.add(new Pair<>(x+1,y));
+                }
+
+                if(y+1<grid[0].length&&grid[x][y+1]==1){//新鲜的橘子被感染
+                    grid[x][y+1]=2;
+                    list2.add(new Pair<>(x,y+1));
+                }
+
+                if(x-1>=0&&grid[x-1][y]==1){//新鲜的橘子被感染
+                    grid[x-1][y]=2;
+                    list2.add(new Pair<>(x-1,y));
+                }
+
+                if(y-1>=0&&grid[x][y-1]==1){//新鲜的橘子被感染
+                    grid[x][y-1]=2;
+                    list2.add(new Pair<>(x,y-1));
+                }
+            }
+
+            if(!list2.isEmpty()){
+                queue.add(list2);
+            }else {
+                hasRot=false;
+            }
+        }
+
+        if(rotNums == totalNums){
+            return day;
+        }
+
+        return -1;
+    }
     //课程表
     //你这个学期必须选修 numCourses 门课程，记为 0 到 numCourses - 1 。
     //
@@ -3660,6 +3882,9 @@ public class Solution {
 //        System.out.println(Arrays.toString(ints));
         char[][] chars={{'A','B','C','D'},{'S','F','C','S'},{'A','D','E','E'}};
         boolean abcced = solution.exist(chars, "ABCCED");
+
+        int[][]ints = {{2,1,1},{1,1,0},{0,1,1}};
+        int i = solution.orangesRotting(ints);
 
     }
 }
