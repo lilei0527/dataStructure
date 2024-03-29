@@ -1,9 +1,7 @@
 package leetcode;
 
 
-import jdk.jfr.internal.tool.Main;
-import tree.Tree;
-import tree.TreeNode;
+import javafx.util.Pair;
 
 import java.util.*;
 
@@ -3498,6 +3496,78 @@ public class Solution {
         return list1;
     }
 
+    //腐烂的橘子
+    //值 0 代表空单元格；
+    //值 1 代表新鲜橘子；
+    //值 2 代表腐烂的橘子。
+    public int orangesRotting(int[][] grid) {
+            int day = -1;
+            Queue<List<Pair<Integer,Integer>>>queue = new LinkedList<>();//新腐烂的橘子
+       int rotNums = 0;
+       int totalNums = 0;
+       List<Pair<Integer,Integer>>list1 = new ArrayList<>();
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+
+                if(grid[i][j]==2){
+                    Pair<Integer,Integer> pair = new Pair<>(i,j);
+                    list1.add(pair);
+                }
+
+                if(grid[i][j]==2||grid[i][j]==1){
+                    totalNums++;
+                }
+            }
+        }
+        queue.offer(list1);
+
+        boolean hasRot = true;
+        while (hasRot&&!queue.isEmpty()){
+            day++;
+            List<Pair<Integer, Integer>> poll = queue.poll();
+
+            List<Pair<Integer,Integer>>list2 = new ArrayList<>();
+            for (Pair<Integer, Integer> pair : poll) {
+                int x = pair.getKey();
+                int y = pair.getValue();
+
+                rotNums++;
+
+                if(x+1<grid.length&&grid[x+1][y]==1){//新鲜的橘子被感染
+                    grid[x+1][y]=2;
+                    list2.add(new Pair<>(x+1,y));
+                }
+
+                if(y+1<grid[0].length&&grid[x][y+1]==1){//新鲜的橘子被感染
+                    grid[x][y+1]=2;
+                    list2.add(new Pair<>(x,y+1));
+                }
+
+                if(x-1>=0&&grid[x-1][y]==1){//新鲜的橘子被感染
+                    grid[x-1][y]=2;
+                    list2.add(new Pair<>(x-1,y));
+                }
+
+                if(y-1>=0&&grid[x][y-1]==1){//新鲜的橘子被感染
+                    grid[x][y-1]=2;
+                    list2.add(new Pair<>(x,y-1));
+                }
+            }
+
+            if(!list2.isEmpty()){
+                queue.add(list2);
+            }else {
+                hasRot=false;
+            }
+        }
+
+        if(rotNums == totalNums){
+            return day;
+        }
+
+        return -1;
+    }
+
 
     public static void main(String[] args) throws InterruptedException {
         Solution solution = new Solution();
@@ -3638,6 +3708,9 @@ public class Solution {
 //        System.out.println(Arrays.toString(ints));
         char[][] chars={{'A','B','C','D'},{'S','F','C','S'},{'A','D','E','E'}};
         boolean abcced = solution.exist(chars, "ABCCED");
+
+        int[][]ints = {{2,1,1},{1,1,0},{0,1,1}};
+        int i = solution.orangesRotting(ints);
 
     }
 }
