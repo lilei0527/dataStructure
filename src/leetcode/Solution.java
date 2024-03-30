@@ -3742,6 +3742,23 @@ public class Solution {
         return -1;
     }
 
+    //寻找两个正序数组的中位数
+    public int findMin(int[] nums) {
+        int left = 0;
+        int right = nums.length-1;
+
+        while (left<right){
+            int mid = (left+right)/2;
+
+            if(nums[right]<nums[mid]){
+                left = mid+1;
+            }else {
+                right=mid;
+            }
+        }
+
+        return nums[left];
+    }
 
     public static void main(String[] args) throws InterruptedException {
         Solution solution = new Solution();
