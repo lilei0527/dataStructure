@@ -3760,6 +3760,37 @@ public class Solution {
         return nums[left];
     }
 
+    //有效的括号
+    public boolean isValid(String s) {
+        Stack<Character>stack = new Stack<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if(c=='('||c=='{'||c=='['){
+                stack.push(c);
+            }else {
+                if(c==')'){
+                    if(stack.isEmpty()||!stack.pop().equals('(')){
+                        return false;
+                    }
+                }
+                if(c=='}'){
+                    if(stack.isEmpty()||!stack.pop().equals('{')){
+                        return false;
+                    }
+                }
+
+                if(c==']'){
+                    if(stack.isEmpty()||!stack.pop().equals('[')){
+                        return false;
+                    }
+                }
+            }
+        }
+
+
+        return stack.isEmpty();
+    }
+
     public static void main(String[] args) throws InterruptedException {
         Solution solution = new Solution();
 //        Ip ip = new Ip();
