@@ -3865,7 +3865,7 @@ public class Solution {
                 char c2 = word2.charAt(j-1);
 
                 if(c1==c2){
-                    dp[i][j] = Math.min(Math.min(dp[i-1][j],dp[i][j-1]),dp[i-1][j-1]);
+                    dp[i][j] = Math.min(Math.min(dp[i-1][j]+1,dp[i][j-1]+1),dp[i-1][j-1]);
                 }else {
                     dp[i][j] = Math.min(Math.min(dp[i-1][j]+1,dp[i][j-1]+1),dp[i-1][j-1]+1);
                 }
