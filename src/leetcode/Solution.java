@@ -3875,6 +3875,23 @@ public class Solution {
         return dp[word1.length()][word2.length()];
     }
 
+    //和为 K 的连续子数组
+    //返回所有和为K的连续子数组的个数
+    public int subarraySum(int[] nums, int k) {
+        Map<Integer,Integer> map = new HashMap<>();//连续和，出现次数
+        map.put(0,1);
+        int sum = 0;
+        int count = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum+=nums[i];
+            if(map.containsKey(sum-k)){
+                count += map.get(sum-k);
+            }
+            map.put(sum,map.getOrDefault(sum,0)+1);
+        }
+        return count;
+    }
+
 
     public static void main(String[] args) throws InterruptedException {
         Solution solution = new Solution();
