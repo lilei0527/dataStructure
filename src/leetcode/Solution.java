@@ -4,6 +4,7 @@ package leetcode;
 import javafx.util.Pair;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author lilei
@@ -205,7 +206,7 @@ public class Solution {
         for(int num:nums){
             map.put(num,map.getOrDefault(num,0)+1);
         }
-        PriorityQueue<Integer> pq= new PriorityQueue<>((x, y) -> map.get(y) - map.get(x));
+        PriorityQueue<Integer> pq= new PriorityQueue<>((x, y) -> map.get(x) - map.get(y));
         for(Integer key:map.keySet()){
             pq.offer(key);
             if(pq.size()> k){
@@ -217,31 +218,55 @@ public class Solution {
         }
         return res;
     }
+    public int[] topKFrequent1(int[] nums, int k) {
+        Map<Integer,Integer>map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            Integer integer = map.get(nums[i]);
+
+            if(integer==null){
+                integer=1;
+            }else {
+                integer++;
+            }
+            map.put(nums[i],integer);
+        }
+
+        List<Map.Entry<Integer, Integer>> collect = map.entrySet().
+                stream().sorted((v1, v2) -> v2.getValue() - v1.getValue()).collect(Collectors.toList());
+
+        int[]res = new int[k];
+        for (int i = 0; i < k; i++) {
+
+            res[i] = collect.get(i).getKey();
+        }
+
+        return res;
+    }
 
 
-    /**
-     * 寻找重复数
-     * 给定一个包含n + 1 个整数的数组nums ，其数字都在[1, n]范围内（包括 1 和 n），可知至少存在一个重复的整数。
-     *
-     * 假设 nums 只有 一个重复的整数 ，返回这个重复的数 。
-     *
-     * 你设计的解决方案必须 不修改 数组 nums 且只用常量级 O(1) 的额外空间。
-     *
-     *
-     *
-     * 示例 1：
-     *
-     * 输入：nums = [1,3,4,2,2]
-     * 输出：2
-     * 示例 2：
-     *
-     * 输入：nums = [3,1,3,4,2]
-     * 输出：3
-     */
+
+        /**
+         * 寻找重复数
+         * 给定一个包含n + 1 个整数的数组nums ，其数字都在[1, n]范围内（包括 1 和 n），可知至少存在一个重复的整数。
+         *
+         * 假设 nums 只有 一个重复的整数 ，返回这个重复的数 。
+         *
+         * 你设计的解决方案必须 不修改 数组 nums 且只用常量级 O(1) 的额外空间。
+         *
+         *
+         *
+         * 示例 1：
+         *
+         * 输入：nums = [1,3,4,2,2]
+         * 输出：2
+         * 示例 2：
+         *
+         * 输入：nums = [3,1,3,4,2]
+         * 输出：3
+         */
     public int findDuplicate(int[] nums) {
         int slow =0;
         int fast =0;
-
         do {
             slow = nums[slow];
             fast = nums[nums[fast]];
@@ -3790,6 +3815,33 @@ public class Solution {
 
         return stack.isEmpty();
     }
+
+    //最长公共子序列
+    public int longestCommonSubsequence(String text1, String text2) {
+          int [][]dp = new int[text1.length()+1][text2.length()+1];
+        for (int i = 0; i < text1.length(); i++) {
+            dp[i][0]=0;
+        }
+
+        for (int i = 0; i < text2.length(); i++) {
+            dp[0][i] = 0;
+        }
+
+        for (int i = 1; i <= text1.length(); i++) {
+            char c1 = text1.charAt(i-1);
+            for (int j = 1; j <= text2.length(); j++) {
+                char c2 = text2.charAt(j-1);
+                if(c1==c2){
+                    dp[i][j] = dp[i-1][j-1]+1;
+                }else{
+                    dp[i][j] = Math.max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+
+        return dp[text1.length()][text2.length()];
+    }
+
 
     public static void main(String[] args) throws InterruptedException {
         Solution solution = new Solution();
