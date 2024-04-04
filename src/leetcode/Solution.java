@@ -851,6 +851,16 @@ public class Solution {
         map.put(sum, map.get(sum) - 1);
     }
 
+    //从前序与中序遍历序列构造二叉树
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        int n = preorder.length;
+        Map<Integer,Integer>indexMap = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            indexMap.put(inorder[i], i);
+        }
+        return buildTree(preorder,inorder,0,preorder.length-1,0,indexMap);
+    }
+
     public TreeNode buildTree(int[] preorder, int[] inorder, int left, int right, int root, Map<Integer, Integer> indexMap) {
         if (left > right) {
             return null;
