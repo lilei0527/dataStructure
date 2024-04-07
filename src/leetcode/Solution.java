@@ -3738,6 +3738,54 @@ public class Solution {
         return -1;
     }
 
+    //寻找两个正序数组的中位数
+    public int findMin(int[] nums) {
+        int left = 0;
+        int right = nums.length-1;
+
+        while (left<right){
+            int mid = (left+right)/2;
+
+            if(nums[right]<nums[mid]){
+                left = mid+1;
+            }else {
+                right=mid;
+            }
+        }
+
+        return nums[left];
+    }
+
+    //有效的括号
+    public boolean isValid(String s) {
+        Stack<Character>stack = new Stack<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if(c=='('||c=='{'||c=='['){
+                stack.push(c);
+            }else {
+                if(c==')'){
+                    if(stack.isEmpty()||!stack.pop().equals('(')){
+                        return false;
+                    }
+                }
+                if(c=='}'){
+                    if(stack.isEmpty()||!stack.pop().equals('{')){
+                        return false;
+                    }
+                }
+
+                if(c==']'){
+                    if(stack.isEmpty()||!stack.pop().equals('[')){
+                        return false;
+                    }
+                }
+            }
+        }
+
+
+        return stack.isEmpty();
+    }
 
     //最长公共子序列
     public int longestCommonSubsequence(String text1, String text2) {
@@ -3795,6 +3843,56 @@ public class Solution {
         //断开链表尾部
         head.next = null;
         return curHead;
+    }
+
+    //编辑距离
+    //给你两个单词 word1 和 word2， 请返回将 word1 转换成 word2 所使用的最少操作数  。
+    //
+    //你可以对一个单词进行如下三种操作：
+    //
+    //插入一个字符
+    //删除一个字符
+    //替换一个字符
+    public int minDistance(String word1, String word2) {
+            int [][]dp = new int[word1.length()+1][word2.length()+1];
+        for (int i = 0; i <= word1.length(); i++) {
+            dp[i][0] = i;
+        }
+        for (int i = 0; i <= word2.length(); i++) {
+            dp[0][i] = i;
+        }
+
+        for (int i = 1; i <= word1.length(); i++) {
+            char c1 = word1.charAt(i-1);
+            for (int j = 1; j <=word2.length(); j++) {
+                char c2 = word2.charAt(j-1);
+
+                if(c1==c2){
+                    dp[i][j] = Math.min(Math.min(dp[i-1][j]+1,dp[i][j-1]+1),dp[i-1][j-1]);
+                }else {
+                    dp[i][j] = Math.min(Math.min(dp[i-1][j]+1,dp[i][j-1]+1),dp[i-1][j-1]+1);
+                }
+            }
+        }
+
+        return dp[word1.length()][word2.length()];
+    }
+
+    //和为 K 的连续子数组
+    //返回所有和为K的连续子数组的个数
+    public int subarraySum(int[] nums, int k) {
+        Map<Integer,Integer> map = new HashMap<>();//连续和，出现次数
+        map.put(0,1);
+        int sum = 0;
+        int count = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum+=nums[i];
+            if(map.containsKey(sum-k)){
+                count += map.get(sum-k);
+            }
+            map.put(sum,map.getOrDefault(sum,0)+1);
+        }
+        return count;
     }
 
 
