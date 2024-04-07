@@ -3845,6 +3845,36 @@ public class Solution {
         return curHead;
     }
 
+    //分隔链表
+    //给你一个链表的头节点 head 和一个特定值 x ，请你对链表进行分隔，使得所有 小于 x 的节点都出现在 大于或等于 x 的节点之前。
+    //
+    //你应当 保留 两个分区中每个节点的初始相对位置。
+    public ListNode partition(ListNode head, int x) {
+        ListNode ltNode = new ListNode(-1);
+        ListNode gtNode = new ListNode(-1);
+
+
+        ListNode lt = ltNode;
+        ListNode gt = gtNode;
+
+        while (head!=null){
+            if(head.val<x){
+                lt.next = head;
+                lt = lt.next;
+            }else {
+                gt.next = head;
+                gt = gt.next;
+            }
+
+            head=head.next;
+        }
+
+
+        lt.next = gtNode.next;
+        gt.next = null;
+        return ltNode.next;
+    }
+
     //编辑距离
     //给你两个单词 word1 和 word2， 请返回将 word1 转换成 word2 所使用的最少操作数  。
     //
