@@ -1296,6 +1296,7 @@ public class Solution {
             list.add(candidates[i]);
             backTrack(candidates, sum + candidates[i], target, i, result, list);
             list.remove(list.size() - 1);
+
         }
     }
 
@@ -3762,6 +3763,38 @@ public class Solution {
         }
 
         return dp[text1.length()][text2.length()];
+    }
+
+    //旋转链表
+    //给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null||k==0) {
+            return head;
+        }
+
+        //计算链表长度
+        int length=1;
+        ListNode node = head;
+        while (node.next!=null){
+            length++;
+            node = node.next;
+        }
+
+        //连接链表尾部
+        node.next=head;
+
+        //计算向右移动的次数n   <length
+        int n = length-k%length;
+
+        //定位新的head节点
+        for (int i = 0; i < n-1; i++) {
+            head = head.next;
+        }
+
+        ListNode curHead = head.next;
+        //断开链表尾部
+        head.next = null;
+        return curHead;
     }
 
 
