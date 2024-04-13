@@ -3752,7 +3752,6 @@ public class Solution {
                 right=mid;
             }
         }
-
         return nums[left];
     }
 
@@ -3923,6 +3922,25 @@ public class Solution {
             map.put(sum,map.getOrDefault(sum,0)+1);
         }
         return count;
+    }
+
+    //删除链表的中间节点
+    public ListNode deleteMiddle(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+
+
+        ListNode slow = head;
+        ListNode fast = head;
+        ListNode prev = null;
+        while (fast!= null && fast.next!= null) {
+            fast = fast.next.next;
+            prev = slow;
+            slow = slow.next;
+        }
+        prev.next = slow.next;
+        return head;
     }
 
 
