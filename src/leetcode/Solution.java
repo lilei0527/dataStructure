@@ -3925,6 +3925,48 @@ public class Solution {
         return count;
     }
 
+    //最小覆盖子串
+    //给定两个字符串 s 和 t 。返回 s 中包含 t 的所有字符的最短子字符串。如果 s 中不存在符合条件的子字符串，则返回空字符串 "" 。
+    public String minWindow(String s, String t) {
+        int[] baseHash = new int[128];int[] curHash = new int[128];
+        for (char ch : t.toCharArray()) {
+            ++baseHash[ch];
+        }
+
+        int minLen = Integer.MAX_VALUE;//记录子串的起始位置和长度
+        int left = 0, right = 0, n = s.length(), m = t.length(), count = 0;//记录有效字符的个数
+        int minLeft = left;int minRihgt = right;
+        while(right < n)
+        {
+            char in = s.charAt(right++);
+            if(++curHash[in] <= baseHash[in])//进窗口
+            {
+                ++count;
+            }
+
+            while(count == m)//判断
+            {
+                if(right-left < minLen)//更新结果
+                {
+                    minLen =  right-left;
+                    minLeft = left;
+                    minRihgt = right;
+                }
+
+                char out = s.charAt(left++);
+                if(curHash[out]-- <= baseHash[out])//出窗口
+                {
+                    --count;
+                }
+            }
+        }
+        return minLen == Integer.MAX_VALUE ? "" : s.substring(minLeft,minRihgt);
+
+
+    }
+
+
+
 
     public static void main(String[] args) throws InterruptedException {
         Solution solution = new Solution();
