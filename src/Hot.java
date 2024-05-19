@@ -25,14 +25,14 @@ public class Hot {
     public int lengthOfLongestSubstring(String s) {
         Map<Character, Integer> map = new HashMap<>();
         int left = 0;
-        int max =0;
+        int max = 0;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             Integer index = map.get(c);
-            if(index!=null){
-                left = Math.max(left,index+1);
+            if (index != null) {
+                left = Math.max(left, index + 1);
             }
-            max = Math.max(max, i-left+1);
+            max = Math.max(max, i - left + 1);
             map.put(c, i);
         }
         return max;
@@ -40,20 +40,21 @@ public class Hot {
 
     //最长公共子序列
     public int longestCommonSubsequence(String text1, String text2) {
-        int[][]dp =new int[text1.length()+1][text2.length()+1];;
-        for (int i = 0; i < text1.length()+1; i++) {
+        int[][] dp = new int[text1.length() + 1][text2.length() + 1];
+        ;
+        for (int i = 0; i < text1.length() + 1; i++) {
             dp[i][0] = 0;
         }
-        for (int j = 0; j < text2.length()+1; j++) {
+        for (int j = 0; j < text2.length() + 1; j++) {
             dp[0][j] = 0;
         }
         for (int i = 1; i <= text1.length(); i++) {
-            char c = text1.charAt(i-1);
+            char c = text1.charAt(i - 1);
             for (int j = 1; j <= text2.length(); j++) {
-                if(c==text2.charAt(j-1)){
-                    dp[i][j] = dp[i-1][j-1]+1;
-                }else{
-                    dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+                if (c == text2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
                 }
             }
         }
@@ -76,36 +77,33 @@ public class Hot {
     }
 
 
-
-
-
     //最大子数组和
     public int maxSubArray(int[] nums) {
-        int max=Integer.MIN_VALUE;
-        int sum=0;
-        for(int i=0; i<nums.length; i++){
-            sum = Math.max(sum+nums[i],nums[i]);
-            max = Math.max(max,sum);
+        int max = Integer.MIN_VALUE;
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum = Math.max(sum + nums[i], nums[i]);
+            max = Math.max(max, sum);
         }
         return max;
     }
 
     //合并两个有序链表
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-         ListNode dummy = new ListNode(0);
-         ListNode curr = dummy;
-         while (list1 != null && list2 != null) {
-             if (list1.val < list2.val) {
-                 curr.next = list1;
-                 list1 = list1.next;
-             }else{
-                 curr.next = list2;
-                 list2 = list2.next;
-             }
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+        while (list1 != null && list2 != null) {
+            if (list1.val < list2.val) {
+                curr.next = list1;
+                list1 = list1.next;
+            } else {
+                curr.next = list2;
+                list2 = list2.next;
+            }
             curr = curr.next;
-         }
-         curr.next = list1 == null ? list2 : list1;
-         return dummy.next;
+        }
+        curr.next = list1 == null ? list2 : list1;
+        return dummy.next;
     }
 
     //最长递增子序列
@@ -113,24 +111,24 @@ public class Hot {
         List<Integer> list = new ArrayList<>();
         list.add(nums[0]);
         for (int i = 1; i < nums.length; i++) {
-            if(nums[i]>list.get(list.size()-1)){
+            if (nums[i] > list.get(list.size() - 1)) {
                 list.add(nums[i]);
-            }else{
+            } else {
                 int left = 0;
-                int right = list.size()-1;
+                int right = list.size() - 1;
 
-                while (left<=right){
-                    int mid = (left+right)/2;
-                    if(nums[i]<list.get(mid)){
-                        right = mid-1;
-                    }else if (nums[i]>list.get(mid)){
-                        left = mid+1;
-                    }else{
+                while (left <= right) {
+                    int mid = (left + right) / 2;
+                    if (nums[i] < list.get(mid)) {
+                        right = mid - 1;
+                    } else if (nums[i] > list.get(mid)) {
+                        left = mid + 1;
+                    } else {
                         left = mid;
                         break;
                     }
                 }
-                list.set(left,nums[i]);
+                list.set(left, nums[i]);
             }
         }
         return list.size();
@@ -147,7 +145,7 @@ public class Hot {
         dp[0] = 0;
         for (int j = 0; j < coins.length; j++) {
             for (int i = coins[j]; i <= amount; i++) {
-               dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
+                dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
             }
         }
         if (dp[amount] == amount + 1) {
@@ -158,24 +156,24 @@ public class Hot {
 
     //无重复字符的最长子串
     public int lengthOfLongestSubstring1(String s) {
-        Map<Character, Integer>map = new HashMap<>();
+        Map<Character, Integer> map = new HashMap<>();
         int left = 0;
         int max = 0;
         for (int i = 0; i < s.length(); i++) {
-           char c = s.charAt(i);
-           Integer index = map.get(c);
-           if(index!=null){
-               left = Math.max(left,index+1);
-           }
-           max = Math.max(max, i-left+1);
-           map.put(c, i);
+            char c = s.charAt(i);
+            Integer index = map.get(c);
+            if (index != null) {
+                left = Math.max(left, index + 1);
+            }
+            max = Math.max(max, i - left + 1);
+            map.put(c, i);
         }
         return max;
     }
 
     //重排链表
     public void reorderList(ListNode head) {
-        if(head==null){
+        if (head == null) {
             return;
         }
 
@@ -202,7 +200,7 @@ public class Hot {
         //将左右两个链表交错合并
         ListNode left = head;
         ListNode right = prev;
-        while (left != null && right!=null) {
+        while (left != null && right != null) {
             ListNode leftNext = left.next;
             ListNode rightNext = right.next;
 
@@ -226,7 +224,7 @@ public class Hot {
             this.val = val;
         }
 
-        TreeNode(int val, TreeNode left,TreeNode right) {
+        TreeNode(int val, TreeNode left, TreeNode right) {
             this.val = val;
             this.left = left;
             this.right = right;
@@ -237,31 +235,50 @@ public class Hot {
     //二叉树的层序遍历
     public List<List<Integer>> levelOrder(TreeNode root) {
         List<List<Integer>> res = new ArrayList<>();
-        levelOrder(Collections.singletonList(root),res);
+        levelOrder(Collections.singletonList(root), res);
         return res;
     }
 
-    public void levelOrder(List<TreeNode> nodes,List<List<Integer>> res) {
-        if(nodes.isEmpty()){
+    public void levelOrder(List<TreeNode> nodes, List<List<Integer>> res) {
+        if (nodes.isEmpty()) {
             return;
         }
         List<TreeNode> child = new ArrayList<>();
         List<Integer> list = new ArrayList<>();
         for (TreeNode node : nodes) {
             list.add(node.val);
-            if(node.left!=null){
+            if (node.left != null) {
                 child.add(node.left);
             }
-            if(node.right!=null){
+            if (node.right != null) {
                 child.add(node.right);
             }
         }
-            res.add(list);
-            levelOrder(child,res);
+        res.add(list);
+        levelOrder(child, res);
     }
 
+    //最长回文子串
+    public String longestPalindrome(String s) {
+        String res = "";
+        for (int i = 0; i < s.length(); i++) {
+            String s1 = longestPalindrome(s, i, i);
+            String s2 = longestPalindrome(s, i, i+1);
+            String max = s1.length() > s2.length() ? s1 : s2;
+            res = res.length() > max.length() ? res : max;
+        }
+        return res;
+    }
 
-        public static void main(String[] args) {
+    public String longestPalindrome(String s,int left,int right){
+        while(left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        return s.substring(left+1,right);
+    }
+
+    public static void main(String[] args) {
 
         Hot hot = new Hot();
         System.out.println(hot.lengthOfLongestSubstring("tmmzuxt"));
