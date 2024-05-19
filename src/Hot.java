@@ -360,6 +360,42 @@ public class Hot {
         return dummy.next;
     }
 
+    //数组中的第K个最大元素
+    public int findKthLargest(int[] nums, int k){
+        return findKthLargest(nums,nums.length-k,0,nums.length-1);
+    }
+
+    public int findKthLargest(int[] nums, int index,int left,int right){
+        int baseLeft = left;
+        int baseRight = right;
+
+        while(left<right){
+            while(left<right&&nums[right]>=nums[baseLeft]){
+                right--;
+            }
+            while (left<right&&nums[left]<=nums[baseLeft]){
+                left++;
+            }
+            int temp = nums[left];
+            nums[left]=nums[right];
+            nums[right]=temp;
+        }
+
+        int temp = nums[baseLeft];
+        nums[baseLeft]=nums[left];
+        nums[left]=temp;
+
+        if(left==index){
+            return nums[index];
+        }
+
+        if(left>index){
+            return findKthLargest(nums,index,baseLeft,left-1);
+        }else{
+            return findKthLargest(nums,index,left+1,baseRight);
+        }
+    }
+
 
 
     public static void main(String[] args) {
