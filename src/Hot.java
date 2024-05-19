@@ -325,6 +325,22 @@ public class Hot {
         }
     }
 
+    //合并区间
+    public int[][] merge(int[][] intervals) {
+        List<int[]> res = new ArrayList<>();
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+        res.add(intervals[0]);
+        for (int i = 0; i < intervals.length; i++) {
+            int[] last = res.get(res.size() - 1);
+            if(intervals[i][0]<=last[1]){
+                last[1]=Math.max(last[1],intervals[i][1]);
+            }else{
+                res.add(intervals[i]);
+            }
+        }
+        return res.toArray(new int[res.size()][]);
+    }
+
 
 
     public static void main(String[] args) {
