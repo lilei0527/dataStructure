@@ -214,6 +214,52 @@ public class Hot {
         }
     }
 
+    public static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode() {
+        }
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+
+        TreeNode(int val, TreeNode left,TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+
+    //二叉树的层序遍历
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        levelOrder(Collections.singletonList(root),res);
+        return res;
+    }
+
+    public void levelOrder(List<TreeNode> nodes,List<List<Integer>> res) {
+        if(nodes.isEmpty()){
+            return;
+        }
+        List<TreeNode> child = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        for (TreeNode node : nodes) {
+            list.add(node.val);
+            if(node.left!=null){
+                child.add(node.left);
+            }
+            if(node.right!=null){
+                child.add(node.right);
+            }
+        }
+            res.add(list);
+            levelOrder(child,res);
+    }
+
 
         public static void main(String[] args) {
 
