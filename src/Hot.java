@@ -396,6 +396,42 @@ public class Hot {
         }
     }
 
+    //三数之和
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length; i++) {
+            if(i>0&&nums[i]==nums[i-1]){
+                continue; // 第一个元素和第二个元素去除重复
+            }
+
+            int left = i+1;
+            int right = nums.length-1;
+            while(left<right){
+                if(left!=i+1&&nums[left]==nums[left-1]){
+                    left++;
+                    continue;// 第二个元素和第三个元素去除重复
+                }
+                int sum = nums[i]+nums[left]+nums[right];
+                if(sum>0){
+                    right--;
+                }else if(sum<0){
+                    left++;
+                }else{
+                    List<Integer> list = new ArrayList<>();
+                    list.add(nums[i]);
+                    list.add(nums[left]);
+                    list.add(nums[right]);
+                    res.add(list);
+                    right--;
+                    left++;
+                }
+            }
+
+        }
+        return res;
+    }
+
 
 
     public static void main(String[] args) {
