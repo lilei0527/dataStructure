@@ -301,6 +301,32 @@ public class Hot {
         numIsLands(grid,x+1,y);
     }
 
+    //全排列
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        for (int num : nums) {
+            list.add(num);
+        }
+        permute(res,list,0);
+        return res;
+    }
+
+    public void permute(List<List<Integer>> res,List<Integer>list,int start) {
+        if(start==list.size()){
+            res.add(new ArrayList<>(list));
+            return;
+        }
+
+        for(int i=start;i<list.size();i++){
+            Collections.swap(list,i,start);
+            permute(res,list,start+1);
+            Collections.swap(list,i,start);
+        }
+    }
+
+
+
     public static void main(String[] args) {
 
         Hot hot = new Hot();
