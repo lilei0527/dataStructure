@@ -188,7 +188,7 @@ public class Hot {
         ListNode rightHead = slow.next;
         slow.next = null;
 
-        //反转中点左边的链表
+        //反转中点右边的链表
         ListNode prev = null;//新的头节点
         while (rightHead != null) {
             ListNode next = rightHead.next;
@@ -456,6 +456,130 @@ public class Hot {
             }
         }
         return -1;
+    }
+
+    /**
+     * lru缓存
+     * 维护一个双向链表
+     * 获取数据的时候把数据放到链表头
+     * 存入数据的时候判断key是否存在，如果存在,替换value,将key放到链表头
+     * 如果不存在，存入kv键值对，将key放到链表头，如果超过容量,移除链表末尾元素
+     */
+     class LRUCache {
+         class Node{
+            int key;
+            int val;
+            Node next;
+            Node pre;
+
+            public Node(int key, int val) {
+                this.key = key;
+                this.val = val;
+            }
+            public Node(){}
+        }
+
+        Map<Integer,Node> map = new HashMap<>();
+        int capacity;
+        int size=0;
+        Node head ;
+        Node tail ;
+
+        //移除链表中的某个节点
+        void removeNode(Node node){
+            node.pre.next = node.next;
+            node.next.pre = node.pre;
+        }
+
+        void addToHead(Node node){
+            node.pre = head;
+            node.next = head.next;
+            head.next.pre = node;
+            head.next = node;
+        }
+
+        void moveToHead(Node node){
+            removeNode(node);
+            addToHead(node);
+        }
+
+        Node removeFromTail(){
+            Node pre = tail.pre;
+            removeNode(tail.pre);
+            return pre;
+        }
+
+
+        public LRUCache(int capacity) {
+            this.capacity = capacity;
+            head = new Node();
+            tail = new Node();
+            head.next = tail;
+            tail.pre = head;
+        }
+
+        public int get(int key) {
+            Node node = map.get(key);
+            if(node==null){
+                return -1;
+            }else{
+                moveToHead(node);
+                return node.val;
+            }
+        }
+
+        public void put(int key, int value) {
+            Node node = map.get(key);
+            if(node==null){
+                Node newNode = new Node(key, value);
+                map.put(key,newNode);
+                addToHead(newNode);
+                size++;
+                if(size>capacity){
+                    Node fromTail = removeFromTail();
+                    map.remove(fromTail.key);
+                    size--;
+                }
+            }else{
+                node.val=value;
+                moveToHead(node);
+            }
+        }
+    }
+
+
+    //二叉树的锯齿形层序遍历
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+         List<List<Integer>> res = new ArrayList<>();
+         if(root==null){
+             return res;
+         }
+        zigzagLevelOrder(res,Collections.singletonList(root));
+         return res;
+    }
+
+    public void zigzagLevelOrder(List<List<Integer>> res, List<TreeNode> treeNodes) {
+        if (treeNodes.isEmpty()) {
+            return;
+        }
+        List<TreeNode> children = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i <treeNodes.size(); i++) {
+            TreeNode treeNode = treeNodes.get(i);
+            list.add(treeNode.val);
+
+            if (treeNode.left != null) {
+                children.add(treeNode.left);
+            }
+            if (treeNode.right != null) {
+                children.add(treeNode.right);
+            }
+        }
+        if(res.size()%2!=0){
+            Collections.reverse(list);
+        }
+        res.add(list);
+        zigzagLevelOrder(res,children);
     }
 
 
