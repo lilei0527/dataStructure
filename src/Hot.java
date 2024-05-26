@@ -669,6 +669,25 @@ public class Hot {
         return i >= 0 && i <= 255;
     }
 
+    //删除排序链表中的重复元素 II
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode dummy = new ListNode(-1);
+        dummy.next=head;
+        ListNode cur = dummy;
+        while (cur.next != null&&cur.next.next!=null) {
+            if(cur.next.val==cur.next.next.val){
+                //cur.next = 第一个不重复的
+                int repeat=cur.next.val;
+                while(cur.next!=null&&cur.next.val==repeat){
+                    cur.next = cur.next.next;
+                }
+            }else{
+                cur=cur.next;
+            }
+        }
+        return dummy.next;
+    }
+
 
 
     public static void main(String[] args) {
