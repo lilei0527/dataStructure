@@ -711,11 +711,100 @@ public class Hot {
         return 0;
     }
 
+    //字符串相乘
+    public String multiply(String num1, String num2) {
+        if (num1.equals("0") || num2.equals("0")) {
+            return "0";
+        }
+         List<String>list=new ArrayList<>();
+        for (int i = num1.length()-1; i >=0 ; i--) {
+            int i1=num1.charAt(i)-'0';
+            int jin=0;
+            StringBuilder sb=new StringBuilder();
+            for (int j = 0; j < num1.length()-1-i; j++) {
+                sb.append('0');
+            }
+            for (int j = num2.length()-1; j >=0 ; j--) {
+                int j1=num2.charAt(j)-'0';
+                int sum=i1*j1+jin;
+                int yu=sum%10;
+                jin=sum/10;
+                sb.append(yu);
+            }
+            if(jin!=0){
+                sb.append(jin);
+            }
+            sb.reverse();
+            list.add(sb.toString());
+        }
+        String s="";
+        for (int i = 0; i < list.size(); i++) {
+            s=add(s,list.get(i));
+        }
+        return s;
+    }
+
+    //字符串相加
+    public String add(String num1, String num2) {
+         int i=num1.length()-1;
+         int j=num2.length()-1;
+         int jin=0;
+         StringBuilder sb=new StringBuilder();
+         while (i>=0||j>=0||jin!=0){
+            int i1=i>=0?num1.charAt(i)-'0':0;
+            int j1=j>=0?num2.charAt(j)-'0':0;
+            int sum=i1+j1+jin;
+            int yu = sum%10;
+            jin = sum/10;
+            i--;
+            j--;
+            sb.append(yu);
+         }
+         sb.reverse();
+         return sb.toString();
+    }
+
+    //字符串相乘
+    public String multiply1(String num1, String num2) {
+        if (num1.equals("0") || num2.equals("0")) {
+            return "0";
+        }
+        int[] m = new int[num1.length() + num2.length()];
+        for (int i = num1.length() - 1; i >= 0; i--) {
+            int ci = num1.charAt(i) - '0';
+            for (int j = num2.length() - 1; j >= 0; j--) {
+                int cj = num2.charAt(j) - '0';
+                m[i + j + 1] = m[i + j + 1] + ci * cj;
+            }
+        }
+
+
+        int jin=0;
+        for (int i = m.length-1; i >=0;i--) {
+             jin = jin+m[i];
+             m[i]=jin%10;
+             jin=jin/10;
+        }
+
+        StringBuilder sb=new StringBuilder();
+        int index = m[0] == 0 ? 1 : 0;
+        for (int i = index; i < m.length; i++) {
+            sb.append(m[i]);
+        }
+        return sb.toString();
+
+
+    }
+
+
+
 
 
     public static void main(String[] args) {
 
         Hot hot = new Hot();
         System.out.println(hot.lengthOfLongestSubstring("tmmzuxt"));
+
+        System.out.println(hot.multiply1("123", "456"));
     }
 }
