@@ -582,6 +582,46 @@ public class Hot {
         zigzagLevelOrder(res,children);
     }
 
+    //螺旋矩阵
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> res = new ArrayList<>();
+        int rowLength = matrix.length;
+        int colLength = matrix[0].length;
+        int size = rowLength*colLength;
+        int circle=0;
+        while (true){
+            //左往右
+            for (int i = circle; i < colLength-circle; i++) {
+                res.add(matrix[circle][i]);
+                if(res.size()==size){
+                    return res;
+                }
+            }
+            //上往下
+            for (int i = circle+1; i < rowLength-circle; i++) {
+                res.add(matrix[i][colLength-circle-1]);
+                if(res.size()==size){
+                    return res;
+                }
+            }
+            //右往左
+            for (int i = colLength-circle-2; i >=circle; i--) {
+                res.add(matrix[rowLength-circle-1][i]);
+                if(res.size()==size){
+                    return res;
+                }
+            }
+            //下往上
+            for (int i = rowLength-circle-2; i >circle ; i--) {
+                res.add(matrix[i][circle]);
+                if(res.size()==size){
+                    return res;
+                }
+            }
+            circle++;
+        }
+    }
+
 
 
     public static void main(String[] args) {
