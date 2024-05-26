@@ -622,6 +622,53 @@ public class Hot {
         }
     }
 
+    //复原 IP 地址
+    public List<String> restoreIpAddresses(String s) {
+        List<String> res = new ArrayList<>();
+        List<String> list = new ArrayList<>();
+        restoreIpAddresses(res,list,s,0);
+        return res;
+    }
+
+    public void restoreIpAddresses(List<String>res,List<String>list,String s,int start){
+        if(list.size()==4&&start==s.length()){
+            StringBuilder sb = new StringBuilder();
+            for (String string : list) {
+                sb.append(string);
+                sb.append(".");
+            }
+            sb.deleteCharAt(sb.length()-1);
+            res.add(sb.toString());
+            return;
+        }
+
+        //最多三位
+        for (int i = start; i <start+3&&i<s.length() ; i++) {
+            String sub = s.substring(start,i+1);
+            //判断是否合法
+            if(isLegal(sub)){
+                list.add(sub);
+                restoreIpAddresses(res,list,s,i+1);
+                list.remove(list.size()-1);
+            }
+        }
+    }
+
+    public boolean isLegal(String s) {
+        //是否是0-255的数字
+        int i;
+        try{
+            i = Integer.parseInt(s);
+        }catch(NumberFormatException e){
+            return false;
+        }
+        //前导0
+        if(s.charAt(0)=='0'&&s.length()>1){
+            return false;
+        }
+        return i >= 0 && i <= 255;
+    }
+
 
 
     public static void main(String[] args) {
