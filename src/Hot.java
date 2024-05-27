@@ -797,14 +797,45 @@ public class Hot {
     }
 
 
+    //下一个排列
+    public void nextPermutation(int[] nums) {
+        for (int i = nums.length-2; i >=0 ; i--) {
+            if(nums[i]<nums[i+1]){
+                for (int j = nums.length-1; j >i ; j--) {
+                    if(nums[j]>nums[i]){
+                        swap(nums,i,j);
+                        reverse(nums,i+1);
+                        return;
+                    }
+                }
+            }
+        }
+        reverse(nums,0);
+    }
+
+    public void reverse(int[] nums, int start) {
+        int left = start, right = nums.length - 1;
+        while (left < right) {
+            swap(nums, left, right);
+            left++;
+            right--;
+        }
+    }
+
+    public void swap(int[] nums, int i, int j) {
+         int temp = nums[i];
+         nums[i] = nums[j];
+         nums[j] = temp;
+    }
 
 
 
     public static void main(String[] args) {
-
         Hot hot = new Hot();
         System.out.println(hot.lengthOfLongestSubstring("tmmzuxt"));
 
         System.out.println(hot.multiply1("123", "456"));
+        int[] num = {1,2,3};
+        hot.nextPermutation(num);
     }
 }
