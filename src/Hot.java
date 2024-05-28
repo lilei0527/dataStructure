@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Hot {
 
-    static class ListNode {
+    public static class ListNode {
         int val;
         ListNode next = null;
 
@@ -88,23 +88,6 @@ public class Hot {
         return max;
     }
 
-    //合并两个有序链表
-    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-        ListNode dummy = new ListNode(0);
-        ListNode curr = dummy;
-        while (list1 != null && list2 != null) {
-            if (list1.val < list2.val) {
-                curr.next = list1;
-                list1 = list1.next;
-            } else {
-                curr.next = list2;
-                list2 = list2.next;
-            }
-            curr = curr.next;
-        }
-        curr.next = list1 == null ? list2 : list1;
-        return dummy.next;
-    }
 
     //最长递增子序列
     public int lengthOfLIS(int[] nums) {
@@ -826,6 +809,49 @@ public class Hot {
          int temp = nums[i];
          nums[i] = nums[j];
          nums[j] = temp;
+    }
+
+
+    //排序链表
+    public ListNode sortList(ListNode head) {
+         if(head==null||head.next==null){
+             return head;
+         }
+        ListNode mid = getMid(head);
+        ListNode nexHead = mid.next;
+        mid.next=null;
+       return mergeTwoLists(sortList(head),sortList(nexHead));
+    }
+
+    public ListNode getMid(ListNode node) {
+        ListNode fast = node;
+        ListNode slow = node;
+        while (fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(0);
+        ListNode cur = dummy;
+        while (l1 != null && l2 != null) {
+            if (l1.val <= l2.val) {
+                cur.next = l1;
+                l1 = l1.next;
+            }else {
+                cur.next = l2;
+                l2 = l2.next;
+            }
+            cur = cur.next;
+        }
+        if (l1 != null) {
+            cur.next = l1;
+        }else{
+            cur.next=l2;
+        }
+        return dummy.next;
     }
 
 
