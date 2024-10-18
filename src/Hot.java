@@ -140,6 +140,7 @@ public class Hot {
     //无重复字符的最长子串
     public int lengthOfLongestSubstring1(String s) {
         Map<Character, Integer> map = new HashMap<>();
+        //出现了重复子串最大的位置
         int left = 0;
         int max = 0;
         for (int i = 0; i < s.length(); i++) {
@@ -855,6 +856,80 @@ public class Hot {
     }
 
 
+    public static class LRU{
+         class Node{
+             int key;
+             int val;
+             Node next;
+             Node pre;
+             public Node(int key,int val){
+                 this.key=key;
+                 this.val=val;
+             }
+
+         }
+
+         private Node head = new Node(0,0);
+         private Node tail= new Node(0,0);
+         private int capacity;
+         private int size;
+
+         private Map<Integer,Node> map = new HashMap<>();
+
+         public LRU(int capacity) {
+             this.capacity = capacity;
+             head.next = tail;
+             tail.pre = head;
+             size = 0;
+         }
+
+
+
+
+         private void addToHead(Node node){
+            node.next = head.next;
+            head.next.pre = node;
+            head.next = node;
+            node.pre = head;
+            size++;
+            if(size>capacity){
+                removeNode(tail.pre);
+            }
+         }
+
+
+         private void removeNode(Node node){
+             node.pre.next = node.next;
+             node.next.pre = node.pre;
+             size--;
+             map.remove(node.key);
+         }
+
+
+         public void put(int key, int value) {
+             Node node = map.get(key);
+             if(node==null){
+                 node = new Node(key,value);
+                 map.put(key,node);
+             }else{
+                 node.val = value;
+             }
+             addToHead(node);
+         }
+
+         public int get(int key) {
+             Node node = map.get(key);
+             if(node==null){
+                 return -1;
+             }else{
+                 removeNode(node);
+                 addToHead(node);
+                 return node.val;
+             }
+         }
+    }
+
+
 
     public static void main(String[] args) {
         Hot hot = new Hot();
@@ -863,5 +938,17 @@ public class Hot {
         System.out.println(hot.multiply1("123", "456"));
         int[] num = {1,2,3};
         hot.nextPermutation(num);
+
+
+        LRU lru = new LRU(2);
+        lru.put(1,1);
+        lru.put(2,2);
+        lru.get(1);
+        lru.put(3,3);
+        lru.get(2);
+        lru.put(4,4);
+        lru.get(1);
+        lru.get(3);
+        lru.get(4);
     }
 }
