@@ -930,6 +930,29 @@ public class Hot {
     }
 
 
+    public String longestPalindrome1(String s) {
+        String res = "";
+        for (int i = 0; i < s.length(); i++) {
+            String s1 = longestPalindrome1(s, i, i);
+            String s2 = longestPalindrome1(s, i, i+1);
+            String s3 = s1.length() > s2.length()? s1 : s2;
+            res = s3.length()>res.length()?s3:res;
+        }
+        return res;
+    }
+
+    public String longestPalindrome1(String s, int start, int end) {
+        while (start >= 0 && end < s.length()) {
+            if (s.charAt(start) != s.charAt(end)) {
+                break;
+            }
+            start--;
+            end++;
+        }
+        return s.substring(start+1,end);
+    }
+
+
 
     public static void main(String[] args) {
         Hot hot = new Hot();
