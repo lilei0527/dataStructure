@@ -217,13 +217,13 @@ public class Hot {
 
 
     //二叉树的层序遍历
-    public List<List<Integer>> levelOrder(TreeNode root) {
+    public List<List<Integer>> levelOrder1(TreeNode root) {
         List<List<Integer>> res = new ArrayList<>();
-        levelOrder(Collections.singletonList(root), res);
+        levelOrder1(Collections.singletonList(root), res);
         return res;
     }
 
-    public void levelOrder(List<TreeNode> nodes, List<List<Integer>> res) {
+    public void levelOrder1(List<TreeNode> nodes, List<List<Integer>> res) {
         if (nodes.isEmpty()) {
             return;
         }
@@ -239,7 +239,7 @@ public class Hot {
             }
         }
         res.add(list);
-        levelOrder(child, res);
+        levelOrder1(child, res);
     }
 
     //最长回文子串
@@ -1010,6 +1010,30 @@ public class Hot {
         numIslands1(grid,i,j-1);
     }
 
+    //全排列
+    public List<List<Integer>> permute1(int[] nums) {
+         List<List<Integer>> res = new ArrayList<>();
+         List<Integer> list = new ArrayList<>();
+         for (int i = 0; i < nums.length; i++) {
+             list.add(nums[i]);
+         }
+        permute1(res,list,0);
+        return res;
+    }
+
+    public void permute1(List<List<Integer>> res, List<Integer> list,int start){
+         if(start==list.size()){
+             res.add(new ArrayList<>(list));
+             return;
+         }
+
+        for (int i = start+1; i < list.size(); i++) {
+            Collections.swap(list,start,i);
+            permute1(res,list,start+1);
+            Collections.swap(list,start,i);
+        }
+        }
+
 
 
     public static void main(String[] args) {
@@ -1033,3 +1057,4 @@ public class Hot {
         lru.get(4);
     }
 }
+
