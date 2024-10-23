@@ -951,6 +951,64 @@ public class Hot {
         }
         return s.substring(start+1,end);
     }
+    
+    //二叉树的层序遍历
+    public List<List<Integer>> levelOrder(TreeNode root) {
+         if(root==null){
+             return Collections.emptyList();
+         }
+        List<List<Integer>> res = new ArrayList<>();
+         List<TreeNode> treeNodes = new ArrayList<>();
+        treeNodes.add(root);
+        levelOrder(res,treeNodes);
+        return res;
+    }
+
+    public void levelOrder(List<List<Integer>> res, List<TreeNode> treeNodes){
+         if(treeNodes.isEmpty()){
+             return;
+         }
+         List<Integer> list = new ArrayList<>();
+         List<TreeNode> treeNodeList = new ArrayList<>();
+
+        for (TreeNode treeNode : treeNodes) {
+            list.add(treeNode.val);
+            if (treeNode.left != null) {
+                treeNodeList.add(treeNode.left);
+            }
+            if (treeNode.right != null) {
+                treeNodeList.add(treeNode.right);
+            }
+        }
+        res.add(list);
+        levelOrder(res,treeNodeList);
+    }
+
+
+    //岛屿数量
+    public int numIslands1(char[][] grid) {
+        int count = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '1') {
+                    numIslands1(grid, i, j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public void numIslands1(char[][] grid, int i, int j){
+            if(i<0||i>=grid.length||j<0||j>=grid[0].length||grid[i][j]=='0'){
+                return;
+            }
+            grid[i][j]='0';
+        numIslands1(grid,i+1,j);
+        numIslands1(grid,i-1,j);
+        numIslands1(grid,i,j+1);
+        numIslands1(grid,i,j-1);
+    }
 
 
 
