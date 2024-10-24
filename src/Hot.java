@@ -1034,6 +1034,41 @@ public class Hot {
         }
         }
 
+        //二叉树的最近公共祖先
+        public TreeNode lowestCommonAncestor1(TreeNode root, TreeNode p, TreeNode q) {
+            Map<Integer, TreeNode> map = new HashMap<>();
+            fill(root,map);
+
+            Set<TreeNode> set = new HashSet<>();
+            TreeNode nodeP = p;
+            while(nodeP!=null){
+                set.add(nodeP);
+                nodeP=map.get(nodeP.val);
+            }
+
+            TreeNode nodeQ = q;
+            while(nodeQ!=null){
+                if(set.contains(nodeQ)){
+                    return nodeQ;
+                }
+                nodeQ=map.get(nodeQ.val);
+            }
+            return null;
+
+        }
+
+
+        public void fill(TreeNode node,Map<Integer,TreeNode> map){
+            if(node.left!=null){
+                map.put(node.left.val,node);
+                fill(node.left,map);
+            }
+            if(node.right!=null){
+                map.put(node.right.val,node);
+                fill(node.right,map);
+            }
+        }
+
 
 
     public static void main(String[] args) {
