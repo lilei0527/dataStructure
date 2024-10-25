@@ -1114,6 +1114,44 @@ public class Hot {
         }
 
 
+
+        //重排链表
+        public void reorderList1(ListNode head) {
+            //先找中点
+            ListNode slow = head;
+            ListNode fast = head;
+            while(fast.next!=null&&fast.next.next!=null){
+                slow = slow.next;
+                fast = fast.next.next;
+            }
+
+            ListNode rightHead = slow.next;
+            slow.next = null;
+
+            //反转后半段链表
+            ListNode pre = null;
+            ListNode cur = rightHead;
+            while(cur!=null){
+                ListNode next = cur.next;
+                cur.next = pre;
+                pre = cur;
+                cur = next;
+            }
+
+            //合并两个链表
+            ListNode cur1 = head;
+            ListNode cur2 = pre;
+            while(cur1!=null&&cur2!=null){
+                ListNode next1 = cur1.next;
+                ListNode next2 = cur2.next;
+                cur1.next = cur2;
+                cur2.next = next1;
+                cur1 = next1;
+                cur2 = next2;
+            }
+        }
+
+
     public static void main(String[] args) {
         Hot hot = new Hot();
         System.out.println(hot.lengthOfLongestSubstring("tmmzuxt"));
