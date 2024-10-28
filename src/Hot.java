@@ -1183,6 +1183,28 @@ public class Hot {
             return dummy.next;
         }
 
+        //二叉树的右视图
+        public List<Integer> rightSideView(TreeNode root) {
+             List<Integer> res = new ArrayList<>();
+             rightSideView(root, res, 0);
+             return res;
+        }
+
+    public void rightSideView(TreeNode node, List<Integer> res, int level) {
+        if (node == null) {
+            return;
+        }
+        if (res.size() == level) {
+            res.add(node.val);
+        }
+        rightSideView(node.right, res, level + 1);
+        rightSideView(node.left, res, level + 1);
+    }
+
+
+}
+
+
 
     public static void main(String[] args) {
         Hot hot = new Hot();
