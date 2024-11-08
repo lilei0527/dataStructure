@@ -1201,6 +1201,32 @@ public class Hot {
         rightSideView(node.left, res, level + 1);
     }
 
+    //括号生成
+    public List<String> generateParenthesis(int n) {
+         List<String>res = new ArrayList<>();
+        generateParenthesis(res,new StringBuilder(),0,0,n);
+        return res;
+    }
+
+    public void generateParenthesis(List<String>list,StringBuilder sb,int left,int right,int n){
+         if(sb.length() == 2*n){
+             list.add(sb.toString());
+             return;
+         }
+
+        if(left<n){
+            sb.append("(");
+            generateParenthesis(list,sb,left+1,right,n);
+            sb.deleteCharAt(sb.length()-1);
+        }
+
+        if(right<left){
+            sb.append(")");
+            generateParenthesis(list,sb,left,right+1,n);
+            sb.deleteCharAt(sb.length()-1);
+        }
+    }
+
 
 
 
